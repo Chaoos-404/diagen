@@ -1171,7 +1171,22 @@ class Layout:
         self._copy_template(cols)
         if self.bus:                     # bus sources go on top (see _bus_sources_on_top)
             src = self._bus_sources()
+            index = {c.id: i for i, c in enumerate(self.ckt.components)}
             for l in range(len(cols)):
+                if l in self.bus:
+                    # every gate taps the same trunks, so the order hardly
+                    # matters to the wiring: keep the netlist's (y0, y1, ...)
+                    cols[l].sort(key=lambda n: index[n.anchor.comp.id])
+                elif l > min(self.bus):
+                    # later columns follow: each node by where what feeds it sits
+                    pos = {n.id: i / len(c) for c in cols[:l] for i, n in enumerate(c)}
+                    cur = {n.id: i for i, n in enumerate(cols[l])}
+
+                    def fed_from(n):
+                        xs = [pos[self.node_of[c].id] for m in n.members for net in m.comp.pins.values()
+                              for c, _ in self.net_pins.get(net, ()) if self.node_of[c].id in pos]
+                        return (sum(xs) / len(xs) if xs else 2, cur[n.id])
+                    cols[l].sort(key=fed_from)
                 cols[l].sort(key=lambda n: n.id not in src)
         # swaps requested by the engine's layout search: (layer, index); a
         # swap inside a stage is made in every stage alike

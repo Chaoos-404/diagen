@@ -158,19 +158,27 @@ class _Search:
         # stage, so the stages stay alike.
         copies = {n.id for n in lay.nodes if n.id in lay.node_stage
                   and lay.node_stage[n.id][1] != lay.template[lay.node_stage[n.id][0]]}
+        # a gate fed only from bus trunks taps them in the order written:
+        # swapping its inputs changes nothing but the regular look
+        bus = {net for nets in lay.bus.values() for net in nets}
         self.gate_moves = []
         for c in ckt.components:
             if getattr(c.spec, "base", None) in COMMUTATIVE and lay.node_of[c.id].id not in copies:
                 ins = [p for p in c.spec.order if p != "y" and p in c.pins]
+                if bus and all(c.pins[p] in bus for p in ins):
+                    continue
                 self.gate_moves += [("pin", tuple((o, a, b) for o in [c.id] + lay.peers.get(c.id, [])))
                                     for a, b in zip(ins, ins[1:])]
         # The move list never changes (swaps keep every column's size), so
         # single moves are scanned round-robin: after an improvement the scan
         # carries on with the next move instead of re-trying the ones that
         # just failed.
+        # the gates of a bus column keep the netlist's order (y0, y1, ...):
+        # they all tap the same trunks, so the order is the reader's, not the wiring's
         self.moves = [("col", l, i) for l, col in enumerate(lay.cols)
                       for i in range(len(col) - 1)
-                      if not (col[i].id in copies and col[i + 1].id in copies)] + self.gate_moves
+                      if not (col[i].id in copies and col[i + 1].id in copies)
+                      and l not in lay.bus] + self.gate_moves
         self.k = 0
         self.stuck = False                 # no single move helps any more
 
