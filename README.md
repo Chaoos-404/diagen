@@ -67,8 +67,10 @@ adds the `diagen` and `diagen-mcp` commands.
 2. **Orient and group** ([layout.py](diagen/layout.py)): parts between a
    signal and a rail hang vertically; parts between two signals lie in the
    signal path. Parts that belong together become one layout node: feedback
-   around an op-amp or gate, parallel parts, dividers, and loads stacked on a
-   transistor's collector, emitter, drain or source.
+   around an op-amp or gate (with a non-inverting amplifier's gain resistor
+   hanging straight down from the feedback junction), parallel parts,
+   dividers, and loads stacked on a transistor's collector, emitter, drain or
+   source.
 3. **Rank by signal flow**: a Sugiyama-style layered layout. Edges come from
    driver pins (gate/op-amp outputs, input ports), or for passive nets from
    BFS distance from the sources. Cycles are broken by DFS, cross-coupled
@@ -78,7 +80,8 @@ adds the `diagen` and `diagen-mcp` commands.
    with isotonic regression (pool-adjacent-violators). Nodes never overlap
    and wires come out straight wherever possible.
 5. **Route** ([router.py](diagen/router.py)): grid A* over (point, heading)
-   with bend and crossing costs. Nets are routed as trees with T-junction
+   with bend and crossing costs; the heuristic counts the bends a route
+   cannot avoid, which keeps the search narrow. Nets are routed as trees with T-junction
    dots. Hard rules: never through a body or label, never along another net,
    cross only at right angles, never turn or join on another net's wire. Nets
    that fail are retried in a different order; anything still unroutable is
@@ -88,9 +91,12 @@ adds the `diagen` and `diagen-mcp` commands.
    drawing scores better (wire length, bends, crossings, area). With
    `ports=auto` both port placements are laid out and scored the same way
    (with `near`, ports get thin columns of their own beside the part they
-   connect to). For commutative gates (AND/OR/XOR…) the search also tries
+   connect to, and one stage's outputs never share a column with the next
+   stage's inputs). For commutative gates (AND/OR/XOR…) the search also tries
    exchanging inputs, which is often what removes a crossing.
    If a net cannot be routed, the channels are widened and it tries again.
+   The search budget is a number of trials, not seconds, so a netlist gives
+   the same drawing on every machine.
 7. **Render** ([render.py](diagen/render.py)): one primitive list, two back
    ends, so the SVG and the TikZ always match.
 

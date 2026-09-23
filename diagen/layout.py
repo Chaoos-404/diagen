@@ -7,8 +7,9 @@ The pipeline:
    in the signal path (a "series" part).
 2. Group parts into layout nodes. A node is one anchor part plus satellites
    that must sit right next to it: parts in parallel with it, feedback parts
-   across an amplifier or gate, and shunts stacked on a transistor's
-   collector/emitter/drain/source.
+   across an amplifier or gate (plus the shunt hanging from the feedback
+   junction in a non-inverting amplifier), and shunts stacked on a
+   transistor's collector/emitter/drain/source.
 3. Assign nodes to columns by signal flow (longest path over a DAG built from
    driver pins, or BFS distance from the sources for passive nets).
 4. Order nodes inside each column (barycentre sweeps) and pick y positions
@@ -360,9 +361,38 @@ class Layout:
                 for m in members:
                     self._attach(m.id, prev, "above")
                     prev = m.id
+                # hang from the outermost one: each goes outside the last
+                self._hang_on_feedback(host, members[-1], shunt_anchor)
             else:
                 for prev, m in zip(members, members[1:]):
                     self._attach(m.id, prev.id, "below")
+
+    def _feedback_below(self, host, fb):
+        """Does feedback part `fb` go under its host (it feeds a lower input)?"""
+        nets = set(fb.comp.pins.values())
+        ys = [host.pin_pos(p)[1] for p, pin in host.sym.pins.items()
+              if pin.kind == "in" and host.comp.pins.get(p) in nets]
+        hb = self._inst_box(host)
+        return bool(ys) and ys[0] > (hb[1] + hb[3]) / 2
+
+    def _hang_on_feedback(self, host, fb, shunt_anchor):
+        """The gain-setting shunt of a non-inverting amplifier (R1 from the
+        '-' node to ground) hangs straight down from the feedback part's end,
+        so the '-' node is one vertical wire with R2 across and R1 below."""
+        host_i, fb_i = self.insts[host.id], self.insts[fb.id]
+        ins = {host.pins[p] for p, pin in host_i.sym.pins.items()
+               if pin.kind == "in" and p in host.pins}
+        below = self._feedback_below(host_i, fb_i)
+        for p, net in fb.pins.items():
+            if net not in ins:
+                continue
+            for (snet, rnet), cid in shunt_anchor.items():
+                # skip shunts already placed, or carrying a divider of their own
+                if snet != net or cid in self.parent or cid in self.parent.values():
+                    continue
+                if (self.orail(rnet) in ("gnd", "neg")) == below:
+                    self._attach(cid, fb.id, ("hang", p, self._shunt_info(cid)[0]))
+                    return
 
     # 3. layering -----------------------------------------------------------------------
     def _layers(self):
@@ -549,10 +579,12 @@ class Layout:
         if near:
             # Ports get thin columns of their own, right beside what they
             # connect to, instead of sharing a column with parts (which would
-            # push those parts out of line).
+            # push those parts out of line). Outputs of one stage and inputs
+            # of the next get separate columns: stacked in one column they
+            # would force the next stage below the previous one's outputs.
             for a in anchors:
                 if comps[a].type not in ("input", "output"):
-                    layer[a] *= 2
+                    layer[a] *= 3
             for a in anchors:
                 if comps[a].type == "input":
                     used = [layer[v] for v in dag.get(a, ())]
@@ -560,7 +592,7 @@ class Layout:
                 elif comps[a].type == "output":
                     drv = [layer[p] for p in anchors if a in dag.get(p, ())
                            and comps[p].type not in ("input", "output")]
-                    layer[a] = max(drv) + 1 if drv else 2 * hi + 1
+                    layer[a] = max(drv) + 1 if drv else 3 * hi + 1
             used = sorted(set(layer.values()))
             rank = {v: i for i, v in enumerate(used)}
             layer = {a: rank[layer[a]] for a in layer}
@@ -659,14 +691,18 @@ class Layout:
                     span = abs(pb[0] - pa[0])
                     dx = round((ax0 + ax1 - span) / 2) - min(pa[0], pb[0])
                     # go on the side of the host input this part feeds back into
-                    nets = set(inst.comp.pins.values())
-                    ys = [host.pin_pos(p)[1] for p, pin in host.sym.pins.items()
-                          if pin.kind == "in" and host.comp.pins.get(p) in nets]
-                    hb = self._inst_box(host)
-                    if ys and ys[0] > (hb[1] + hb[3]) / 2:
+                    if self._feedback_below(host, inst):
                         dy = round(box[3] + 1 - sb[1])
                     else:
                         dy = round(box[1] - 1 - sb[3])
+                elif isinstance(self.sat_kind[cid], tuple) and self.sat_kind[cid][0] == "hang":
+                    # signal pin right under (or over) the feedback pin's exit point
+                    _, fp, sp = self.sat_kind[cid]
+                    (fx, fy), d = parent.pin_pos(fp), parent.pin_dir(fp)
+                    sx, sy = inst.pin_pos(sp)
+                    down = inst.pin_dir(sp) == "U"
+                    dx = fx + DIRS[d][0] - sx
+                    dy = fy + (1 if down else -1) - sy
                 else:
                     same = "a" if parent.comp.pins.get("a") == inst.comp.pins["a"] else "b"
                     ref = parent.pin_pos(same)

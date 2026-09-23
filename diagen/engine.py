@@ -55,7 +55,19 @@ def _grid_points(box, eps):
             yield (x, y)
 
 
-SEARCH_SECONDS = 1.5   # total layout-search budget per render (each trial is a full place + route)
+# Layout-search budget per render, counted in trials (each one a full place
+# + route) so the same netlist always gives the same drawing on any machine.
+# Bigger circuits get fewer, slower trials; SEARCH_SECONDS is only a safety
+# net against pathological inputs.
+SEARCH_TRIALS = 3000
+SEARCH_SECONDS = 30.0
+
+
+def search_budget(ckt):
+    parts = sum(1 for c in ckt.components if c.type not in ("input", "output"))
+    return max(40, min(300, SEARCH_TRIALS // max(parts, 1)))
+
+
 COMMUTATIVE = ("and", "or", "nand", "nor", "xor", "xnor")
 
 
@@ -70,7 +82,8 @@ def build(ckt: Circuit, opts=None):
     are tried: ports on the outer edges (conventional) and ports next to the
     parts they connect to; the second wins only when clearly better."""
     opts = dict(opts or {})
-    opts["_deadline"] = time.monotonic() + SEARCH_SECONDS   # shared by every variant
+    # shared by every variant
+    opts["_budget"] = [search_budget(ckt), time.monotonic() + SEARCH_SECONDS]
     mode = opts.get("ports") or ckt.options.get("ports") or "auto"
     has_ports = any(c.type in ("input", "output") for c in ckt.components)
     if mode != "auto" or not has_ports:
@@ -106,7 +119,10 @@ def _build(ckt: Circuit, opts, search=True):
             ins = [p for p in spec.order if p != "y" and p in c.pins]
             gate_moves += [("pin", c.id, a, b) for a, b in zip(ins, ins[1:])]
     state = ([], [])                       # (column swaps, pin swaps) applied so far
-    deadline = opts.get("_deadline", time.monotonic() + SEARCH_SECONDS)
+    budget = opts.get("_budget") or [search_budget(ckt), time.monotonic() + SEARCH_SECONDS]
+
+    def spent():
+        return budget[0] <= 0 or time.monotonic() >= budget[1]
 
     def apply(st, move):
         swaps, pins = st
@@ -115,31 +131,38 @@ def _build(ckt: Circuit, opts, search=True):
         return (swaps, _toggle(pins, move[1:]))
 
     def attempt(st):
+        budget[0] -= 1
         return _build_once(ckt, dict(opts, swaps=st[0], pinswaps=st[1]))
 
-    while time.monotonic() < deadline:
-        moves = [("col", l, i) for l, col in enumerate(best[2].cols)
-                 for i in range(len(col) - 1)] + gate_moves
+    # The move list never changes (swaps keep every column's size), so single
+    # moves are scanned round-robin: after an improvement the scan carries on
+    # with the next move instead of re-trying the ones that just failed.
+    moves = [("col", l, i) for l, col in enumerate(best[2].cols)
+             for i in range(len(col) - 1)] + gate_moves
+    k = 0
+    while moves and not spent():
         found = None
-        for m in moves:                              # single moves first
-            if time.monotonic() >= deadline:
+        for _ in range(len(moves)):                  # single moves first
+            if spent():
                 break
+            m = moves[k]
+            k = (k + 1) % len(moves)
             st = apply(state, m)
             cand = attempt(st)
             if score(cand[1]) < score(best[1]) - 1e-9:
                 found = (cand, st)
                 break
-        if found is None:                            # then pairs: escapes local optima
+        if found is None and not spent():            # then pairs: escapes local optima
             for i, m1 in enumerate(moves):
                 for m2 in moves[i + 1:]:
-                    if time.monotonic() >= deadline:
+                    if spent():
                         break
                     st = apply(apply(state, m1), m2)
                     cand = attempt(st)
                     if score(cand[1]) < score(best[1]) - 1e-9:
                         found = (cand, st)
                         break
-                if found or time.monotonic() >= deadline:
+                if found or spent():
                     break
         if found is None:
             break

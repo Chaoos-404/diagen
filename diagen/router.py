@@ -118,10 +118,28 @@ class Router:
             qd = self.pins[q][1]
             dx, dy = DIRS[qd]
             pin_goal[(q[0] + dx, q[1] + dy)] = (q, OPPOSITE[qd])
-        targets = list(tree_pts) + [q for q in tree_pins]
+        # the search ends on reaching a tree point or a tree pin's stub
+        targets = list(tree_pts) + list(pin_goal)
+        memo = {}
 
-        def h(p):
-            return min(abs(p[0] - q[0]) + abs(p[1] - q[1]) for q in targets)
+        def h(p, d):
+            """Admissible estimate: distance plus the bends that are
+            unavoidable from heading d (none if the target lies straight
+            ahead, one if it is off to the side, two if it is behind)."""
+            key = (p, d)
+            if key in memo:
+                return memo[key]
+            hx, hy = DIRS[d]
+            best = 1e18
+            for q in targets:
+                dx, dy = q[0] - p[0], q[1] - p[1]
+                ahead = dx * hx + dy * hy
+                side = dx * hy - dy * hx
+                v = abs(dx) + abs(dy) + (2 * BEND if ahead < 0 else BEND if side else 0.0)
+                if v < best:
+                    best = v
+            memo[key] = best
+            return best
 
         sx, sy = DIRS[sdir]
         first = (start[0] + sx, start[1] + sy)
@@ -130,7 +148,7 @@ class Router:
         startstate = (first, sdir)
         g = {startstate: 1.0}
         came = {startstate: None}
-        heap = [(1.0 + h(first), 1.0, first, sdir)]
+        heap = [(1.0 + h(first, sdir), 1.0, first, sdir)]
         while heap:
             f, cost, p, d = heapq.heappop(heap)
             if cost > g.get((p, d), 1e18):
@@ -162,7 +180,7 @@ class Router:
                 if ng < g.get((q, nd), 1e18):
                     g[(q, nd)] = ng
                     came[(q, nd)] = (p, d)
-                    heapq.heappush(heap, (ng + h(q), ng, q, nd))
+                    heapq.heappush(heap, (ng + h(q, nd), ng, q, nd))
         return None
 
     def _unwind(self, came, state, start):

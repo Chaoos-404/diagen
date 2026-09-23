@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="389.6" height="218.8" viewBox="0 0 389.6 218.8" font-family="'Latin Modern Roman', 'CMU Serif', 'Times New Roman', serif" font-size="13">
+<svg xmlns="http://www.w3.org/2000/svg" width="309.6" height="318.8" viewBox="0 0 309.6 318.8" font-family="'Latin Modern Roman', 'CMU Serif', 'Times New Roman', serif" font-size="13">
 <title>Non-inverting amplifier</title>
 <rect width="100%" height="100%" fill="white"/>
 <g stroke="black" stroke-width="1.4" fill="none" stroke-linecap="round" stroke-linejoin="round">
@@ -9,51 +9,50 @@
 <polyline points="16,158 40,158"/>
 <polyline points="20.4,162.4 35.6,162.4"/>
 <polyline points="24.8,166.8 31.2,166.8"/>
-<polygon points="208,104 208,12 274,58"/>
-<polyline points="188,78 208,78"/>
-<polyline points="188,38 208,38"/>
-<polyline points="274,58 288,58"/>
-<polyline points="188,178 208,178"/>
-<polyline points="248,178 268,178"/>
-<polyline points="208,178 211.333,172 218,184 224.667,172 231.333,184 238,172 244.667,184 248,178"/>
-<polyline points="108,98 108,118"/>
-<polyline points="108,158 108,178"/>
-<polyline points="108,118 114,121.333 102,128 114,134.667 102,141.333 114,148 102,154.667 108,158"/>
-<polyline points="108,178 108,198"/>
-<polyline points="96,198 120,198"/>
-<polyline points="100.4,202.4 115.6,202.4"/>
-<polyline points="104.8,206.8 111.2,206.8"/>
-<polyline points="348,78 348,98"/>
-<polyline points="348,138 348,158"/>
-<polyline points="348,98 354,101.333 342,108 354,114.667 342,121.333 354,128 342,134.667 348,138"/>
-<polyline points="348,158 348,178"/>
-<polyline points="336,178 360,178"/>
-<polyline points="340.4,182.4 355.6,182.4"/>
-<polyline points="344.8,186.8 351.2,186.8"/>
-<polyline points="28,38 188,38"/>
-<polyline points="28,38 28,58"/>
-<polyline points="108,78 188,78"/>
+<polygon points="128,104 128,12 194,58"/>
+<polyline points="108,78 128,78"/>
+<polyline points="108,38 128,38"/>
+<polyline points="194,58 208,58"/>
+<polyline points="108,178 128,178"/>
 <polyline points="168,178 188,178"/>
-<polyline points="108,78 108,98"/>
-<polyline points="168,78 168,178"/>
-<circle cx="168" cy="78" r="2.8" fill="black" stroke="none"/>
-<polyline points="288,58 348,58"/>
-<polyline points="268,178 308,178"/>
-<polyline points="308,58 308,178"/>
-<polyline points="348,58 348,78"/>
-<circle cx="308" cy="58" r="2.8" fill="black" stroke="none"/>
+<polyline points="128,178 131.333,172 138,184 144.667,172 151.333,184 158,172 164.667,184 168,178"/>
+<polyline points="88,198 88,218"/>
+<polyline points="88,258 88,278"/>
+<polyline points="88,218 94,221.333 82,228 94,234.667 82,241.333 94,248 82,254.667 88,258"/>
+<polyline points="88,278 88,298"/>
+<polyline points="76,298 100,298"/>
+<polyline points="80.4,302.4 95.6,302.4"/>
+<polyline points="84.8,306.8 91.2,306.8"/>
+<polyline points="268,78 268,98"/>
+<polyline points="268,138 268,158"/>
+<polyline points="268,98 274,101.333 262,108 274,114.667 262,121.333 274,128 262,134.667 268,138"/>
+<polyline points="268,158 268,178"/>
+<polyline points="256,178 280,178"/>
+<polyline points="260.4,182.4 275.6,182.4"/>
+<polyline points="264.8,186.8 271.2,186.8"/>
+<polyline points="28,38 108,38"/>
+<polyline points="28,38 28,58"/>
+<polyline points="88,178 108,178"/>
+<polyline points="88,78 108,78"/>
+<polyline points="88,78 88,198"/>
+<circle cx="88" cy="178" r="2.8" fill="black" stroke="none"/>
+<polyline points="208,58 268,58"/>
+<polyline points="188,178 228,178"/>
+<polyline points="228,58 228,178"/>
+<polyline points="268,58 268,78"/>
+<circle cx="228" cy="58" r="2.8" fill="black" stroke="none"/>
 </g>
 <text x="28" y="92.12" text-anchor="middle" font-size="10.4" fill="black" stroke="none"><tspan>+</tspan></text>
 <text x="28" y="110.12" text-anchor="middle" font-size="10.4" fill="black" stroke="none"><tspan>−</tspan></text>
 <text x="49" y="93.4" text-anchor="start" fill="black" stroke="none"><tspan>V1</tspan></text>
 <text x="49" y="110.4" text-anchor="start" fill="black" stroke="none"><tspan>1V</tspan></text>
-<text x="216" y="81.51" text-anchor="middle" font-size="11.7" fill="black" stroke="none"><tspan>−</tspan></text>
-<text x="216" y="41.51" text-anchor="middle" font-size="11.7" fill="black" stroke="none"><tspan>+</tspan></text>
-<text x="248" y="27.14" text-anchor="start" fill="black" stroke="none"><tspan>U1</tspan></text>
-<text x="228" y="165.14" text-anchor="middle" fill="black" stroke="none"><tspan>90k</tspan></text>
-<text x="228" y="148.14" text-anchor="middle" fill="black" stroke="none"><tspan>R2</tspan></text>
-<text x="120" y="133.4" text-anchor="start" fill="black" stroke="none"><tspan>R1</tspan></text>
-<text x="120" y="150.4" text-anchor="start" fill="black" stroke="none"><tspan>10k</tspan></text>
-<text x="360" y="113.4" text-anchor="start" fill="black" stroke="none"><tspan>RL</tspan></text>
-<text x="360" y="130.4" text-anchor="start" fill="black" stroke="none"><tspan>1k</tspan></text>
+<text x="136" y="81.51" text-anchor="middle" font-size="11.7" fill="black" stroke="none"><tspan>−</tspan></text>
+<text x="136" y="41.51" text-anchor="middle" font-size="11.7" fill="black" stroke="none"><tspan>+</tspan></text>
+<text x="168" y="27.14" text-anchor="start" fill="black" stroke="none"><tspan>U1</tspan></text>
+<text x="148" y="165.14" text-anchor="middle" fill="black" stroke="none"><tspan>90k</tspan></text>
+<text x="148" y="148.14" text-anchor="middle" fill="black" stroke="none"><tspan>R2</tspan></text>
+<text x="100" y="233.4" text-anchor="start" fill="black" stroke="none"><tspan>R1</tspan></text>
+<text x="100" y="250.4" text-anchor="start" fill="black" stroke="none"><tspan>10k</tspan></text>
+<text x="280" y="113.4" text-anchor="start" fill="black" stroke="none"><tspan>RL</tspan></text>
+<text x="280" y="130.4" text-anchor="start" fill="black" stroke="none"><tspan>1k</tspan></text>
 </svg>

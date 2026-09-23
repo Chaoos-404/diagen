@@ -141,6 +141,50 @@ class LayoutRulesTest(unittest.TestCase):
         lay = Layout(parse(read(os.path.join(ROOT, "examples", "inverting_amp.cir")))).run()
         self.assertIs(lay.node_of["Rf"], lay.node_of["U1"])
 
+    def test_noninverting_gain_resistor_hangs_under_feedback(self):
+        from diagen.layout import Layout
+        lay = Layout(parse(read(os.path.join(ROOT, "examples", "noninverting_amp.cir")))).run()
+        self.assertIs(lay.node_of["R1"], lay.node_of["U1"])
+        r1, r2 = lay.insts["R1"], lay.insts["R2"]
+        top, bottom = sorted((r1.pin_pos("a"), r1.pin_pos("b")), key=lambda p: p[1])
+        self.assertEqual(top[0], bottom[0])                        # vertical
+        fb = "a" if r2.comp.pins["a"] == "fb" else "b"
+        x, y = r2.pin_pos(fb)
+        self.assertEqual(top[0], x - 1 if r2.pin_dir(fb) == "L" else x + 1)
+        self.assertGreater(top[1], y)                              # right below the junction
+
+    def test_near_ports_of_adjacent_stages_get_separate_columns(self):
+        from diagen.layout import Layout
+        text = read(os.path.join(ROOT, "examples", "ripple_adder.cir"))
+        lay = Layout(parse(text), {"ports": "near"}).run()
+        self.assertNotEqual(lay.node_of["output:s0"].layer, lay.node_of["input:a1"].layer)
+        _, report = render(text)
+        self.assertEqual(report.bends, 0)                          # carries run straight
+
+
+class SearchTest(unittest.TestCase):
+    def test_result_does_not_depend_on_machine_speed(self):
+        import time
+        import diagen.engine as engine
+        lines = ["input a0 b0 a1 b1 a2 b2 cin", "output s0 s1 s2 cout"]
+        for i in range(3):
+            ci, co = ("cin" if i == 0 else f"c{i}"), ("cout" if i == 2 else f"c{i + 1}")
+            lines += [f"X{i} xor2 a{i} b{i} p{i}", f"Y{i} xor2 p{i} {ci} s{i}",
+                      f"A{i} and2 a{i} b{i} g{i}", f"B{i} and2 p{i} {ci} t{i}",
+                      f"O{i} or2 g{i} t{i} {co}"]
+        text = "\n".join(lines)
+        fast = to_svg(render(text)[0])
+        orig = engine._build_once
+
+        def slow(*a, **k):
+            time.sleep(0.003)
+            return orig(*a, **k)
+        engine._build_once = slow
+        try:
+            self.assertEqual(to_svg(render(text)[0]), fast)
+        finally:
+            engine._build_once = orig
+
 
 class FuzzTest(unittest.TestCase):
     """Random netlists must never crash, and nets must route or be reported."""
