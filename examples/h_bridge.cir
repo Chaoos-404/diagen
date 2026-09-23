@@ -1,0 +1,7 @@
+title H-bridge
+input a b
+Q1 pnp c=m1 b=a e=vcc
+Q2 pnp c=m2 b=b e=vcc
+Q3 npn c=m1 b=b e=0
+Q4 npn c=m2 b=a e=0
+M1 lamp m1 m2

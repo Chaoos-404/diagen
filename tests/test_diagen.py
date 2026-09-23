@@ -169,6 +169,79 @@ class LayoutRulesTest(unittest.TestCase):
         self.assertEqual({lay.node_of[g].layer for g in ("G0", "G1", "G2", "G3")}, {2})
 
 
+DIFF_PAIR = ("input vin1 vin2\noutput vo1 vo2\nRC1 res vcc vo1 10k\nRC2 res vcc vo2 10k\n"
+             "Q1 npn c=vo1 b=vin1 e=tail\nQ2 npn c=vo2 b=vin2 e=tail\nRE res tail vee 20k\n")
+
+
+class SymmetryTest(unittest.TestCase):
+    def layout(self, text, **opts):
+        from diagen.layout import Layout
+        return Layout(parse(text), opts).run()
+
+    @staticmethod
+    def hflip(inst):
+        return inst.t.mirror and inst.t.rot == 2
+
+    def test_differential_pair_is_a_mirror_image(self):
+        lay = self.layout(DIFF_PAIR)
+        q1, q2, re = (lay.insts[c] for c in ("Q1", "Q2", "RE"))
+        self.assertIs(lay.node_of["Q1"], lay.node_of["Q2"])
+        self.assertEqual(q1.pin_pos("e")[1], q2.pin_pos("e")[1])        # side by side
+        self.assertFalse(self.hflip(q1))
+        self.assertTrue(self.hflip(q2))                                  # bases face outwards
+        self.assertEqual(re.pin_pos("a")[0], (q1.pin_pos("e")[0] + q2.pin_pos("e")[0]) / 2)
+        self.assertGreater(lay.node_of["input:vin2"].layer, lay.node_of["Q2"].layer)   # from the right
+        _, report = render(DIFF_PAIR)
+        self.assertTrue(report.ok)
+        self.assertEqual(report.crossings, 0)
+
+    def test_nand_pull_ups_are_copies_over_the_pull_down_stack(self):
+        lay = self.layout("input a b\noutput y\nP1 pmos d=y g=a s=vdd\nP2 pmos d=y g=b s=vdd\n"
+                          "N1 nmos d=y g=a s=m\nN2 nmos d=m g=b s=0\n")
+        p1, p2, n1, n2 = (lay.insts[c] for c in ("P1", "P2", "N1", "N2"))
+        self.assertEqual(p1.pin_pos("d")[1], p2.pin_pos("d")[1])
+        self.assertFalse(self.hflip(p1) or self.hflip(p2))              # same way round
+        self.assertLess(p1.pin_pos("d")[0], n1.pin_pos("d")[0])
+        self.assertLess(n1.pin_pos("d")[0], p2.pin_pos("d")[0])         # on the axis
+        self.assertEqual(n1.pin_pos("s")[0], n2.pin_pos("d")[0])        # stacked in line
+        self.assertLess(n1.pin_pos("s")[1], n2.pin_pos("d")[1])
+
+    def test_each_level_of_a_mirror_faces_its_own_way(self):
+        # current-mirror load: bases shared, facing in; input pair: facing out
+        lay = self.layout("input vin1 vin2\noutput vout\n"
+                          "Q3 pnp c=x b=x e=vcc\nQ4 pnp c=vout b=x e=vcc\n"
+                          "Q1 npn c=x b=vin1 e=tail\nQ2 npn c=vout b=vin2 e=tail\n"
+                          "Q5 npn c=tail b=vb e=0\nRB res vcc vb 20k\nQ6 npn c=vb b=vb e=0\n")
+        flips = {c: self.hflip(lay.insts[c]) for c in ("Q1", "Q2", "Q3", "Q4", "Q5")}
+        self.assertEqual(flips, {"Q1": False, "Q2": True, "Q3": True, "Q4": False, "Q5": False})
+        self.assertIs(lay.node_of["Q5"], lay.node_of["Q1"])             # the tail on the axis
+
+    def test_bridge_load_goes_across_the_middle(self):
+        lay = self.layout("input a b\nQ1 pnp c=m1 b=a e=vcc\nQ2 pnp c=m2 b=b e=vcc\n"
+                          "Q3 npn c=m1 b=b e=0\nQ4 npn c=m2 b=a e=0\nM1 lamp m1 m2\n")
+        m, q1, q2 = lay.insts["M1"], lay.insts["Q1"], lay.insts["Q2"]
+        self.assertIs(lay.node_of["M1"], lay.node_of["Q1"])
+        self.assertEqual(m.pin_pos("a")[1], m.pin_pos("b")[1])          # lying flat
+        self.assertLess(q1.pin_pos("c")[0], min(m.pin_pos("a")[0], m.pin_pos("b")[0]))
+        self.assertGreater(q2.pin_pos("c")[0], max(m.pin_pos("a")[0], m.pin_pos("b")[0]))
+
+    def test_inverter_input_is_level_with_its_output(self):
+        drawing, report = render(read(os.path.join(ROOT, "examples", "cmos_inverter.cir")))
+        self.assertTrue(report.ok)
+        lay = self.layout(read(os.path.join(ROOT, "examples", "cmos_inverter.cir")))
+
+        def y(c, p):
+            return lay.insts[c].pin_pos(p)[1] + lay.node_of[c].y
+        axis = (y("M1", "g") + y("M2", "g")) / 2                        # mirrored top to bottom
+        self.assertEqual(y("input:in", "a"), axis)
+        self.assertEqual(y("output:out", "a"), axis)
+
+    def test_symmetry_off(self):
+        lay = self.layout(DIFF_PAIR, symmetry="off")
+        self.assertIsNot(lay.node_of["Q1"], lay.node_of["Q2"])
+        self.assertFalse(self.hflip(lay.insts["Q2"]))
+
+
 class StagesTest(unittest.TestCase):
     def test_repeated_stages_are_found_and_laid_out_alike(self):
         from diagen.layout import Layout

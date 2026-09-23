@@ -71,6 +71,20 @@ adds the `diagen` and `diagen-mcp` commands.
    hanging straight down from the feedback junction), parallel parts,
    dividers, and loads stacked on a transistor's collector, emitter, drain or
    source.
+   **Transistor cells**: transistors joined through their vertical pins are
+   stacked in line (an inverter's pull-up over its pull-down, a cascode, a
+   push-pull pair). Two stacks with the same parts that share a net, or
+   are cross-coupled, are drawn side by side: as copies facing the same way
+   when they are in parallel (the pull-ups of a NAND gate), otherwise as
+   mirror images (a differential pair, a current mirror, an SRAM cell, an
+   H-bridge), each level turning its base or gate inwards when that net is
+   shared or cross-coupled and outwards when it comes from outside. The part
+   that closes the pair (the tail source, the NAND pull-down) sits on the
+   axis, and a load between the two halves lies across the middle. A
+   complementary pair with its gates tied (an inverter, a push-pull stage) is
+   mirrored top to bottom: its input comes in level with the output, on the
+   axis between the two. An input that only feeds a base facing right comes
+   in from the right.
 3. **Rank by signal flow**: a Sugiyama-style layered layout. Edges come from
    driver pins (gate/op-amp outputs, input ports), or for passive nets from
    BFS distance from the sources. Cycles are broken by DFS, cross-coupled

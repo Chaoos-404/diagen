@@ -1,0 +1,6 @@
+title Class-B push-pull output stage
+input vin
+output vout
+Q1 npn c=vcc b=vin e=vout
+Q2 pnp c=vee b=vin e=vout
+RL res vout 0 8

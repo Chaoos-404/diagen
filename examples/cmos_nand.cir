@@ -1,0 +1,7 @@
+title CMOS NAND gate
+input a b
+output y
+P1 pmos d=y g=a s=vdd
+P2 pmos d=y g=b s=vdd
+N1 nmos d=y g=a s=m
+N2 nmos d=m g=b s=0

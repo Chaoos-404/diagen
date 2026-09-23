@@ -25,8 +25,10 @@ from dataclasses import dataclass, field
 
 from .geom import DIRS, Line, Text, Transform, apply, prim_box, text_box, union
 from .netlist import Circuit, Component
+from .symbols import Port
 
 GAP_Y = 2          # minimum empty rows between nodes in one column
+TRANSISTORS = ("npn", "pnp", "nmos", "pmos")
 
 
 def _is_port(n):
@@ -138,6 +140,11 @@ def make_label(inst: Inst):
         n = len(lines)
         return [Text((right, cy + (i - (n - 1) / 2) * 0.85), s, "w") for i, s in enumerate(lines)]
     x, y, anchor = sym.label_spot
+    if inst.t.mirror and inst.t.rot == 2:
+        # mirrored left-right: the label moves to the other side with the pins
+        px, py = inst.t.pt((x, y))
+        anchor = {"w": "e", "e": "w"}.get(anchor, anchor)
+        return [Text((px, py + i * 0.85), s, anchor) for i, s in enumerate(lines)]
     if inst.t.mirror:
         # Keep the label on the same visual side: place it as if unmirrored,
         # then shift by where the mirrored body centre actually lands.
@@ -290,17 +297,302 @@ class Layout:
         self.parent[child] = parent
         self.sat_kind[child] = kind
 
+    def _cells(self):
+        """Transistors drawn as one block, the way textbooks draw them.
+
+        * Stacks: a transistor whose top pin meets another's bottom pin sits
+          right under it, pins in line (an inverter's pull-up over its
+          pull-down, a cascode, one leg of an H-bridge). This is what the
+          north/south pins of a transistor are for.
+        * Symmetry: two stacks with the same parts that map onto each other
+          when some nets are exchanged are drawn side by side. When they are
+          in parallel (every vertical pin on the same net: the pull-ups of a
+          NAND gate) they are copies, all facing the same way (translational
+          symmetry). Otherwise they are mirror images (a differential pair, a
+          current mirror, the two halves of an SRAM cell or an H-bridge):
+          on each level the base or gate faces inwards when its net is shared
+          or cross-coupled, and outwards when it comes from outside.
+        * The part that closes a symmetric pair from below or above (the tail
+          of a differential pair, the pull-down of a NAND) sits on the axis.
+
+        Members are positioned here and attached to the first transistor
+        with kind ("cell",); nets inside a cell are kept in self.cell_nets.
+        `option symmetry=off` turns this off.
+        """
+        self.cell_nets = set()
+        self.axis_pins = {}          # (comp, pin) -> (y of the axis, (comp, pin) of the partner)
+        if str(self.opts.get("symmetry", "auto")).lower() in ("off", "no", "0", "false"):
+            return
+        insts = self.insts
+        devs = [c for c in self.ckt.components if c.type in TRANSISTORS
+                and not any(k in c.attrs for k in ("flip", "rot", "rank"))]
+        if len(devs) < 2:
+            return
+        comp = {c.id: c for c in devs}
+        order = {c.id: i for i, c in enumerate(self.ckt.components)}
+
+        def pin_to(cid, d):
+            inst = insts[cid]
+            return next((p for p in inst.sym.pins if inst.pin_dir(p) == d), None)
+        pins = {c.id: {d: pin_to(c.id, d) for d in ("U", "D", "L")} for c in devs}
+        net = {cid: {d: comp[cid].pins.get(p) if p else None for d, p in ps.items()}
+               for cid, ps in pins.items()}
+        top = {i: net[i]["U"] for i in comp}
+        bot = {i: net[i]["D"] for i in comp}
+        sig = lambda n: n is not None and self.is_signal(n)
+        pull_up = ("pmos", "pnp")
+
+        # 1) stacks
+        below, above = {}, {}
+        seen = []
+        for c in devs:
+            for n in (top[c.id], bot[c.id]):
+                if sig(n) and n not in seen:
+                    seen.append(n)
+        for n in seen:
+            ups = [i for i in comp if bot[i] == n]       # parts above the junction
+            downs = [i for i in comp if top[i] == n]     # parts below it
+
+            def pick(cands, far, upper):
+                # several parts on one side: the one on a rail, of the kind
+                # that belongs there (the pull-up of an inverter, not its
+                # access transistor)
+                if len(cands) == 1:
+                    return cands[0]
+                good = [i for i in cands if far[i] is not None and not sig(far[i])
+                        and (comp[i].type in pull_up) == upper]
+                return good[0] if len(good) == 1 else None
+            if not ups or not downs:
+                continue
+            u, d = pick(ups, top, True), pick(downs, bot, False)
+            if u is None or d is None or u in below or d in above:
+                continue
+            k = u                                        # no loops
+            while k in above and k != d:
+                k = above[k]
+            if k == d:
+                continue
+            below[u], above[d] = d, u
+            self.cell_nets.add(n)
+        cols = []
+        for c in devs:
+            if c.id not in above:
+                col = [c.id]
+                while col[-1] in below:
+                    col.append(below[col[-1]])
+                cols.append(col)
+
+        # 2) symmetric groups
+        def mapping(A, B):
+            if len(A) != len(B):
+                return None
+            s = {}
+            for a, b in zip(A, B):
+                if comp[a].type != comp[b].type:
+                    return None
+                for d in ("U", "D", "L"):
+                    x, y = net[a][d], net[b][d]
+                    if (x is None) != (y is None):
+                        return None
+                    if x is None:
+                        continue
+                    if s.get(x, y) != y or s.get(y, x) != x:
+                        return None
+                    s[x], s[y] = y, x
+            return s
+
+        def parallel(A, B):
+            return all(top[a] == top[b] and bot[a] == bot[b] for a, b in zip(A, B))
+
+        def related(A, B, s):
+            if s is None:
+                # Not an exact image (the diode-connected half of a current
+                # mirror load), but the same parts sharing a net on the same
+                # pin of the same level are still drawn as a pair.
+                return len(A) == len(B) and all(comp[a].type == comp[b].type for a, b in zip(A, B)) \
+                    and any(net[a][d] == net[b][d] and sig(net[a][d])
+                            for a, b in zip(A, B) for d in ("U", "D", "L"))
+            mine = {net[a][d] for a in A for d in ("U", "D", "L")} - {None}
+            fixed = any(s[x] == x and sig(x) for x in mine)
+            cross = any(s[x] != x and s[x] in mine for x in mine)
+            return fixed or cross
+
+        cols.sort(key=lambda col: (-len(col), order[col[0]]))
+        used = set()
+        cells = []
+        for i, A in enumerate(cols):
+            if A[0] in used:
+                continue
+            group, mirror, smap = [A], False, {}
+            for B in cols[i + 1:]:
+                if B[0] in used:
+                    continue
+                s = mapping(A, B)
+                if not related(A, B, s):
+                    continue
+                if parallel(A, B):
+                    if not mirror:
+                        group.append(B)
+                elif len(group) == 1:
+                    group, mirror, smap = [A, B], True, s or {}
+                    break
+            if len(group) == 1:
+                continue                                 # a lone stack waits: it may close a pair
+            for col in group:
+                used.add(col[0])
+            below_c = above_c = None
+            if len(group) > 1:
+                nb, nt = bot[A[-1]], top[A[0]]
+                if sig(nb) and all(bot[col[-1]] == nb for col in group):
+                    below_c = next((C for C in cols if C[0] not in used and top[C[0]] == nb), None) \
+                        or self._center_shunt(nb, used)
+                if sig(nt) and all(top[col[0]] == nt for col in group):
+                    above_c = next((C for C in cols if C[0] not in used and bot[C[-1]] == nt), None) \
+                        or self._center_shunt(nt, used)
+                for C in (below_c, above_c):
+                    if C:
+                        used.add(C[0])
+                if below_c:
+                    self.cell_nets.add(nb)
+                if above_c:
+                    self.cell_nets.add(nt)
+            # a rung: a part between a net of one half and its mirror image
+            # in the other (the load of an H-bridge) goes across the middle
+            rung = None
+            if mirror:
+                mine = {net[a][d] for a in group[0] for d in ("U", "D", "L")}
+                for c in self.ckt.components:
+                    ab = (c.pins.get("a"), c.pins.get("b"))
+                    if insts[c.id].sym.two_terminal and len(c.pins) == 2 and c.id not in used \
+                            and all(sig(n) for n in ab) and ab[0] != ab[1] \
+                            and smap.get(ab[0]) == ab[1] and (ab[0] in mine or ab[1] in mine):
+                        rung = c.id
+                        used.add(c.id)
+                        break
+            cells.append((group, mirror, below_c, above_c, rung))
+        cells += [([col], False, None, None, None) for col in cols if len(col) > 1 and col[0] not in used]
+
+        # 3) geometry: level i of every column has its top pin at y = 6i
+        for group, mirror, below_c, above_c, rung in cells:
+            flips = []
+            for k, col in enumerate(group):
+                f = []
+                for lvl, cid in enumerate(col):
+                    if not mirror:
+                        f.append(False)
+                        continue
+                    other = group[1 - k]
+                    h = net[cid]["L"]
+                    theirs = {net[o][d] for o in other for d in ("U", "D")}
+                    inward = h is not None and (h == net[other[lvl]]["L"] or h in theirs)
+                    # inward: the left part turns its base right, the right one left
+                    f.append(inward == (k == 0))
+                flips.append(f)
+
+            def put(cid, hflip, x, y, pin="U"):
+                inst = insts[cid]
+                inst.t = Transform(2, True) if hflip else Transform(0)
+                px, py = inst.pin_pos(pins[cid][pin])
+                inst.t = inst.moved(x - px, y - py)
+
+            ext = []                                     # (left, right) of each column's pin line
+            for col, f in zip(group, flips):
+                for lvl, (cid, hf) in enumerate(zip(col, f)):
+                    put(cid, hf, 0, 6 * lvl)
+                boxes = [self._inst_box(insts[cid]) for cid in col]
+                # room on the right for the label of a part stacked on an end pin
+                ext.append((min(b[0] for b in boxes), max(max(b[2] for b in boxes), 3.5)))
+            room = 2
+            if rung:
+                rb = self._inst_box(insts[rung])
+                room += math.ceil(max(rb[2] - rb[0], rb[3] - rb[1])) + 2
+            xs = [0]
+            for (_, r), (l, _) in zip(ext, ext[1:]):
+                xs.append(math.ceil(xs[-1] + r - l + room))
+            for col, f, x in zip(group, flips, xs):
+                for lvl, (cid, hf) in enumerate(zip(col, f)):
+                    put(cid, hf, x, 6 * lvl)
+            mid = round(sum(xs) / len(xs))
+            yb = 6 * (len(group[0]) - 1) + 4
+            members = [cid for col in group for cid in col]
+            if rung:
+                left = group[0]
+                ab = [insts[rung].comp.pins[p] for p in ("a", "b")]
+                n = ab[0] if ab[0] in {net[a][d] for a in left for d in ("U", "D", "L")} else ab[1]
+                y = None
+                for lvl, cid in enumerate(left):
+                    if bot[cid] == n and lvl + 1 < len(left):
+                        y = 6 * lvl + 5                  # the junction between two levels
+                        break
+                    for d in ("U", "D", "L"):
+                        if net[cid][d] == n:
+                            y = insts[cid].pin_pos(pins[cid][d])[1]
+                if y is not None:
+                    inst = insts[rung]
+                    inst.t = Transform(0) if ab[0] == n else Transform(2)
+                    pa = inst.pin_pos("a" if ab[0] == n else "b")
+                    pb = inst.pin_pos("b" if ab[0] == n else "a")
+                    inst.t = inst.moved(round((xs[0] + xs[-1] - (pa[0] + pb[0])) / 2), y - pa[1])
+                    members.append(rung)
+            if below_c:
+                if below_c[0] in comp:
+                    for lvl, cid in enumerate(below_c):
+                        put(cid, False, mid, yb + 2 + 6 * lvl)
+                else:
+                    self._put_shunt(below_c[0], mid, yb + 2)
+                members += below_c
+            if above_c:
+                if above_c[0] in comp:
+                    for lvl, cid in enumerate(reversed(above_c)):
+                        put(cid, False, mid, -2 - 6 * lvl, pin="D")
+                else:
+                    self._put_shunt(above_c[0], mid, -2)
+                members += above_c
+            for cid in members[1:]:
+                self._attach(cid, members[0], ("cell",))
+            # A complementary pair in a stack (the pull-up over the pull-down
+            # of an inverter, the two halves of a push-pull stage) with its
+            # gates tied is mirrored top to bottom about the junction: whatever
+            # drives the gates lines up with that axis, level with the output.
+            stacks = list(group) + [c for c in (below_c, above_c) if c and c[0] in comp]
+            for col in stacks:
+                for u, d in zip(col, col[1:]):
+                    h = net[u]["L"]
+                    if (comp[u].type in pull_up) == (comp[d].type in pull_up) \
+                            or not sig(h) or h != net[d]["L"]:
+                        continue
+                    ku, kd = (u, pins[u]["L"]), (d, pins[d]["L"])
+                    if insts[u].pin_dir(ku[1]) != insts[d].pin_dir(kd[1]):
+                        continue
+                    axis = (insts[u].pin_pos(ku[1])[1] + insts[d].pin_pos(kd[1])[1]) / 2
+                    self.axis_pins[ku] = (axis, kd)
+                    self.axis_pins[kd] = (axis, ku)
+
+    def _center_shunt(self, net, used):
+        """A part from `net` to a rail, not yet placed, to sit on a cell's axis."""
+        for c in self.ckt.components:
+            info = self._shunt_info(c.id)
+            if info and info[1] == net and c.id not in used:
+                return [c.id]
+        return None
+
+    def _put_shunt(self, cid, x, y):
+        inst = self.insts[cid]
+        px, py = inst.pin_pos(self._shunt_info(cid)[0])
+        inst.t = inst.moved(x - px, y - py)
+
     def _group(self):
         """Pick satellites. Each satellite hangs off an immediate parent part."""
         self.parent: dict[str, str] = {}
         comps = self.ckt.components
         taken = lambda cid: cid in self.parent
+        self._cells()
 
         # a) shunts in parallel (same signal net, same rail): side by side
         shunt_groups = defaultdict(list)
         for c in comps:
             info = self._shunt_info(c.id)
-            if info:
+            if info and not taken(c.id):
                 shunt_groups[(info[1], info[2])].append(c.id)
         shunt_anchor = {}
         for key, ids in shunt_groups.items():
@@ -315,7 +607,7 @@ class Layout:
                 continue
             for p in inst.sym.pins:
                 net = c.pins.get(p)
-                if net is None or not self.is_signal(net):
+                if net is None or not self.is_signal(net) or net in self.cell_nets:
                     continue
                 d = inst.pin_dir(p)
                 if d not in ("U", "D"):
@@ -340,7 +632,7 @@ class Layout:
                 self._attach(sides["low"][0], sides["pos"][0], "under")
 
         # d) series parts: in parallel with each other, or feedback around a part
-        series = [c for c in comps if self.insts[c.id].sym.two_terminal
+        series = [c for c in comps if self.insts[c.id].sym.two_terminal and not taken(c.id)
                   and len(c.pins) == 2 and all(self.orail(n) is None for n in c.pins.values())
                   and c.pins["a"] != c.pins["b"]]
         groups = defaultdict(list)
@@ -598,8 +890,25 @@ class Layout:
         inner = [layer[a] for a in anchors if comps[a].type not in ("input", "output")]
         lo = min(inner) if inner else 0
         hi = max(inner) if inner else 0
+        # An input that only feeds pins facing right (the base of the mirrored
+        # half of a differential pair) comes in from the right of that part.
+        from_right = {}
         for a in anchors:
-            if comps[a].type == "input":
+            if comps[a].type != "input":
+                continue
+            ends = [(cid, p) for n in comps[a].pins.values() for cid, p in self.net_pins[n]
+                    if cid != a]
+            if ends and all(self.insts[cid].pin_dir(p) == "R" for cid, p in ends):
+                from_right[a] = max(layer[root(cid)] for cid, _ in ends)
+                # drawn like an output port (pin on the left, name on the right),
+                # still the source of its net
+                sym = Port("output").build(comps[a], self.opts)
+                sym.type, sym.pins["a"].kind = "input", "out"
+                self.insts[a].sym = sym
+        for a in anchors:
+            if a in from_right:
+                layer[a] = from_right[a] + 1
+            elif comps[a].type == "input":
                 layer[a] = layer[a] if near else lo - 1
             elif comps[a].type == "output":
                 drv = [layer[p] for p in anchors if a in dag.get(p, ())]
@@ -614,7 +923,9 @@ class Layout:
                 if comps[a].type not in ("input", "output"):
                     layer[a] *= 3
             for a in anchors:
-                if comps[a].type == "input":
+                if a in from_right:
+                    layer[a] = 3 * from_right[a] + 1
+                elif comps[a].type == "input":
                     used = [layer[v] for v in dag.get(a, ())]
                     layer[a] = min(used) - 1 if used else -1
                 elif comps[a].type == "output":
@@ -913,6 +1224,8 @@ class Layout:
                 [prim_box(p) for m in node.members for p in m.decor]
 
     def _place_child(self, inst, parent, kind):
+        if kind == ("cell",):                  # placed by _cells
+            return
         if isinstance(kind, tuple):            # stacked on a vertical pin
             _, hp, sp = kind
             hx, hy = parent.pin_pos(hp)
@@ -1486,7 +1799,18 @@ class Layout:
         for net, pins in self.net_pins.items():
             if not self.is_signal(net) or net in bus:
                 continue
-            ends = [stub[k] for k in pins if k in stub]
+            ends = []
+            for k in pins:
+                if k not in stub:
+                    continue
+                ax = self.axis_pins.get(k)
+                if ax and ax[1] in pins:
+                    # both gates of a complementary pair: one end, on the axis
+                    if (k, ax[1]) < (ax[1], k):
+                        n, _, mass = stub[k]
+                        ends.append((n, ax[0], mass))
+                    continue
+                ends.append(stub[k])
             for n1, o1, _ in ends:
                 for n2, o2, mass in ends:
                     if n1 is n2 or n1.layer == n2.layer:

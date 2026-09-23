@@ -1,0 +1,8 @@
+title BJT differential pair
+input vin1 vin2
+output vo1 vo2
+RC1 res vcc vo1 10k
+RC2 res vcc vo2 10k
+Q1 npn c=vo1 b=vin1 e=tail
+Q2 npn c=vo2 b=vin2 e=tail
+RE res tail vee 20k

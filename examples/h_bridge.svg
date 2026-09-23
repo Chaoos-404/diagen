@@ -1,0 +1,83 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="560.8" height="324" viewBox="0 0 560.8 324" font-family="'Latin Modern Roman', 'CMU Serif', 'Times New Roman', serif" font-size="13">
+<title>H-bridge</title>
+<rect width="100%" height="100%" fill="white"/>
+<g stroke="black" stroke-width="1.4" fill="none" stroke-linecap="round" stroke-linejoin="round">
+<polyline points="88.8,112 124.8,112"/>
+<polyline points="124.8,96 124.8,128" stroke-width="2.8"/>
+<polyline points="124.8,104 148.8,90 148.8,72"/>
+<polyline points="124.8,120 148.8,134 148.8,152"/>
+<polygon points="127.8,102.4 131.441,96.766 134.492,101.933" fill="black"/>
+<circle cx="133.8" cy="112" r="26"/>
+<polyline points="148.8,72 148.8,52"/>
+<polyline points="138.8,52 158.8,52"/>
+<polyline points="528.8,112 492.8,112"/>
+<polyline points="492.8,96 492.8,128" stroke-width="2.8"/>
+<polyline points="492.8,104 468.8,90 468.8,72"/>
+<polyline points="492.8,120 468.8,134 468.8,152"/>
+<polygon points="489.8,102.4 486.159,96.766 483.108,101.933" fill="black"/>
+<circle cx="483.8" cy="112" r="26"/>
+<polyline points="468.8,72 468.8,52"/>
+<polyline points="458.8,52 478.8,52"/>
+<polyline points="88.8,232 124.8,232"/>
+<polyline points="124.8,216 124.8,248" stroke-width="2.8"/>
+<polyline points="124.8,224 148.8,210 148.8,192"/>
+<polyline points="124.8,240 148.8,254 148.8,272"/>
+<polygon points="145.8,252.4 139.108,251.933 142.159,246.766" fill="black"/>
+<circle cx="133.8" cy="232" r="26"/>
+<polyline points="148.8,272 148.8,292"/>
+<polyline points="136.8,292 160.8,292"/>
+<polyline points="141.2,296.4 156.4,296.4"/>
+<polyline points="145.6,300.8 152,300.8"/>
+<polyline points="528.8,232 492.8,232"/>
+<polyline points="492.8,216 492.8,248" stroke-width="2.8"/>
+<polyline points="492.8,224 468.8,210 468.8,192"/>
+<polyline points="492.8,240 468.8,254 468.8,272"/>
+<polygon points="471.8,252.4 478.492,251.933 475.441,246.766" fill="black"/>
+<circle cx="483.8" cy="232" r="26"/>
+<polyline points="468.8,272 468.8,292"/>
+<polyline points="456.8,292 480.8,292"/>
+<polyline points="461.2,296.4 476.4,296.4"/>
+<polyline points="465.6,300.8 472,300.8"/>
+<polyline points="268.8,172 292.8,172"/>
+<polyline points="324.8,172 348.8,172"/>
+<circle cx="308.8" cy="172" r="16"/>
+<polyline points="297.486,160.686 320.114,183.314"/>
+<polyline points="297.486,183.314 320.114,160.686"/>
+<circle cx="28.8" cy="152" r="3"/>
+<circle cx="28.8" cy="112" r="3"/>
+<polyline points="148.8,172 268.8,172"/>
+<polyline points="148.8,152 148.8,192"/>
+<circle cx="148.8" cy="172" r="2.8" fill="black" stroke="none"/>
+<polyline points="348.8,172 468.8,172"/>
+<polyline points="468.8,152 468.8,192"/>
+<circle cx="468.8" cy="172" r="2.8" fill="black" stroke="none"/>
+<polyline points="68.8,112 88.8,112"/>
+<polyline points="31.8,152 68.8,152"/>
+<polyline points="528.8,232 548.8,232"/>
+<polyline points="48.8,312 548.8,312"/>
+<polyline points="68.8,112 68.8,152"/>
+<polyline points="548.8,232 548.8,312"/>
+<polyline points="48.8,152 48.8,312"/>
+<circle cx="48.8" cy="152" r="2.8" fill="black" stroke="none"/>
+<polyline points="68.8,232 88.8,232"/>
+<polyline points="68.8,212 88.8,212"/>
+<polyline points="48.8,132 88.8,132"/>
+<polyline points="31.8,112 48.8,112"/>
+<polyline points="528.8,112 548.8,112"/>
+<polyline points="48.8,12 548.8,12"/>
+<polyline points="68.8,212 68.8,232"/>
+<polyline points="88.8,132 88.8,212"/>
+<polyline points="48.8,12 48.8,132"/>
+<polyline points="548.8,12 548.8,112"/>
+<circle cx="48.8" cy="112" r="2.8" fill="black" stroke="none"/>
+</g>
+<text x="148.8" y="47.026" text-anchor="middle" font-size="11.7" fill="black" stroke="none"><tspan>vcc</tspan></text>
+<text x="162.8" y="115.9" text-anchor="start" fill="black" stroke="none"><tspan>Q1</tspan></text>
+<text x="468.8" y="47.026" text-anchor="middle" font-size="11.7" fill="black" stroke="none"><tspan>vcc</tspan></text>
+<text x="454.8" y="115.9" text-anchor="end" fill="black" stroke="none"><tspan>Q2</tspan></text>
+<text x="162.8" y="235.9" text-anchor="start" fill="black" stroke="none"><tspan>Q3</tspan></text>
+<text x="454.8" y="235.9" text-anchor="end" fill="black" stroke="none"><tspan>Q4</tspan></text>
+<text x="308.8" y="150.14" text-anchor="middle" fill="black" stroke="none"><tspan>M1</tspan></text>
+<text x="22.8" y="155.9" text-anchor="end" fill="black" stroke="none"><tspan>a</tspan></text>
+<text x="22.8" y="115.9" text-anchor="end" fill="black" stroke="none"><tspan>b</tspan></text>
+</svg>

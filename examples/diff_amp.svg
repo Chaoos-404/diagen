@@ -1,0 +1,101 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="598.4" height="470.5" viewBox="0 0 598.4 470.5" font-family="'Latin Modern Roman', 'CMU Serif', 'Times New Roman', serif" font-size="13">
+<title>Differential amplifier with current-mirror load and tail source</title>
+<rect width="100%" height="100%" fill="white"/>
+<g stroke="black" stroke-width="1.4" fill="none" stroke-linecap="round" stroke-linejoin="round">
+<polyline points="309.2,89.7 273.2,89.7"/>
+<polyline points="273.2,73.7 273.2,105.7" stroke-width="2.8"/>
+<polyline points="273.2,81.7 249.2,67.7 249.2,49.7"/>
+<polyline points="273.2,97.7 249.2,111.7 249.2,129.7"/>
+<polygon points="270.2,80.1 266.559,74.466 263.508,79.633" fill="black"/>
+<circle cx="264.2" cy="89.7" r="26"/>
+<polyline points="249.2,49.7 249.2,29.7"/>
+<polyline points="239.2,29.7 259.2,29.7"/>
+<polyline points="389.2,89.7 425.2,89.7"/>
+<polyline points="425.2,73.7 425.2,105.7" stroke-width="2.8"/>
+<polyline points="425.2,81.7 449.2,67.7 449.2,49.7"/>
+<polyline points="425.2,97.7 449.2,111.7 449.2,129.7"/>
+<polygon points="428.2,80.1 431.841,74.466 434.892,79.633" fill="black"/>
+<circle cx="434.2" cy="89.7" r="26"/>
+<polyline points="449.2,49.7 449.2,29.7"/>
+<polyline points="439.2,29.7 459.2,29.7"/>
+<polyline points="189.2,209.7 225.2,209.7"/>
+<polyline points="225.2,193.7 225.2,225.7" stroke-width="2.8"/>
+<polyline points="225.2,201.7 249.2,187.7 249.2,169.7"/>
+<polyline points="225.2,217.7 249.2,231.7 249.2,249.7"/>
+<polygon points="246.2,230.1 239.508,229.633 242.559,224.466" fill="black"/>
+<circle cx="234.2" cy="209.7" r="26"/>
+<polyline points="509.2,209.7 473.2,209.7"/>
+<polyline points="473.2,193.7 473.2,225.7" stroke-width="2.8"/>
+<polyline points="473.2,201.7 449.2,187.7 449.2,169.7"/>
+<polyline points="473.2,217.7 449.2,231.7 449.2,249.7"/>
+<polygon points="452.2,230.1 458.892,229.633 455.841,224.466" fill="black"/>
+<circle cx="464.2" cy="209.7" r="26"/>
+<polyline points="289.2,329.7 325.2,329.7"/>
+<polyline points="325.2,313.7 325.2,345.7" stroke-width="2.8"/>
+<polyline points="325.2,321.7 349.2,307.7 349.2,289.7"/>
+<polyline points="325.2,337.7 349.2,351.7 349.2,369.7"/>
+<polygon points="346.2,350.1 339.508,349.633 342.559,344.466" fill="black"/>
+<circle cx="334.2" cy="329.7" r="26"/>
+<polyline points="349.2,369.7 349.2,389.7"/>
+<polyline points="337.2,389.7 361.2,389.7"/>
+<polyline points="341.6,394.1 356.8,394.1"/>
+<polyline points="346,398.5 352.4,398.5"/>
+<polyline points="89.2,389.7 125.2,389.7"/>
+<polyline points="125.2,373.7 125.2,405.7" stroke-width="2.8"/>
+<polyline points="125.2,381.7 149.2,367.7 149.2,349.7"/>
+<polyline points="125.2,397.7 149.2,411.7 149.2,429.7"/>
+<polygon points="146.2,410.1 139.508,409.633 142.559,404.466" fill="black"/>
+<circle cx="134.2" cy="389.7" r="26"/>
+<polyline points="149.2,429.7 149.2,449.7"/>
+<polyline points="137.2,449.7 161.2,449.7"/>
+<polyline points="141.6,454.1 156.8,454.1"/>
+<polyline points="146,458.5 152.4,458.5"/>
+<polyline points="149.2,229.7 149.2,249.7"/>
+<polyline points="149.2,289.7 149.2,309.7"/>
+<polyline points="149.2,249.7 155.2,253.033 143.2,259.7 155.2,266.367 143.2,273.033 155.2,279.7 143.2,286.367 149.2,289.7"/>
+<polyline points="149.2,229.7 149.2,209.7"/>
+<polyline points="139.2,209.7 159.2,209.7"/>
+<circle cx="49.2" cy="209.7" r="3"/>
+<circle cx="549.2" cy="209.7" r="3"/>
+<circle cx="549.2" cy="149.7" r="3"/>
+<polyline points="509.2,209.7 546.2,209.7"/>
+<polyline points="449.2,149.7 546.2,149.7"/>
+<polyline points="449.2,129.7 449.2,169.7"/>
+<circle cx="449.2" cy="149.7" r="2.8" fill="black" stroke="none"/>
+<polyline points="52.2,209.7 69.2,209.7"/>
+<polyline points="169.2,209.7 189.2,209.7"/>
+<polyline points="69.2,169.7 169.2,169.7"/>
+<polyline points="169.2,169.7 169.2,209.7"/>
+<polyline points="69.2,169.7 69.2,209.7"/>
+<polyline points="309.2,89.7 389.2,89.7"/>
+<polyline points="249.2,149.7 329.2,149.7"/>
+<polyline points="249.2,129.7 249.2,169.7"/>
+<polyline points="329.2,89.7 329.2,149.7"/>
+<circle cx="249.2" cy="149.7" r="2.8" fill="black" stroke="none"/>
+<circle cx="329.2" cy="89.7" r="2.8" fill="black" stroke="none"/>
+<polyline points="249.2,269.7 449.2,269.7"/>
+<polyline points="349.2,269.7 349.2,289.7"/>
+<polyline points="249.2,249.7 249.2,269.7"/>
+<polyline points="449.2,249.7 449.2,269.7"/>
+<circle cx="349.2" cy="269.7" r="2.8" fill="black" stroke="none"/>
+<polyline points="69.2,329.7 289.2,329.7"/>
+<polyline points="69.2,389.7 89.2,389.7"/>
+<polyline points="149.2,309.7 149.2,349.7"/>
+<polyline points="69.2,329.7 69.2,389.7"/>
+<circle cx="149.2" cy="329.7" r="2.8" fill="black" stroke="none"/>
+</g>
+<text x="249.2" y="24.726" text-anchor="middle" font-size="11.7" fill="black" stroke="none"><tspan>vcc</tspan></text>
+<text x="235.2" y="93.6" text-anchor="end" fill="black" stroke="none"><tspan>Q3</tspan></text>
+<text x="449.2" y="24.726" text-anchor="middle" font-size="11.7" fill="black" stroke="none"><tspan>vcc</tspan></text>
+<text x="463.2" y="93.6" text-anchor="start" fill="black" stroke="none"><tspan>Q4</tspan></text>
+<text x="263.2" y="213.6" text-anchor="start" fill="black" stroke="none"><tspan>Q1</tspan></text>
+<text x="435.2" y="213.6" text-anchor="end" fill="black" stroke="none"><tspan>Q2</tspan></text>
+<text x="363.2" y="333.6" text-anchor="start" fill="black" stroke="none"><tspan>Q5</tspan></text>
+<text x="163.2" y="393.6" text-anchor="start" fill="black" stroke="none"><tspan>Q6</tspan></text>
+<text x="149.2" y="204.726" text-anchor="middle" font-size="11.7" fill="black" stroke="none"><tspan>vcc</tspan></text>
+<text x="161.2" y="265.1" text-anchor="start" fill="black" stroke="none"><tspan>RB</tspan></text>
+<text x="161.2" y="282.1" text-anchor="start" fill="black" stroke="none"><tspan>20k</tspan></text>
+<text x="43.2" y="213.6" text-anchor="end" fill="black" stroke="none"><tspan>vin1</tspan></text>
+<text x="555.2" y="213.6" text-anchor="start" fill="black" stroke="none"><tspan>vin2</tspan></text>
+<text x="555.2" y="153.6" text-anchor="start" fill="black" stroke="none"><tspan>vout</tspan></text>
+</svg>

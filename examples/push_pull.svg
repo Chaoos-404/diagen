@@ -1,0 +1,49 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="291.6" height="299.4" viewBox="0 0 291.6 299.4" font-family="'Latin Modern Roman', 'CMU Serif', 'Times New Roman', serif" font-size="13">
+<title>Class-B push-pull output stage</title>
+<rect width="100%" height="100%" fill="white"/>
+<g stroke="black" stroke-width="1.4" fill="none" stroke-linecap="round" stroke-linejoin="round">
+<polyline points="102.4,89.7 138.4,89.7"/>
+<polyline points="138.4,73.7 138.4,105.7" stroke-width="2.8"/>
+<polyline points="138.4,81.7 162.4,67.7 162.4,49.7"/>
+<polyline points="138.4,97.7 162.4,111.7 162.4,129.7"/>
+<polygon points="159.4,110.1 152.708,109.633 155.759,104.466" fill="black"/>
+<circle cx="147.4" cy="89.7" r="26"/>
+<polyline points="162.4,49.7 162.4,29.7"/>
+<polyline points="152.4,29.7 172.4,29.7"/>
+<polyline points="102.4,209.7 138.4,209.7"/>
+<polyline points="138.4,193.7 138.4,225.7" stroke-width="2.8"/>
+<polyline points="138.4,201.7 162.4,187.7 162.4,169.7"/>
+<polyline points="138.4,217.7 162.4,231.7 162.4,249.7"/>
+<polygon points="141.4,200.1 145.041,194.466 148.092,199.633" fill="black"/>
+<circle cx="147.4" cy="209.7" r="26"/>
+<polyline points="162.4,249.7 162.4,269.7"/>
+<polyline points="152.4,269.7 172.4,269.7"/>
+<polyline points="222.4,169.7 222.4,189.7"/>
+<polyline points="222.4,229.7 222.4,249.7"/>
+<polyline points="222.4,189.7 228.4,193.033 216.4,199.7 228.4,206.367 216.4,213.033 228.4,219.7 216.4,226.367 222.4,229.7"/>
+<polyline points="222.4,249.7 222.4,269.7"/>
+<polyline points="210.4,269.7 234.4,269.7"/>
+<polyline points="214.8,274.1 230,274.1"/>
+<polyline points="219.2,278.5 225.6,278.5"/>
+<circle cx="42.4" cy="149.7" r="3"/>
+<circle cx="242.4" cy="149.7" r="3"/>
+<polyline points="162.4,149.7 239.4,149.7"/>
+<polyline points="162.4,129.7 162.4,169.7"/>
+<polyline points="222.4,149.7 222.4,169.7"/>
+<circle cx="162.4" cy="149.7" r="2.8" fill="black" stroke="none"/>
+<circle cx="222.4" cy="149.7" r="2.8" fill="black" stroke="none"/>
+<polyline points="62.4,89.7 102.4,89.7"/>
+<polyline points="45.4,149.7 62.4,149.7"/>
+<polyline points="62.4,209.7 102.4,209.7"/>
+<polyline points="62.4,89.7 62.4,209.7"/>
+<circle cx="62.4" cy="149.7" r="2.8" fill="black" stroke="none"/>
+</g>
+<text x="162.4" y="24.726" text-anchor="middle" font-size="11.7" fill="black" stroke="none"><tspan>vcc</tspan></text>
+<text x="176.4" y="93.6" text-anchor="start" fill="black" stroke="none"><tspan>Q1</tspan></text>
+<text x="162.4" y="281.46" text-anchor="middle" font-size="11.7" fill="black" stroke="none"><tspan>vee</tspan></text>
+<text x="176.4" y="213.6" text-anchor="start" fill="black" stroke="none"><tspan>Q2</tspan></text>
+<text x="234.4" y="205.1" text-anchor="start" fill="black" stroke="none"><tspan>RL</tspan></text>
+<text x="234.4" y="222.1" text-anchor="start" fill="black" stroke="none"><tspan>8</tspan></text>
+<text x="36.4" y="153.6" text-anchor="end" fill="black" stroke="none"><tspan>vin</tspan></text>
+<text x="248.4" y="153.6" text-anchor="start" fill="black" stroke="none"><tspan>vout</tspan></text>
+</svg>

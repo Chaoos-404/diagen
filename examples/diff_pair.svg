@@ -1,0 +1,71 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="478.4" height="441.7" viewBox="0 0 478.4 441.7" font-family="'Latin Modern Roman', 'CMU Serif', 'Times New Roman', serif" font-size="13">
+<title>BJT differential pair</title>
+<rect width="100%" height="100%" fill="white"/>
+<g stroke="black" stroke-width="1.4" fill="none" stroke-linecap="round" stroke-linejoin="round">
+<polyline points="89.2,232 125.2,232"/>
+<polyline points="125.2,216 125.2,248" stroke-width="2.8"/>
+<polyline points="125.2,224 149.2,210 149.2,192"/>
+<polyline points="125.2,240 149.2,254 149.2,272"/>
+<polygon points="146.2,252.4 139.508,251.933 142.559,246.766" fill="black"/>
+<circle cx="134.2" cy="232" r="26"/>
+<polyline points="149.2,72 149.2,92"/>
+<polyline points="149.2,132 149.2,152"/>
+<polyline points="149.2,92 155.2,95.333 143.2,102 155.2,108.667 143.2,115.333 155.2,122 143.2,128.667 149.2,132"/>
+<polyline points="149.2,72 149.2,52"/>
+<polyline points="139.2,52 159.2,52"/>
+<polyline points="369.2,232 333.2,232"/>
+<polyline points="333.2,216 333.2,248" stroke-width="2.8"/>
+<polyline points="333.2,224 309.2,210 309.2,192"/>
+<polyline points="333.2,240 309.2,254 309.2,272"/>
+<polygon points="312.2,252.4 318.892,251.933 315.841,246.766" fill="black"/>
+<circle cx="324.2" cy="232" r="26"/>
+<polyline points="229.2,312 229.2,332"/>
+<polyline points="229.2,372 229.2,392"/>
+<polyline points="229.2,332 235.2,335.333 223.2,342 235.2,348.667 223.2,355.333 235.2,362 223.2,368.667 229.2,372"/>
+<polyline points="229.2,392 229.2,412"/>
+<polyline points="219.2,412 239.2,412"/>
+<polyline points="309.2,72 309.2,92"/>
+<polyline points="309.2,132 309.2,152"/>
+<polyline points="309.2,92 315.2,95.333 303.2,102 315.2,108.667 303.2,115.333 315.2,122 303.2,128.667 309.2,132"/>
+<polyline points="309.2,72 309.2,52"/>
+<polyline points="299.2,52 319.2,52"/>
+<circle cx="49.2" cy="232" r="3"/>
+<circle cx="429.2" cy="232" r="3"/>
+<circle cx="429.2" cy="152" r="3"/>
+<circle cx="429.2" cy="192" r="3"/>
+<polyline points="52.2,232 89.2,232"/>
+<polyline points="369.2,232 426.2,232"/>
+<polyline points="349.2,192 426.2,192"/>
+<polyline points="309.2,172 349.2,172"/>
+<polyline points="309.2,152 309.2,192"/>
+<polyline points="349.2,172 349.2,192"/>
+<circle cx="309.2" cy="172" r="2.8" fill="black" stroke="none"/>
+<polyline points="149.2,292 309.2,292"/>
+<polyline points="229.2,292 229.2,312"/>
+<polyline points="149.2,272 149.2,292"/>
+<polyline points="309.2,272 309.2,292"/>
+<circle cx="229.2" cy="292" r="2.8" fill="black" stroke="none"/>
+<polyline points="369.2,152 426.2,152"/>
+<polyline points="209.2,12 369.2,12"/>
+<polyline points="149.2,172 209.2,172"/>
+<polyline points="149.2,152 149.2,192"/>
+<polyline points="369.2,12 369.2,152"/>
+<polyline points="209.2,12 209.2,172"/>
+<circle cx="149.2" cy="172" r="2.8" fill="black" stroke="none"/>
+</g>
+<text x="163.2" y="235.9" text-anchor="start" fill="black" stroke="none"><tspan>Q1</tspan></text>
+<text x="149.2" y="47.026" text-anchor="middle" font-size="11.7" fill="black" stroke="none"><tspan>vcc</tspan></text>
+<text x="161.2" y="107.4" text-anchor="start" fill="black" stroke="none"><tspan>RC1</tspan></text>
+<text x="161.2" y="124.4" text-anchor="start" fill="black" stroke="none"><tspan>10k</tspan></text>
+<text x="295.2" y="235.9" text-anchor="end" fill="black" stroke="none"><tspan>Q2</tspan></text>
+<text x="229.2" y="423.76" text-anchor="middle" font-size="11.7" fill="black" stroke="none"><tspan>vee</tspan></text>
+<text x="241.2" y="347.4" text-anchor="start" fill="black" stroke="none"><tspan>RE</tspan></text>
+<text x="241.2" y="364.4" text-anchor="start" fill="black" stroke="none"><tspan>20k</tspan></text>
+<text x="309.2" y="47.026" text-anchor="middle" font-size="11.7" fill="black" stroke="none"><tspan>vcc</tspan></text>
+<text x="321.2" y="107.4" text-anchor="start" fill="black" stroke="none"><tspan>RC2</tspan></text>
+<text x="321.2" y="124.4" text-anchor="start" fill="black" stroke="none"><tspan>10k</tspan></text>
+<text x="43.2" y="235.9" text-anchor="end" fill="black" stroke="none"><tspan>vin1</tspan></text>
+<text x="435.2" y="235.9" text-anchor="start" fill="black" stroke="none"><tspan>vin2</tspan></text>
+<text x="435.2" y="155.9" text-anchor="start" fill="black" stroke="none"><tspan>vo1</tspan></text>
+<text x="435.2" y="195.9" text-anchor="start" fill="black" stroke="none"><tspan>vo2</tspan></text>
+</svg>

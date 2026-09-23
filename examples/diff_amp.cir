@@ -1,0 +1,10 @@
+title Differential amplifier with current-mirror load and tail source
+input vin1 vin2
+output vout
+Q3 pnp c=x b=x e=vcc
+Q4 pnp c=vout b=x e=vcc
+Q1 npn c=x b=vin1 e=tail
+Q2 npn c=vout b=vin2 e=tail
+Q5 npn c=tail b=vb e=0
+Q6 npn c=vb b=vb e=0
+RB res vcc vb 20k

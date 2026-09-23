@@ -104,6 +104,12 @@ Unicode `Ω µ` also works.
   as it can.
 * `stages=auto|off`: repeated stages are laid out side by side, all alike
   (see below). `off` lays the circuit out as one piece.
+* `symmetry=auto|off`: transistors are drawn as textbook cells: stacked
+  through their collector/emitter (drain/source) pins, symmetric halves side
+  by side as mirror images (differential pair, current mirror, SRAM,
+  H-bridge) or as copies (parallel pull-ups), the tail on the axis. `off`
+  places every transistor on its own. A transistor with `flip=`, `rot=` or
+  `rank=` is left out of cells.
 * `resistor=american|european`: zigzag or box resistors.
 * `transistor_circle=false`: no envelope circle on BJTs.
 
