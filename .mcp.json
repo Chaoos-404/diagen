@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "diagen": {
+      "command": "python3",
+      "args": ["-m", "diagen.mcp_server"]
+    }
+  }
+}

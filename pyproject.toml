@@ -1,0 +1,22 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "diagen"
+version = "0.1.0"
+description = "Netlist in, clean schematic out: an automatic layout engine for analog and digital circuit diagrams (SVG + TikZ)"
+requires-python = ">=3.10"
+license = {text = "GPL-3.0-or-later"}
+readme = "README.md"
+dependencies = []
+
+[project.scripts]
+diagen = "diagen.cli:main"
+diagen-mcp = "diagen.mcp_server:main"
+
+[tool.setuptools]
+packages = ["diagen"]
+
+[tool.setuptools.package-data]
+diagen = ["NETLIST.md"]

@@ -1,0 +1,11 @@
+title Common-emitter amplifier
+input vin
+output vout
+C1 cap vin b 10u
+R1 res vcc b 47k
+R2 res b 0 10k
+Q1 npn c=c b=b e=e
+RC res vcc c 4.7k
+RE res e 0 1k
+CE cap e 0 100u
+C2 cap c vout 10u

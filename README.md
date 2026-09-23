@@ -1,0 +1,128 @@
+# diagen
+
+**Netlist in, clean schematic out.** An automatic layout engine for analog and
+digital circuit diagrams, built so an AI (or a person) can describe *what is
+connected* and get a publication-ready TikZ or SVG drawing without adjusting
+coordinates by hand.
+
+```
+title Common-emitter amplifier
+input vin
+output vout
+C1 cap vin b 10u
+R1 res vcc b 47k
+R2 res b 0 10k
+Q1 npn c=c b=b e=e
+RC res vcc c 4.7k
+RE res e 0 1k
+CE cap e 0 100u
+C2 cap c vout 10u
+```
+
+![common-emitter amplifier](examples/ce_amp.svg)
+
+The bias divider is stacked, RC and RE sit in line with the transistor, the
+bypass capacitor sits beside RE, and the rails are drawn as symbols. None of
+that is written in the netlist: the engine infers it.
+
+> **中文簡介**：diagen 是一個電路圖自動佈局引擎。你（或 AI）只要用網表描述「哪些元件接在哪些節點」，它就會自動擺放元件、拉線，輸出不需再手動微調的 TikZ 與 SVG，類比電路（放大器、濾波器、電晶體偏壓）和數位電路（邏輯閘、正反器、方塊圖）都適用。附有 MCP 伺服器與 Claude Code 技能，讓 AI 可以直接畫圖並看預覽自我檢查。語法請見 [diagen/NETLIST.md](diagen/NETLIST.md)。
+
+## Use
+
+```bash
+python3 -m diagen examples/ce_amp.cir -o ce_amp.svg -o ce_amp.tex
+```
+
+```bash
+python3 -m diagen examples/ce_amp.cir -o ce_amp.tex --standalone
+```
+
+Outputs are picked by extension: `.svg`, `.tex` (a `tikzpicture` that needs
+only `\usepackage{tikz}`, no circuitikz), and `.png` (preview, via macOS Quick
+Look). The report printed on stderr says `OK` or `INCOMPLETE` and lists wire
+length, bends, crossings, junctions, and warnings such as dangling nets. The
+exit code is 0 only when every net routed.
+
+No dependencies: Python 3.10+ standard library only. `pip install -e .`
+adds the `diagen` and `diagen-mcp` commands.
+
+### For AI agents
+
+* **MCP server**: `python3 -m diagen.mcp_server`. It is registered for this
+  folder in `.mcp.json`; elsewhere run
+  `claude mcp add diagen -- python3 -m diagen.mcp_server`. The
+  `render_circuit` tool returns the report, the TikZ, and a PNG preview, so
+  the model can check its own drawing. `netlist_reference` returns the
+  language reference.
+* **Claude Code skill**: `.claude/skills/circuit-diagram/SKILL.md` teaches the
+  workflow (write netlist → render → read report and preview → fix netlist).
+* **Language reference**: [diagen/NETLIST.md](diagen/NETLIST.md).
+
+## How it works
+
+1. **Parse** ([netlist.py](diagen/netlist.py)): a SPICE-like text format or
+   JSON. Nets named `0`/`gnd` and `vcc`/`vdd`/`+5V` are *rails*: they are
+   drawn as local symbols, never wired. This removes most of the long wires
+   that make hand-drawn schematics messy.
+2. **Orient and group** ([layout.py](diagen/layout.py)): parts between a
+   signal and a rail hang vertically; parts between two signals lie in the
+   signal path. Parts that belong together become one layout node: feedback
+   around an op-amp or gate, parallel parts, dividers, and loads stacked on a
+   transistor's collector, emitter, drain or source.
+3. **Rank by signal flow**: a Sugiyama-style layered layout. Edges come from
+   driver pins (gate/op-amp outputs, input ports), or for passive nets from
+   BFS distance from the sources. Cycles are broken by DFS, cross-coupled
+   latches share a column, and the ranks are assigned by longest path.
+4. **Order and align**: barycentre sweeps reduce crossings. Then each column
+   picks y positions by weighted median over connected pins, solved exactly
+   with isotonic regression (pool-adjacent-violators). Nodes never overlap
+   and wires come out straight wherever possible.
+5. **Route** ([router.py](diagen/router.py)): grid A* over (point, heading)
+   with bend and crossing costs. Nets are routed as trees with T-junction
+   dots. Hard rules: never through a body or label, never along another net,
+   cross only at right angles, never turn or join on another net's wire. Nets
+   that fail are retried in a different order; anything still unroutable is
+   drawn as a red dashed air wire and reported.
+6. **Search**: neighbouring parts in each column are swapped one pair at a
+   time and the circuit is re-routed; a swap is kept whenever the routed
+   drawing scores better (wire length, bends, crossings, area). With
+   `ports=auto` both port placements are laid out and scored the same way
+   (with `near`, ports get thin columns of their own beside the part they
+   connect to). For commutative gates (AND/OR/XOR…) the search also tries
+   exchanging inputs, which is often what removes a crossing.
+   If a net cannot be routed, the channels are widened and it tries again.
+7. **Render** ([render.py](diagen/render.py)): one primitive list, two back
+   ends, so the SVG and the TikZ always match.
+
+## Gallery
+
+| | |
+|---|---|
+| ![](examples/inverting_amp.svg) | ![](examples/noninverting_amp.svg) |
+| ![](examples/sallen_key.svg) | ![](examples/cmos_inverter.svg) |
+| ![](examples/full_adder.svg) | ![](examples/mux2.svg) |
+| ![](examples/sr_latch.svg) | ![](examples/counter.svg) |
+| ![](examples/ripple_adder.svg) | ![](examples/symbols.svg) |
+| ![](examples/wheatstone.svg) | ![](examples/rlc.svg) |
+
+## Extending
+
+* **A new symbol**: add a builder in [symbols.py](diagen/symbols.py) that
+  returns a `SymbolDef`: artwork primitives, pins on integer grid points with
+  their exit direction and `in`/`out` kind, and a body rectangle. Then map
+  its type names in `lookup()`.
+* **A new layout rule**: most visual conventions are grouping rules in
+  `Layout._group`.
+
+## Tests
+
+```bash
+python3 -m unittest discover tests
+```
+
+The suite routes every example, checks the layout rules, and renders 60
+random netlists to make sure nothing crashes.
+
+## License
+
+GPL-3.0-or-later. See [LICENSE](LICENSE).

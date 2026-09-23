@@ -1,0 +1,7 @@
+title 4-bit ripple-carry adder
+input a0 b0 a1 b1 a2 b2 a3 b3 cin
+output s0 s1 s2 s3 cout
+FA0 block A=a0 B=b0 Cin=cin S=s0 Cout=c1 right=S,Cout text=FA
+FA1 block A=a1 B=b1 Cin=c1 S=s1 Cout=c2 right=S,Cout text=FA
+FA2 block A=a2 B=b2 Cin=c2 S=s2 Cout=c3 right=S,Cout text=FA
+FA3 block A=a3 B=b3 Cin=c3 S=s3 Cout=cout right=S,Cout text=FA

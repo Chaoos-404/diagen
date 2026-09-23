@@ -1,0 +1,5 @@
+title RC low-pass filter
+V1 vsource in 0 5V
+R1 res in out 1k
+C1 cap out 0 100n
+output out

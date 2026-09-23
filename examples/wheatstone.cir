@@ -1,0 +1,7 @@
+title Wheatstone bridge
+V1 vsource top 0 10V
+R1 res top a 1k
+R2 res a 0 1k
+R3 res top b 1k
+R4 res b 0 2k
+M1 voltmeter a b

@@ -1,0 +1,8 @@
+title Full adder
+input a b cin
+output s cout
+X1 xor2 a b p
+X2 xor2 p cin s
+A1 and2 a b g
+A2 and2 p cin t
+O1 or2 g t cout

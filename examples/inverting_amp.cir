@@ -1,0 +1,6 @@
+title Inverting amplifier
+input vin
+output vout
+R1 res vin n1 10k
+Rf res n1 vout 100k
+U1 opamp -=n1 +=0 out=vout

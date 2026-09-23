@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="264.4" height="208" viewBox="0 0 264.4 208" font-family="'Latin Modern Roman', 'CMU Serif', 'Times New Roman', serif" font-size="13">
+<title>SR latch (NOR)</title>
+<rect width="100%" height="100%" fill="white"/>
+<g stroke="black" stroke-width="1.4" fill="none" stroke-linecap="round" stroke-linejoin="round">
+<path d="M88.8,132 C117.6,132 140.8,148 152.8,164 C140.8,180 117.6,196 88.8,196 C99.8,176.8 99.8,151.2 88.8,132 Z"/>
+<polyline points="68.8,144 94.022,144"/>
+<polyline points="68.8,184 94.022,184"/>
+<circle cx="156.8" cy="164" r="4"/>
+<polyline points="160.8,164 168.8,164"/>
+<path d="M88.8,12 C117.6,12 140.8,28 152.8,44 C140.8,60 117.6,76 88.8,76 C99.8,56.8 99.8,31.2 88.8,12 Z"/>
+<polyline points="68.8,24 94.022,24"/>
+<polyline points="68.8,64 94.022,64"/>
+<circle cx="156.8" cy="44" r="4"/>
+<polyline points="160.8,44 168.8,44"/>
+<circle cx="28.8" cy="24" r="3"/>
+<circle cx="28.8" cy="184" r="3"/>
+<circle cx="228.8" cy="164" r="3"/>
+<circle cx="228.8" cy="44" r="3"/>
+<polyline points="31.8,184 68.8,184"/>
+<polyline points="31.8,24 68.8,24"/>
+<polyline points="168.8,44 225.8,44"/>
+<polyline points="48.8,124 188.8,124"/>
+<polyline points="48.8,144 68.8,144"/>
+<polyline points="188.8,44 188.8,124"/>
+<polyline points="48.8,124 48.8,144"/>
+<circle cx="188.8" cy="44" r="2.8" fill="black" stroke="none"/>
+<polyline points="168.8,164 225.8,164"/>
+<polyline points="48.8,84 208.8,84"/>
+<polyline points="48.8,64 68.8,64"/>
+<polyline points="208.8,84 208.8,164"/>
+<polyline points="48.8,64 48.8,84"/>
+<circle cx="208.8" cy="164" r="2.8" fill="black" stroke="none"/>
+</g>
+<text x="22.8" y="27.9" text-anchor="end" fill="black" stroke="none"><tspan>s</tspan></text>
+<text x="22.8" y="187.9" text-anchor="end" fill="black" stroke="none"><tspan>r</tspan></text>
+<text x="234.8" y="167.9" text-anchor="start" fill="black" stroke="none"><tspan>q</tspan></text>
+<text x="234.8" y="47.9" text-anchor="start" fill="black" stroke="none"><tspan>qn</tspan></text>
+</svg>

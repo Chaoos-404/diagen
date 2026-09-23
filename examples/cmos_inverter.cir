@@ -1,0 +1,5 @@
+title CMOS inverter
+input in
+output out
+M1 pmos d=out g=in s=vdd
+M2 nmos d=out g=in s=0

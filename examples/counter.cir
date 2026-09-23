@@ -1,0 +1,5 @@
+title 2-bit ripple counter
+input clk
+output q0 q1
+FF0 dff d=n0 clk=clk q=q0 qn=n0
+FF1 dff d=n1 clk=n0 q=q1 qn=n1

@@ -1,0 +1,61 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="551.6" height="302.8" viewBox="0 0 551.6 302.8" font-family="'Latin Modern Roman', 'CMU Serif', 'Times New Roman', serif" font-size="13">
+<title>Sallen-Key low-pass filter</title>
+<rect width="100%" height="100%" fill="white"/>
+<g stroke="black" stroke-width="1.4" fill="none" stroke-linecap="round" stroke-linejoin="round">
+<polyline points="82.4,82 102.4,82"/>
+<polyline points="142.4,82 162.4,82"/>
+<polyline points="102.4,82 105.733,76 112.4,88 119.067,76 125.733,88 132.4,76 139.067,88 142.4,82"/>
+<polyline points="222.4,162 242.4,162"/>
+<polyline points="282.4,162 302.4,162"/>
+<polyline points="242.4,162 245.733,156 252.4,168 259.067,156 265.733,168 272.4,156 279.067,168 282.4,162"/>
+<polyline points="222.4,62 258.4,62"/>
+<polyline points="266.4,62 302.4,62"/>
+<polyline points="258.4,50 258.4,74"/>
+<polyline points="266.4,50 266.4,74"/>
+<polyline points="322.4,182 322.4,218"/>
+<polyline points="322.4,226 322.4,262"/>
+<polyline points="334.4,218 310.4,218"/>
+<polyline points="334.4,226 310.4,226"/>
+<polyline points="322.4,262 322.4,282"/>
+<polyline points="310.4,282 334.4,282"/>
+<polyline points="314.8,286.4 330,286.4"/>
+<polyline points="319.2,290.8 325.6,290.8"/>
+<polygon points="362.4,96 362.4,188 428.4,142"/>
+<polyline points="342.4,122 362.4,122"/>
+<polyline points="342.4,162 362.4,162"/>
+<polyline points="428.4,142 442.4,142"/>
+<circle cx="42.4" cy="82" r="3"/>
+<circle cx="502.4" cy="122" r="3"/>
+<polyline points="45.4,82 82.4,82"/>
+<polyline points="302.4,162 342.4,162"/>
+<polyline points="322.4,162 322.4,182"/>
+<circle cx="322.4" cy="162" r="2.8" fill="black" stroke="none"/>
+<polyline points="182.4,62 222.4,62"/>
+<polyline points="162.4,82 182.4,82"/>
+<polyline points="182.4,162 222.4,162"/>
+<polyline points="182.4,62 182.4,162"/>
+<circle cx="182.4" cy="82" r="2.8" fill="black" stroke="none"/>
+<polyline points="322.4,122 342.4,122"/>
+<polyline points="462.4,122 499.4,122"/>
+<polyline points="302.4,62 322.4,62"/>
+<polyline points="442.4,142 462.4,142"/>
+<polyline points="322.4,82 462.4,82"/>
+<polyline points="322.4,62 322.4,122"/>
+<polyline points="462.4,82 462.4,142"/>
+<circle cx="322.4" cy="82" r="2.8" fill="black" stroke="none"/>
+<circle cx="462.4" cy="122" r="2.8" fill="black" stroke="none"/>
+</g>
+<text x="122.4" y="69.14" text-anchor="middle" fill="black" stroke="none"><tspan>10k</tspan></text>
+<text x="122.4" y="52.14" text-anchor="middle" fill="black" stroke="none"><tspan>R1</tspan></text>
+<text x="262.4" y="149.14" text-anchor="middle" fill="black" stroke="none"><tspan>10k</tspan></text>
+<text x="262.4" y="132.14" text-anchor="middle" fill="black" stroke="none"><tspan>R2</tspan></text>
+<text x="262.4" y="43.14" text-anchor="middle" fill="black" stroke="none"><tspan>10n</tspan></text>
+<text x="262.4" y="26.14" text-anchor="middle" fill="black" stroke="none"><tspan>C1</tspan></text>
+<text x="340.4" y="217.4" text-anchor="start" fill="black" stroke="none"><tspan>C2</tspan></text>
+<text x="340.4" y="234.4" text-anchor="start" fill="black" stroke="none"><tspan>10n</tspan></text>
+<text x="370.4" y="125.51" text-anchor="middle" font-size="11.7" fill="black" stroke="none"><tspan>−</tspan></text>
+<text x="370.4" y="165.51" text-anchor="middle" font-size="11.7" fill="black" stroke="none"><tspan>+</tspan></text>
+<text x="402.4" y="111.14" text-anchor="start" fill="black" stroke="none"><tspan>U1</tspan></text>
+<text x="36.4" y="85.9" text-anchor="end" fill="black" stroke="none"><tspan>vin</tspan></text>
+<text x="508.4" y="125.9" text-anchor="start" fill="black" stroke="none"><tspan>vout</tspan></text>
+</svg>

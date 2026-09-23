@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="431.6" height="194" viewBox="0 0 431.6 194" font-family="'Latin Modern Roman', 'CMU Serif', 'Times New Roman', serif" font-size="13">
+<title>Inverting amplifier</title>
+<rect width="100%" height="100%" fill="white"/>
+<g stroke="black" stroke-width="1.4" fill="none" stroke-linecap="round" stroke-linejoin="round">
+<polyline points="82.4,116 102.4,116"/>
+<polyline points="142.4,116 162.4,116"/>
+<polyline points="102.4,116 105.733,110 112.4,122 119.067,110 125.733,122 132.4,110 139.067,122 142.4,116"/>
+<polygon points="242.4,90 242.4,182 308.4,136"/>
+<polyline points="222.4,116 242.4,116"/>
+<polyline points="222.4,156 242.4,156"/>
+<polyline points="308.4,136 322.4,136"/>
+<polyline points="222.4,156 202.4,156"/>
+<polyline points="202.4,156 202.4,166"/>
+<polyline points="190.4,166 214.4,166"/>
+<polyline points="194.8,170.4 210,170.4"/>
+<polyline points="199.2,174.8 205.6,174.8"/>
+<polyline points="222.4,56 242.4,56"/>
+<polyline points="282.4,56 302.4,56"/>
+<polyline points="242.4,56 245.733,50 252.4,62 259.067,50 265.733,62 272.4,50 279.067,62 282.4,56"/>
+<circle cx="42.4" cy="116" r="3"/>
+<circle cx="382.4" cy="136" r="3"/>
+<polyline points="45.4,116 82.4,116"/>
+<polyline points="162.4,116 222.4,116"/>
+<polyline points="202.4,56 222.4,56"/>
+<polyline points="202.4,56 202.4,116"/>
+<circle cx="202.4" cy="116" r="2.8" fill="black" stroke="none"/>
+<polyline points="322.4,136 379.4,136"/>
+<polyline points="302.4,56 342.4,56"/>
+<polyline points="342.4,56 342.4,136"/>
+<circle cx="342.4" cy="136" r="2.8" fill="black" stroke="none"/>
+</g>
+<text x="122.4" y="103.14" text-anchor="middle" fill="black" stroke="none"><tspan>10k</tspan></text>
+<text x="122.4" y="86.14" text-anchor="middle" fill="black" stroke="none"><tspan>R1</tspan></text>
+<text x="250.4" y="119.51" text-anchor="middle" font-size="11.7" fill="black" stroke="none"><tspan>−</tspan></text>
+<text x="250.4" y="159.51" text-anchor="middle" font-size="11.7" fill="black" stroke="none"><tspan>+</tspan></text>
+<text x="282.4" y="105.14" text-anchor="start" fill="black" stroke="none"><tspan>U1</tspan></text>
+<text x="262.4" y="43.14" text-anchor="middle" fill="black" stroke="none"><tspan>100k</tspan></text>
+<text x="262.4" y="26.14" text-anchor="middle" fill="black" stroke="none"><tspan>Rf</tspan></text>
+<text x="36.4" y="119.9" text-anchor="end" fill="black" stroke="none"><tspan>vin</tspan></text>
+<text x="388.4" y="139.9" text-anchor="start" fill="black" stroke="none"><tspan>vout</tspan></text>
+</svg>

@@ -1,0 +1,92 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="696.84" height="350.5" viewBox="0 0 696.84 350.5" font-family="'Latin Modern Roman', 'CMU Serif', 'Times New Roman', serif" font-size="13">
+<title>Symbol sampler</title>
+<rect width="100%" height="100%" fill="white"/>
+<g stroke="black" stroke-width="1.4" fill="none" stroke-linecap="round" stroke-linejoin="round">
+<polyline points="26.24,109.7 26.24,141.7"/>
+<polyline points="26.24,157.7 26.24,189.7"/>
+<polyline points="40.24,141.7 12.24,141.7"/>
+<polyline points="33.24,147.1 19.24,147.1"/>
+<polyline points="40.24,152.3 12.24,152.3"/>
+<polyline points="33.24,157.7 19.24,157.7"/>
+<polyline points="26.24,109.7 26.24,89.7"/>
+<polyline points="16.24,89.7 36.24,89.7"/>
+<polyline points="26.24,189.7 26.24,209.7"/>
+<polyline points="14.24,209.7 38.24,209.7"/>
+<polyline points="18.64,214.1 33.84,214.1"/>
+<polyline points="23.04,218.5 29.44,218.5"/>
+<polyline points="86.24,49.7 86.24,73.7"/>
+<polyline points="86.24,105.7 86.24,129.7"/>
+<circle cx="86.24" cy="75.7" r="2"/>
+<circle cx="86.24" cy="103.7" r="2"/>
+<polyline points="87.24,77.3 100.24,103.7"/>
+<polyline points="86.24,49.7 86.24,29.7"/>
+<polyline points="76.24,29.7 96.24,29.7"/>
+<polyline points="106.24,149.7 130.24,149.7"/>
+<polyline points="162.24,149.7 186.24,149.7"/>
+<polygon points="130.24,144.7 162.24,144.7 162.24,154.7 130.24,154.7"/>
+<polyline points="130.24,149.7 162.24,149.7"/>
+<polyline points="226.24,149.7 254.24,149.7"/>
+<polyline points="278.24,149.7 306.24,149.7"/>
+<polygon points="254.24,138.7 254.24,160.7 278.24,149.7" fill="black"/>
+<polyline points="278.24,138.7 278.24,160.7"/>
+<polyline points="326.24,249.7 326.24,221.7"/>
+<polyline points="326.24,197.7 326.24,169.7"/>
+<polygon points="315.24,221.7 337.24,221.7 326.24,197.7" fill="black"/>
+<polyline points="312.24,202.7 315.24,197.7 337.24,197.7 340.24,192.7"/>
+<polyline points="326.24,249.7 326.24,269.7"/>
+<polyline points="314.24,269.7 338.24,269.7"/>
+<polyline points="318.64,274.1 333.84,274.1"/>
+<polyline points="323.04,278.5 329.44,278.5"/>
+<polyline points="346.24,149.7 374.24,149.7"/>
+<polyline points="398.24,149.7 426.24,149.7"/>
+<polygon points="374.24,138.7 374.24,160.7 398.24,149.7" fill="black"/>
+<polyline points="398.24,138.7 398.24,160.7"/>
+<polyline points="384.24,135.7 394.24,125.7"/>
+<polygon points="394.24,125.7 389.24,126.7 393.24,130.7" fill="black"/>
+<polyline points="393.24,135.7 403.24,125.7"/>
+<polygon points="403.24,125.7 398.24,126.7 402.24,130.7" fill="black"/>
+<polyline points="466.24,149.7 486.24,149.7"/>
+<polyline points="526.24,149.7 546.24,149.7"/>
+<polyline points="486.24,149.7 489.573,143.7 496.24,155.7 502.907,143.7 509.573,155.7 516.24,143.7 522.907,155.7 526.24,149.7"/>
+<polyline points="586.24,149.7 622.24,149.7"/>
+<polyline points="622.24,133.7 622.24,165.7" stroke-width="2.8"/>
+<polyline points="622.24,141.7 646.24,127.7 646.24,109.7"/>
+<polyline points="622.24,157.7 646.24,171.7 646.24,189.7"/>
+<polygon points="625.24,140.1 628.881,134.466 631.932,139.633" fill="black"/>
+<circle cx="631.24" cy="149.7" r="26"/>
+<polyline points="646.24,109.7 646.24,89.7"/>
+<polyline points="636.24,89.7 656.24,89.7"/>
+<polyline points="646.24,229.7 646.24,253.7"/>
+<polyline points="646.24,285.7 646.24,309.7"/>
+<circle cx="646.24" cy="269.7" r="16"/>
+<polyline points="657.554,258.386 634.926,281.014"/>
+<polyline points="634.926,258.386 657.554,281.014"/>
+<polyline points="646.24,309.7 646.24,329.7"/>
+<polyline points="634.24,329.7 658.24,329.7"/>
+<polyline points="638.64,334.1 653.84,334.1"/>
+<polyline points="643.04,338.5 649.44,338.5"/>
+<polyline points="86.24,149.7 106.24,149.7"/>
+<polyline points="86.24,129.7 86.24,149.7"/>
+<polyline points="186.24,149.7 226.24,149.7"/>
+<polyline points="426.24,149.7 466.24,149.7"/>
+<polyline points="546.24,149.7 586.24,149.7"/>
+<polyline points="646.24,189.7 646.24,229.7"/>
+<polyline points="306.24,149.7 346.24,149.7"/>
+<polyline points="326.24,149.7 326.24,169.7"/>
+<circle cx="326.24" cy="149.7" r="2.8" fill="black" stroke="none"/>
+</g>
+<text x="26.24" y="84.726" text-anchor="middle" font-size="11.7" fill="black" stroke="none"><tspan>vbat</tspan></text>
+<text x="46.24" y="145.1" text-anchor="start" fill="black" stroke="none"><tspan>B1</tspan></text>
+<text x="46.24" y="162.1" text-anchor="start" fill="black" stroke="none"><tspan>9V</tspan></text>
+<text x="86.24" y="24.726" text-anchor="middle" font-size="11.7" fill="black" stroke="none"><tspan>vbat</tspan></text>
+<text x="106.24" y="93.6" text-anchor="start" fill="black" stroke="none"><tspan>S1</tspan></text>
+<text x="146.24" y="137.84" text-anchor="middle" fill="black" stroke="none"><tspan>F1</tspan></text>
+<text x="266.24" y="129.84" text-anchor="middle" fill="black" stroke="none"><tspan>D1</tspan></text>
+<text x="345.24" y="213.6" text-anchor="start" fill="black" stroke="none"><tspan>D</tspan><tspan baseline-shift="-25%" font-size="9.36">Z</tspan></text>
+<text x="386.24" y="118.84" text-anchor="middle" fill="black" stroke="none"><tspan>L1</tspan></text>
+<text x="506.24" y="136.84" text-anchor="middle" fill="black" stroke="none"><tspan>470Ω</tspan></text>
+<text x="506.24" y="119.84" text-anchor="middle" fill="black" stroke="none"><tspan>R1</tspan></text>
+<text x="646.24" y="84.726" text-anchor="middle" font-size="11.7" fill="black" stroke="none"><tspan>vcc</tspan></text>
+<text x="660.24" y="153.6" text-anchor="start" fill="black" stroke="none"><tspan>Q1</tspan></text>
+<text x="667.24" y="273.6" text-anchor="start" fill="black" stroke="none"><tspan>RL</tspan></text>
+</svg>

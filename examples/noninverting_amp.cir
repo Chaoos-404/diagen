@@ -1,0 +1,6 @@
+title Non-inverting amplifier
+V1 vsource in 0 1V
+U1 opamp +=in -=fb out=vout
+R2 res fb vout 90k
+R1 res fb 0 10k
+RL res vout 0 1k

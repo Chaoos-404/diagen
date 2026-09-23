@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="571.2" height="208" viewBox="0 0 571.2 208" font-family="'Latin Modern Roman', 'CMU Serif', 'Times New Roman', serif" font-size="13">
+<title>2:1 multiplexer from gates</title>
+<rect width="100%" height="100%" fill="white"/>
+<g stroke="black" stroke-width="1.4" fill="none" stroke-linecap="round" stroke-linejoin="round">
+<polyline points="102.4,64 122.4,64"/>
+<polygon points="122.4,46 122.4,82 158.4,64"/>
+<circle cx="162.4" cy="64" r="4"/>
+<polyline points="166.4,64 182.4,64"/>
+<path d="M262.4,76 C262.4,76 262.4,12 262.4,12 C262.4,12 294.4,12 294.4,12 C312.074,12 326.4,26.326 326.4,44 C326.4,61.674 312.074,76 294.4,76 C294.4,76 262.4,76 262.4,76 Z"/>
+<polyline points="242.4,24 262.4,24"/>
+<polyline points="242.4,64 262.4,64"/>
+<polyline points="326.4,44 342.4,44"/>
+<path d="M262.4,196 C262.4,196 262.4,132 262.4,132 C262.4,132 294.4,132 294.4,132 C312.074,132 326.4,146.326 326.4,164 C326.4,181.674 312.074,196 294.4,196 C294.4,196 262.4,196 262.4,196 Z"/>
+<polyline points="242.4,144 262.4,144"/>
+<polyline points="242.4,184 262.4,184"/>
+<polyline points="326.4,164 342.4,164"/>
+<path d="M422.4,72 C451.2,72 474.4,88 486.4,104 C474.4,120 451.2,136 422.4,136 C433.4,116.8 433.4,91.2 422.4,72 Z"/>
+<polyline points="402.4,84 427.622,84"/>
+<polyline points="402.4,124 427.622,124"/>
+<polyline points="486.4,104 502.4,104"/>
+<circle cx="202.4" cy="24" r="3"/>
+<circle cx="202.4" cy="184" r="3"/>
+<circle cx="42.4" cy="64" r="3"/>
+<circle cx="542.4" cy="104" r="3"/>
+<polyline points="205.4,24 242.4,24"/>
+<polyline points="205.4,184 242.4,184"/>
+<polyline points="502.4,104 539.4,104"/>
+<polyline points="182.4,64 242.4,64"/>
+<polyline points="362.4,84 402.4,84"/>
+<polyline points="342.4,44 362.4,44"/>
+<polyline points="362.4,44 362.4,84"/>
+<polyline points="362.4,124 402.4,124"/>
+<polyline points="342.4,164 362.4,164"/>
+<polyline points="362.4,124 362.4,164"/>
+<polyline points="45.4,64 102.4,64"/>
+<polyline points="82.4,144 242.4,144"/>
+<polyline points="82.4,64 82.4,144"/>
+<circle cx="82.4" cy="64" r="2.8" fill="black" stroke="none"/>
+</g>
+<text x="196.4" y="27.9" text-anchor="end" fill="black" stroke="none"><tspan>a</tspan></text>
+<text x="196.4" y="187.9" text-anchor="end" fill="black" stroke="none"><tspan>b</tspan></text>
+<text x="36.4" y="67.9" text-anchor="end" fill="black" stroke="none"><tspan>sel</tspan></text>
+<text x="548.4" y="107.9" text-anchor="start" fill="black" stroke="none"><tspan>y</tspan></text>
+</svg>

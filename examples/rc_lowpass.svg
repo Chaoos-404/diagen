@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="210.4" height="196.8" viewBox="0 0 210.4 196.8" font-family="'Latin Modern Roman', 'CMU Serif', 'Times New Roman', serif" font-size="13">
+<title>RC low-pass filter</title>
+<rect width="100%" height="100%" fill="white"/>
+<g stroke="black" stroke-width="1.4" fill="none" stroke-linecap="round" stroke-linejoin="round">
+<polyline points="28,76 28,100"/>
+<polyline points="28,132 28,156"/>
+<circle cx="28" cy="116" r="16"/>
+<polyline points="28,156 28,176"/>
+<polyline points="16,176 40,176"/>
+<polyline points="20.4,180.4 35.6,180.4"/>
+<polyline points="24.8,184.8 31.2,184.8"/>
+<polyline points="48,56 68,56"/>
+<polyline points="108,56 128,56"/>
+<polyline points="68,56 71.333,50 78,62 84.667,50 91.333,62 98,50 104.667,62 108,56"/>
+<polyline points="148,76 148,112"/>
+<polyline points="148,120 148,156"/>
+<polyline points="160,112 136,112"/>
+<polyline points="160,120 136,120"/>
+<polyline points="148,156 148,176"/>
+<polyline points="136,176 160,176"/>
+<polyline points="140.4,180.4 155.6,180.4"/>
+<polyline points="144.8,184.8 151.2,184.8"/>
+<circle cx="168" cy="56" r="3"/>
+<polyline points="28,56 48,56"/>
+<polyline points="28,56 28,76"/>
+<polyline points="128,56 165,56"/>
+<polyline points="148,56 148,76"/>
+<circle cx="148" cy="56" r="2.8" fill="black" stroke="none"/>
+</g>
+<text x="28" y="110.12" text-anchor="middle" font-size="10.4" fill="black" stroke="none"><tspan>+</tspan></text>
+<text x="28" y="128.12" text-anchor="middle" font-size="10.4" fill="black" stroke="none"><tspan>−</tspan></text>
+<text x="49" y="111.4" text-anchor="start" fill="black" stroke="none"><tspan>V1</tspan></text>
+<text x="49" y="128.4" text-anchor="start" fill="black" stroke="none"><tspan>5V</tspan></text>
+<text x="88" y="43.14" text-anchor="middle" fill="black" stroke="none"><tspan>1k</tspan></text>
+<text x="88" y="26.14" text-anchor="middle" fill="black" stroke="none"><tspan>R1</tspan></text>
+<text x="166" y="111.4" text-anchor="start" fill="black" stroke="none"><tspan>C1</tspan></text>
+<text x="166" y="128.4" text-anchor="start" fill="black" stroke="none"><tspan>100n</tspan></text>
+<text x="174" y="59.9" text-anchor="start" fill="black" stroke="none"><tspan>out</tspan></text>
+</svg>

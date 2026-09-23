@@ -1,0 +1,8 @@
+title Sallen-Key low-pass filter
+input vin
+output vout
+R1 res vin n1 10k
+R2 res n1 n2 10k
+C1 cap n1 vout 10n
+C2 cap n2 0 10n
+U1 opamp +=n2 -=vout out=vout

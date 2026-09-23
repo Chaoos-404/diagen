@@ -1,0 +1,61 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="269.6" height="275.6" viewBox="0 0 269.6 275.6" font-family="'Latin Modern Roman', 'CMU Serif', 'Times New Roman', serif" font-size="13">
+<title>Wheatstone bridge</title>
+<rect width="100%" height="100%" fill="white"/>
+<g stroke="black" stroke-width="1.4" fill="none" stroke-linecap="round" stroke-linejoin="round">
+<polyline points="28,34.8 28,58.8"/>
+<polyline points="28,90.8 28,114.8"/>
+<circle cx="28" cy="74.8" r="16"/>
+<polyline points="28,114.8 28,134.8"/>
+<polyline points="16,134.8 40,134.8"/>
+<polyline points="20.4,139.2 35.6,139.2"/>
+<polyline points="24.8,143.6 31.2,143.6"/>
+<polyline points="108,34.8 108,54.8"/>
+<polyline points="108,94.8 108,114.8"/>
+<polyline points="108,54.8 114,58.133 102,64.8 114,71.467 102,78.133 114,84.8 102,91.467 108,94.8"/>
+<polyline points="108,154.8 108,174.8"/>
+<polyline points="108,214.8 108,234.8"/>
+<polyline points="108,174.8 114,178.133 102,184.8 114,191.467 102,198.133 114,204.8 102,211.467 108,214.8"/>
+<polyline points="108,234.8 108,254.8"/>
+<polyline points="96,254.8 120,254.8"/>
+<polyline points="100.4,259.2 115.6,259.2"/>
+<polyline points="104.8,263.6 111.2,263.6"/>
+<polyline points="228,34.8 228,54.8"/>
+<polyline points="228,94.8 228,114.8"/>
+<polyline points="228,54.8 234,58.133 222,64.8 234,71.467 222,78.133 234,84.8 222,91.467 228,94.8"/>
+<polyline points="228,154.8 228,174.8"/>
+<polyline points="228,214.8 228,234.8"/>
+<polyline points="228,174.8 234,178.133 222,184.8 234,191.467 222,198.133 234,204.8 222,211.467 228,214.8"/>
+<polyline points="228,234.8 228,254.8"/>
+<polyline points="216,254.8 240,254.8"/>
+<polyline points="220.4,259.2 235.6,259.2"/>
+<polyline points="224.8,263.6 231.2,263.6"/>
+<polyline points="128,134.8 152,134.8"/>
+<polyline points="184,134.8 208,134.8"/>
+<circle cx="168" cy="134.8" r="16"/>
+<polyline points="108,134.8 128,134.8"/>
+<polyline points="108,114.8 108,154.8"/>
+<circle cx="108" cy="134.8" r="2.8" fill="black" stroke="none"/>
+<polyline points="208,134.8 228,134.8"/>
+<polyline points="228,114.8 228,154.8"/>
+<circle cx="228" cy="134.8" r="2.8" fill="black" stroke="none"/>
+<polyline points="28,14.8 228,14.8"/>
+<polyline points="108,14.8 108,34.8"/>
+<polyline points="28,14.8 28,34.8"/>
+<polyline points="228,14.8 228,34.8"/>
+<circle cx="108" cy="14.8" r="2.8" fill="black" stroke="none"/>
+</g>
+<text x="28" y="68.92" text-anchor="middle" font-size="10.4" fill="black" stroke="none"><tspan>+</tspan></text>
+<text x="28" y="86.92" text-anchor="middle" font-size="10.4" fill="black" stroke="none"><tspan>−</tspan></text>
+<text x="49" y="70.2" text-anchor="start" fill="black" stroke="none"><tspan>V1</tspan></text>
+<text x="49" y="87.2" text-anchor="start" fill="black" stroke="none"><tspan>10V</tspan></text>
+<text x="120" y="70.2" text-anchor="start" fill="black" stroke="none"><tspan>R1</tspan></text>
+<text x="120" y="87.2" text-anchor="start" fill="black" stroke="none"><tspan>1k</tspan></text>
+<text x="120" y="190.2" text-anchor="start" fill="black" stroke="none"><tspan>R2</tspan></text>
+<text x="120" y="207.2" text-anchor="start" fill="black" stroke="none"><tspan>1k</tspan></text>
+<text x="240" y="70.2" text-anchor="start" fill="black" stroke="none"><tspan>R3</tspan></text>
+<text x="240" y="87.2" text-anchor="start" fill="black" stroke="none"><tspan>1k</tspan></text>
+<text x="240" y="190.2" text-anchor="start" fill="black" stroke="none"><tspan>R4</tspan></text>
+<text x="240" y="207.2" text-anchor="start" fill="black" stroke="none"><tspan>2k</tspan></text>
+<text x="168" y="138.7" text-anchor="middle" fill="black" stroke="none"><tspan>V</tspan></text>
+<text x="168" y="112.94" text-anchor="middle" fill="black" stroke="none"><tspan>M1</tspan></text>
+</svg>

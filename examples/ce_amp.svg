@@ -1,0 +1,85 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="531.6" height="410.5" viewBox="0 0 531.6 410.5" font-family="'Latin Modern Roman', 'CMU Serif', 'Times New Roman', serif" font-size="13">
+<title>Common-emitter amplifier</title>
+<rect width="100%" height="100%" fill="white"/>
+<g stroke="black" stroke-width="1.4" fill="none" stroke-linecap="round" stroke-linejoin="round">
+<polyline points="82.4,209.7 118.4,209.7"/>
+<polyline points="126.4,209.7 162.4,209.7"/>
+<polyline points="118.4,197.7 118.4,221.7"/>
+<polyline points="126.4,197.7 126.4,221.7"/>
+<polyline points="182.4,109.7 182.4,129.7"/>
+<polyline points="182.4,169.7 182.4,189.7"/>
+<polyline points="182.4,129.7 188.4,133.033 176.4,139.7 188.4,146.367 176.4,153.033 188.4,159.7 176.4,166.367 182.4,169.7"/>
+<polyline points="182.4,109.7 182.4,89.7"/>
+<polyline points="172.4,89.7 192.4,89.7"/>
+<polyline points="182.4,229.7 182.4,249.7"/>
+<polyline points="182.4,289.7 182.4,309.7"/>
+<polyline points="182.4,249.7 188.4,253.033 176.4,259.7 188.4,266.367 176.4,273.033 188.4,279.7 176.4,286.367 182.4,289.7"/>
+<polyline points="182.4,309.7 182.4,329.7"/>
+<polyline points="170.4,329.7 194.4,329.7"/>
+<polyline points="174.8,334.1 190,334.1"/>
+<polyline points="179.2,338.5 185.6,338.5"/>
+<polyline points="222.4,209.7 258.4,209.7"/>
+<polyline points="258.4,193.7 258.4,225.7" stroke-width="2.8"/>
+<polyline points="258.4,201.7 282.4,187.7 282.4,169.7"/>
+<polyline points="258.4,217.7 282.4,231.7 282.4,249.7"/>
+<polygon points="279.4,230.1 272.708,229.633 275.759,224.466" fill="black"/>
+<circle cx="267.4" cy="209.7" r="26"/>
+<polyline points="282.4,49.7 282.4,69.7"/>
+<polyline points="282.4,109.7 282.4,129.7"/>
+<polyline points="282.4,69.7 288.4,73.033 276.4,79.7 288.4,86.367 276.4,93.033 288.4,99.7 276.4,106.367 282.4,109.7"/>
+<polyline points="282.4,49.7 282.4,29.7"/>
+<polyline points="272.4,29.7 292.4,29.7"/>
+<polyline points="282.4,289.7 282.4,309.7"/>
+<polyline points="282.4,349.7 282.4,369.7"/>
+<polyline points="282.4,309.7 288.4,313.033 276.4,319.7 288.4,326.367 276.4,333.033 288.4,339.7 276.4,346.367 282.4,349.7"/>
+<polyline points="282.4,369.7 282.4,389.7"/>
+<polyline points="270.4,389.7 294.4,389.7"/>
+<polyline points="274.8,394.1 290,394.1"/>
+<polyline points="279.2,398.5 285.6,398.5"/>
+<polyline points="342.4,289.7 342.4,325.7"/>
+<polyline points="342.4,333.7 342.4,369.7"/>
+<polyline points="354.4,325.7 330.4,325.7"/>
+<polyline points="354.4,333.7 330.4,333.7"/>
+<polyline points="342.4,369.7 342.4,389.7"/>
+<polyline points="330.4,389.7 354.4,389.7"/>
+<polyline points="334.8,394.1 350,394.1"/>
+<polyline points="339.2,398.5 345.6,398.5"/>
+<polyline points="362.4,149.7 398.4,149.7"/>
+<polyline points="406.4,149.7 442.4,149.7"/>
+<polyline points="398.4,137.7 398.4,161.7"/>
+<polyline points="406.4,137.7 406.4,161.7"/>
+<circle cx="42.4" cy="209.7" r="3"/>
+<circle cx="482.4" cy="149.7" r="3"/>
+<polyline points="45.4,209.7 82.4,209.7"/>
+<polyline points="442.4,149.7 479.4,149.7"/>
+<polyline points="162.4,209.7 222.4,209.7"/>
+<polyline points="182.4,189.7 182.4,229.7"/>
+<circle cx="182.4" cy="209.7" r="2.8" fill="black" stroke="none"/>
+<polyline points="282.4,269.7 342.4,269.7"/>
+<polyline points="282.4,249.7 282.4,289.7"/>
+<polyline points="342.4,269.7 342.4,289.7"/>
+<circle cx="282.4" cy="269.7" r="2.8" fill="black" stroke="none"/>
+<polyline points="282.4,149.7 362.4,149.7"/>
+<polyline points="282.4,129.7 282.4,169.7"/>
+<circle cx="282.4" cy="149.7" r="2.8" fill="black" stroke="none"/>
+</g>
+<text x="122.4" y="190.84" text-anchor="middle" fill="black" stroke="none"><tspan>10u</tspan></text>
+<text x="122.4" y="173.84" text-anchor="middle" fill="black" stroke="none"><tspan>C1</tspan></text>
+<text x="182.4" y="84.726" text-anchor="middle" font-size="11.7" fill="black" stroke="none"><tspan>vcc</tspan></text>
+<text x="194.4" y="145.1" text-anchor="start" fill="black" stroke="none"><tspan>R1</tspan></text>
+<text x="194.4" y="162.1" text-anchor="start" fill="black" stroke="none"><tspan>47k</tspan></text>
+<text x="194.4" y="265.1" text-anchor="start" fill="black" stroke="none"><tspan>R2</tspan></text>
+<text x="194.4" y="282.1" text-anchor="start" fill="black" stroke="none"><tspan>10k</tspan></text>
+<text x="296.4" y="213.6" text-anchor="start" fill="black" stroke="none"><tspan>Q1</tspan></text>
+<text x="282.4" y="24.726" text-anchor="middle" font-size="11.7" fill="black" stroke="none"><tspan>vcc</tspan></text>
+<text x="294.4" y="85.1" text-anchor="start" fill="black" stroke="none"><tspan>RC</tspan></text>
+<text x="294.4" y="102.1" text-anchor="start" fill="black" stroke="none"><tspan>4.7k</tspan></text>
+<text x="294.4" y="325.1" text-anchor="start" fill="black" stroke="none"><tspan>RE</tspan></text>
+<text x="294.4" y="342.1" text-anchor="start" fill="black" stroke="none"><tspan>1k</tspan></text>
+<text x="360.4" y="325.1" text-anchor="start" fill="black" stroke="none"><tspan>CE</tspan></text>
+<text x="360.4" y="342.1" text-anchor="start" fill="black" stroke="none"><tspan>100u</tspan></text>
+<text x="402.4" y="130.84" text-anchor="middle" fill="black" stroke="none"><tspan>10u</tspan></text>
+<text x="402.4" y="113.84" text-anchor="middle" fill="black" stroke="none"><tspan>C2</tspan></text>
+<text x="36.4" y="213.6" text-anchor="end" fill="black" stroke="none"><tspan>vin</tspan></text>
+<text x="488.4" y="153.6" text-anchor="start" fill="black" stroke="none"><tspan>vout</tspan></text>
+</svg>

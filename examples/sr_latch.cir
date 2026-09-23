@@ -1,0 +1,5 @@
+title SR latch (NOR)
+input s r
+output q qn
+N1 nor2 r qn q
+N2 nor2 s q qn
