@@ -26,7 +26,7 @@ from dataclasses import dataclass, field
 from .symbols import KNOWN_TYPES, lookup
 
 ATTR_KEYS = {"value", "label", "style", "left", "right", "top", "bottom", "text",
-             "clock", "rank", "flip", "rot", "name"}
+             "clock", "rank", "flip", "rot", "name", "stage"}
 GROUND = {"0", "gnd", "ground", "vss", "agnd", "dgnd", "gnd!", "com"}
 SUPPLY_POS = re.compile(r"^(vcc|vdd|v\+|vbat|vsup|vs\+|avdd|dvdd|vin_?supply|\+\d+(\.\d+)?v)$", re.I)
 SUPPLY_NEG = re.compile(r"^(vee|v-|vs-|-\d+(\.\d+)?v)$", re.I)

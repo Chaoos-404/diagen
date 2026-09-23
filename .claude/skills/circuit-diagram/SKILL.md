@@ -23,6 +23,9 @@ the preview, and fix the netlist rather than the coordinates.
 4. Look at the preview. If something reads badly, change the netlist:
    declare `input`/`output` ports, give the supply its rail name (`vcc`, `vdd`,
    `+5V`) so it becomes a symbol, split a net, or add `rank=N` / `flip=1`.
+   For decoders and multiplexers, `option routing=bus` draws the select lines
+   as vertical buses. Repeated stages are laid out alike automatically; tag
+   them with `stage=N` if they share a clock or enable.
 5. Hand over the `.tex` (`\usepackage{tikz}` is the only requirement) or the `.svg`.
 
 ## Netlist in one screen

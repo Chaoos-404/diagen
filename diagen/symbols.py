@@ -313,7 +313,12 @@ class Gate:
             return SymbolDef(self.type, pins, prims, (1, 0.1, 3.2, 1.9),
                              label_spot=(1.6, 1.95, "n"), label_default="none")
 
-        h = 2 * n
+        # Inputs on consecutive rows; with an even count the middle row stays
+        # empty so the output sits on it. Two inputs keep a row between them,
+        # and a 3-input gate is no taller than a 2-input one.
+        rows = n if n % 2 else n + 1
+        ys = [y for y in range(1, rows + 1) if n % 2 or y != (rows + 1) // 2]
+        h = rows + 1
         top, bot, cy = 0.4, h - 0.4, h / 2
         bh = bot - top
         w = 3.2
@@ -356,8 +361,7 @@ class Gate:
                 prims.append(Path((x0, top), [((x0 + depth, top + bh * 0.3), (x0 + depth, bot - bh * 0.3), (x0, bot))]))
                 back = lambda y: curve_x(y, 0.35)
         pins = {}
-        for i in range(n):
-            y = 2 * i + 1
+        for i, y in enumerate(ys):
             name = chr(ord("a") + i)
             pins[name] = Pin(name, 0, y, "L", "in")
             prims.append(Line([(0, y), (back(y), y)]))

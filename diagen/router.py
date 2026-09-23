@@ -14,6 +14,10 @@ cost extra). The rules that keep a schematic readable are hard constraints:
 If a net cannot be routed the order is shuffled (failed nets first) and
 everything is retried; anything still unroutable is drawn as a dashed red
 air wire and reported.
+
+A net can come with a seed: a run of points (a bus trunk) laid down before
+anything is routed. Its pins then tap onto the seed, and seed ends that no
+tap reached are trimmed away.
 """
 from __future__ import annotations
 
@@ -40,9 +44,11 @@ class Router:
         self.pins = pins
         self.stubs = stubs
 
-    def route(self, nets, max_rounds=6):
-        """nets: {net: [pin points]}. Returns (paths, failed)."""
-        order = sorted(nets, key=lambda n: self._span(nets[n]))
+    def route(self, nets, max_rounds=6, seeds=None):
+        """nets: {net: [pin points]}; seeds: {net: [points in a line]}.
+        Returns (paths, failed)."""
+        self.seeds = {n: pts for n, pts in (seeds or {}).items() if n in nets}
+        order = sorted(nets, key=lambda n: (n not in self.seeds, self._span(nets[n])))
         best = None
         for rnd in range(max_rounds):
             paths, failed = self._route_all(order, nets)
@@ -63,9 +69,15 @@ class Router:
         self.occ = defaultdict(dict)       # point -> {net: set(dirs)}
         paths = {}
         failed = {}
+        seeded = {}
+        for net, pts in self.seeds.items():   # every trunk first, so taps cross them
+            if all(self._free(net, q, "U" if i else "D") for i, q in enumerate(pts)):
+                seeded[net] = list(zip(pts, pts[1:]))
+                for a, b in seeded[net]:
+                    self._add_edge(net, a, b)
         for net in order:
             pts = nets[net]
-            edges, missing = self._route_net(net, pts)
+            edges, missing = self._route_net(net, pts, seeded.get(net))
             paths[net] = edges
             if missing:
                 failed[net] = missing
@@ -77,7 +89,7 @@ class Router:
         self.occ[a].setdefault(net, set()).add(d)
         self.occ[b].setdefault(net, set()).add(OPPOSITE[d])
 
-    def _route_net(self, net, pins):
+    def _route_net(self, net, pins, seed=None):
         pins = sorted(pins)
         if len(pins) < 2:
             return [], []
@@ -86,6 +98,10 @@ class Router:
         edges = []
         missing = []
         tree_pts = set()
+        if seed:
+            edges = list(seed)
+            tree_pts = {p for e in seed for p in e}
+            tree_pins, todo = [], list(pins)
         while todo:
             # connect the pin nearest to the tree first
             def dist(p):
@@ -105,9 +121,38 @@ class Router:
             tree_pins.append(p)
             for q in tree_pins:
                 tree_pts.discard(q)   # pins are never join points
+        if seed:
+            edges = self._trim(net, edges, set(pins))
         if missing and len(missing) == len(pins) - 1:
             missing = pins[:1] + missing
         return edges, missing
+
+    def _trim(self, net, edges, pins):
+        """Drop dead ends: wire ends that are not pins (unused trunk ends)."""
+        edges = list(edges)
+        while True:
+            deg = defaultdict(int)
+            for a, b in edges:
+                deg[a] += 1
+                deg[b] += 1
+            dead = {p for p, k in deg.items() if k == 1 and p not in pins}
+            if not dead:
+                return edges
+            keep = []
+            for a, b in edges:
+                if a in dead or b in dead:
+                    for p, q in ((a, b), (b, a)):
+                        d = next(k for k, v in DIRS.items() if v == (q[0] - p[0], q[1] - p[1]))
+                        dirs = self.occ[p].get(net)
+                        if dirs is not None:
+                            dirs.discard(d)
+                            if not dirs:
+                                del self.occ[p][net]
+                                if not self.occ[p]:
+                                    del self.occ[p]
+                else:
+                    keep.append((a, b))
+            edges = keep
 
     def _astar(self, net, start, tree_pts, tree_pins):
         x0, y0, x1, y1 = self.bounds

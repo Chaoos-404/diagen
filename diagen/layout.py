@@ -223,6 +223,8 @@ class Layout:
         self._layers()
         self._orient_series()
         self._build_nodes()
+        self._stage_keys()
+        self._bus_nets()
         self._order()
         self._place()
         return self
@@ -573,6 +575,11 @@ class Layout:
                 if any(layer[o] == layer[u] and not self.insts[o].sym.source
                        and comps[o].type not in ("input", "output") for o in anchors if o != u):
                     layer[u] -= 1
+        self.stages = []
+        if self.opts.get("stages", "auto") not in ("off", "no", "0", "false"):
+            chains = self._find_stages(anchors, net_nodes, rep, members_of, comps, dag)
+            if chains and self._stage_layers(layer, anchors, dag, topo, chains, comps):
+                self.stages = chains
         for r in list(anchors):
             for m in members_of[r]:
                 layer[m] = layer[r]
@@ -621,6 +628,164 @@ class Layout:
         self.adj = adj
         self.dag = dag
         self.dist = dist
+
+    def _find_stages(self, parts, net_nodes, rep, members_of, comps, dag):
+        """Repeated stages: groups of parts that follow one another in a
+        chain, each linked to the next by a single net (the carry of a
+        ripple adder, the clock of a ripple counter), with the same parts in
+        each. Parts tagged `stage=` are grouped by the tag instead.
+
+        Returns chains, each a list of stages (lists of part ids) in signal
+        order. Stages of a single part need no special layout and are left
+        out."""
+        parts = [p for p in parts if comps[p].type not in ("input", "output")]
+        order = {p: i for i, p in enumerate(parts)}
+        partset = set(parts)
+        nets = {}
+        for net, nodes in net_nodes.items():
+            ps = sorted({rep[a] for a in nodes if rep[a] in partset}, key=order.get)
+            if len(ps) >= 2:
+                nets[net] = ps
+        part_nets = defaultdict(list)
+        for net, ps in nets.items():
+            for q in ps:
+                part_nets[q].append(net)
+
+        def reach(start, skip):
+            seen, todo = {start}, [start]
+            while todo:
+                u = todo.pop()
+                for n in part_nets[u]:
+                    if n in skip:
+                        continue
+                    for v in nets[n]:
+                        if v not in seen:
+                            seen.add(v)
+                            todo.append(v)
+            return seen
+
+        def signature(piece):
+            kinds = []
+            for q in piece:
+                for a in members_of[q]:
+                    kinds += [c.type for c in self.ckt.components if self.root(c.id) == a]
+            return tuple(sorted(kinds))
+
+        def flows(a, b):
+            return any(v in b for u in a for v in dag.get(u, ()))
+
+        tags = {p: comps[p].attrs["stage"] for p in parts if "stage" in comps[p].attrs}
+        if tags:
+            def natural(t):
+                return (0, int(t), "") if t.lstrip("-").isdigit() else (1, 0, t)
+            groups = defaultdict(list)
+            for q, t in tags.items():
+                groups[t].append(q)
+            chain = [sorted(groups[t], key=order.get) for t in sorted(groups, key=natural)]
+            return [chain] if len(chain) >= 2 else []
+        # a cut net: without it, some of its parts can no longer reach the others
+        cuts = {n for n, ps in nets.items()
+                if any(v not in reach(ps[0], {n}) for v in ps[1:])}
+        piece_of, pieces = {}, []
+        for q in parts:
+            if q not in piece_of:
+                pc = sorted(reach(q, cuts), key=order.get)
+                for v in pc:
+                    piece_of[v] = len(pieces)
+                pieces.append(pc)
+        sig = [signature(pc) for pc in pieces]
+        link = defaultdict(set)          # piece -> same-kind pieces one cut net away
+        for n in sorted(cuts):
+            ends = sorted({piece_of[v] for v in nets[n]})
+            if len(ends) == 2:
+                a, b = ends
+                if sig[a] == sig[b] and len(pieces[a]) >= 2:
+                    link[a].add(b)
+                    link[b].add(a)
+        chains, seen = [], set()
+        for start in sorted(link):
+            if start in seen or len(link[start]) != 1:
+                continue                 # walk each chain from one of its ends
+            path, prev, cur = [start], None, start
+            while True:
+                nxt = [x for x in link[cur] if x != prev]
+                if len(nxt) != 1 or nxt[0] in path:
+                    break
+                prev, cur = cur, nxt[0]
+                path.append(cur)
+            seen.update(path)
+            if any(len(link[x]) > 2 for x in path) or len(path) < 2:
+                continue
+            if flows(pieces[path[1]], pieces[path[0]]):
+                path.reverse()
+            chains.append([pieces[x] for x in path])
+        return chains
+
+    def _stage_layers(self, layer, anchors, dag, topo, chains, comps):
+        """Columns for a circuit made of stages: each stage is laid out on its
+        own (the same way for every stage), then the stages and the remaining
+        parts are placed as blocks along the signal flow. Returns False (and
+        changes nothing) if the blocks would form a loop."""
+        parts = [a for a in anchors if comps[a].type not in ("input", "output")]
+        group = {}
+        for ci, chain in enumerate(chains):
+            for si, st in enumerate(chain):
+                for q in st:
+                    group[q] = ("stage", ci, si)
+        for q in parts:
+            group.setdefault(q, ("part", q))
+        members = defaultdict(list)
+        for q in parts:
+            members[group[q]].append(q)
+        local, width = {}, {}
+        for g, ps in members.items():
+            inside = set(ps)
+            loc = {q: 0 for q in ps}
+            for u in topo:
+                if u in inside:
+                    for v in dag.get(u, ()):
+                        if v in inside:
+                            loc[v] = max(loc[v], loc[u] + 1)
+            for u in reversed(topo):
+                if u in inside:
+                    nxt = [loc[v] for v in dag.get(u, ()) if v in inside]
+                    if nxt:
+                        loc[u] = max(loc[u], min(nxt) - 1)
+            local.update(loc)
+            width[g] = max(loc.values()) + 1
+        gsucc = defaultdict(set)
+        for u in dag:
+            for v in dag[u]:
+                if u in group and v in group and group[u] != group[v]:
+                    gsucc[group[u]].add(group[v])
+        indeg = defaultdict(int)
+        for g in gsucc:
+            for h in gsucc[g]:
+                indeg[h] += 1
+        first = {}
+        for q in parts:
+            first.setdefault(group[q], len(first))
+        todo = deque(sorted((g for g in members if not indeg[g]), key=first.get))
+        gorder = []
+        while todo:
+            g = todo.popleft()
+            gorder.append(g)
+            for h in sorted(gsucc[g], key=first.get):
+                indeg[h] -= 1
+                if not indeg[h]:
+                    todo.append(h)
+        if len(gorder) != len(members):
+            return False
+        base = {g: 0 for g in members}
+        for g in gorder:
+            for h in gsucc[g]:
+                base[h] = max(base[h], base[g] + width[g])
+        for g in reversed(gorder):          # pull blocks toward what they drive
+            if gsucc[g]:
+                base[g] = max(base[g], min(base[h] for h in gsucc[g]) - width[g])
+        for q in parts:
+            layer[q] = base[group[q]] + local[q]
+        return True
 
     def _spread_bridges(self, layer, anchors, root, comps):
         """A two-terminal part between two groups that ended up in the same
@@ -849,6 +1014,7 @@ class Layout:
                     left += 1
             if right is not None:
                 left += int(self.opts.get("spacing", 0) or 0)   # extra room on retry
+                left += len(self.bus.get(col[0].layer, ()))    # one track per bus trunk
             for n in col:
                 n.x = round(left + (width - (n.core[2] - n.core[0])) / 2 - n.core[0])
             right = max(n.x + n.core[2] for n in col)
@@ -1002,11 +1168,167 @@ class Layout:
                 cols[l].sort(key=key)
         if self.opts.get("xmin"):
             self._reduce_crossings(cols, touch, net_nodes)
-        # swaps requested by the engine's layout search: (layer, index)
+        self._copy_template(cols)
+        if self.bus:                     # bus sources go on top (see _bus_sources_on_top)
+            src = self._bus_sources()
+            for l in range(len(cols)):
+                cols[l].sort(key=lambda n: n.id not in src)
+        # swaps requested by the engine's layout search: (layer, index); a
+        # swap inside a stage is made in every stage alike
         for l, i in self.opts.get("swaps", ()):
             if l < len(cols) and i + 1 < len(cols[l]):
-                cols[l][i], cols[l][i + 1] = cols[l][i + 1], cols[l][i]
+                u, v = cols[l][i], cols[l][i + 1]
+                cols[l][i], cols[l][i + 1] = v, u
+                su, sv = self.node_stage.get(u.id), self.node_stage.get(v.id)
+                if su is None or su != sv:
+                    continue
+                for (ci, si), _ in self.stage_nodes.items():
+                    if ci != su[0] or si == su[1]:
+                        continue
+                    a = self.twin.get((ci, si, self.node_key[u.id]))
+                    b = self.twin.get((ci, si, self.node_key[v.id]))
+                    if a and b and a.layer == b.layer:
+                        col = cols[a.layer]
+                        ia, ib = col.index(a), col.index(b)
+                        col[ia], col[ib] = b, a
         self.cols = cols
+
+    def _bus_nets(self):
+        """With routing=bus, a net feeding two or more gates of one column
+        from the left becomes a bus: a vertical trunk in the channel just
+        left of that column, which every input taps onto (textbook decoders
+        and multiplexers). Each net gets one trunk, in the column where it
+        has the most taps. self.bus: {layer: [nets]}."""
+        self.bus = {}
+        if self.opts.get("routing") != "bus":
+            return
+        taps = defaultdict(lambda: defaultdict(int))     # net -> layer -> taps
+        for n in self.nodes:
+            if _is_port(n):
+                continue
+            for m in n.members:
+                for p, pin in m.sym.pins.items():
+                    net = m.comp.pins.get(p)
+                    if net is not None and self.is_signal(net) and pin.kind == "in" \
+                            and m.pin_dir(p) == "L":
+                        taps[net][n.layer] += 1
+        for net in sorted(taps):
+            l, k = max(taps[net].items(), key=lambda t: (t[1], -t[0]))
+            fed = any(self.node_of[c].layer < l for c, _ in self.net_pins[net])
+            if k >= 2 and fed:
+                self.bus.setdefault(l, []).append(net)
+
+    def _bus_sources(self):
+        """Nodes that only drive and read bus nets (select inputs and their
+        inverters): they feed the trunks from above."""
+        bus = {net: l for l, nets in self.bus.items() for net in nets}
+        out = set()
+        for n in self.nodes:
+            nets = {m.comp.pins[p] for m in n.members for p in m.sym.pins
+                    if p in m.comp.pins and self.is_signal(m.comp.pins[p])}
+            if nets and all(net in bus and n.layer < bus[net] for net in nets):
+                out.add(n.id)
+        return out
+
+    def _bus_sources_on_top(self):
+        """Textbook bus drawing: the sources sit above the gates and each
+        source wire runs to the top of its trunk, so the trunks start in a
+        staircase and no source wire crosses another trunk."""
+        if not self.bus:
+            return
+        src = self._bus_sources()
+        if not src:
+            return
+        # Each source gets rows of its own, from the top: a wire running right
+        # to its trunk never meets another source. A source fed by another
+        # (an inverter on a select line) goes right under it.
+        by_id = {n.id: n for n in self.nodes}
+        nets_of = defaultdict(set)
+        for n in self.nodes:
+            for m in n.members:
+                for p in m.sym.pins:
+                    if p in m.comp.pins:
+                        nets_of[n.id].add(m.comp.pins[p])
+        order = []
+
+        def visit(n):
+            if n.id in order:
+                return
+            order.append(n.id)
+            for col in self.cols[n.layer + 1:]:
+                for o in col:
+                    if o.id in src and nets_of[o.id] & nets_of[n.id]:
+                        visit(o)
+        for col in self.cols:
+            for n in col:
+                if n.id in src:
+                    visit(n)
+        top = min(n.y + n.box[1] for n in self.nodes)
+        for i in order:
+            n = by_id[i]
+            n.y = round(top - n.box[1])
+            top = n.y + n.box[3] + 1
+        # everything else goes below the sources, so no other wire has to
+        # thread through the rows where source wires run to their trunks
+        low_src = max(n.y + n.box[3] for n in self.nodes if n.id in src)
+        top_tap = min(n.y + n.box[1] for n in self.nodes if n.id not in src)
+        delta = math.ceil(low_src + GAP_Y - top_tap)
+        if delta > 0:
+            for n in self.nodes:
+                if n.id not in src:
+                    n.y += delta
+
+    def _stage_keys(self):
+        """Match up the parts of repeated stages: the k-th part of a kind in
+        one stage (in netlist order) is the twin of the k-th of that kind in
+        every other stage."""
+        self.node_stage, self.node_key, self.twin = {}, {}, {}
+        self.stage_nodes, self.template, self.peers = {}, {}, {}
+        index = {c.id: i for i, c in enumerate(self.ckt.components)}
+        comp_key = defaultdict(dict)        # chain -> {comp key: [comp ids by stage]}
+        for ci, chain in enumerate(self.stages):
+            self.template[ci] = len(chain) // 2
+            for si, st in enumerate(chain):
+                nodes = sorted({self.node_of[q].id: self.node_of[q] for q in st}.values(),
+                               key=lambda n: index[n.anchor.comp.id])
+                self.stage_nodes[(ci, si)] = nodes
+                count = defaultdict(int)
+                for n in nodes:
+                    kind = tuple(sorted(m.comp.type for m in n.members))
+                    key = (kind, count[kind])
+                    count[kind] += 1
+                    self.node_stage[n.id] = (ci, si)
+                    self.node_key[n.id] = key
+                    self.twin[(ci, si, key)] = n
+                comps = sorted((m.comp for n in nodes for m in n.members), key=lambda c: index[c.id])
+                count = defaultdict(int)
+                for c in comps:
+                    comp_key[ci].setdefault((c.type, count[c.type]), []).append(c.id)
+                    count[c.type] += 1
+        for ci, keys in comp_key.items():
+            for ids in keys.values():
+                for c in ids:
+                    self.peers[c] = [o for o in ids if o != c]
+
+    def _copy_template(self, cols):
+        """Every stage takes the column order of its chain's template (the
+        middle stage), so repeated stages are drawn alike."""
+        for (ci, si), nodes in self.stage_nodes.items():
+            t = self.template[ci]
+            if si == t:
+                continue
+            rank = {}
+            for n in self.stage_nodes[(ci, t)]:
+                rank[n.id] = cols[n.layer].index(n)
+            mine = set(n.id for n in nodes)
+            for col in cols:
+                slots = [i for i, n in enumerate(col) if n.id in mine]
+                if len(slots) < 2:
+                    continue
+                want = sorted((col[i] for i in slots),
+                              key=lambda n: rank.get(self.twin.get((ci, t, self.node_key[n.id]), n).id, 1e9))
+                for i, n in zip(slots, want):
+                    col[i] = n
 
     def _reduce_crossings(self, cols, touch, net_nodes):
         """Sugiyama crossing reduction on top of the barycentre order.
@@ -1142,8 +1464,10 @@ class Layout:
                         dx, dy = DIRS[m.pin_dir(p)]
                         stub[(m.comp.id, p)] = (n, py + dy, len(m.comp.pins))
         links = defaultdict(list)   # node id -> [(my_off, other node, other_off, weight)]
+        # a bus net is tapped from its trunk: lining its pins up gains nothing
+        bus = {net for nets in self.bus.values() for net in nets}
         for net, pins in self.net_pins.items():
-            if not self.is_signal(net):
+            if not self.is_signal(net) or net in bus:
                 continue
             ends = [stub[k] for k in pins if k in stub]
             for n1, o1, _ in ends:
@@ -1179,6 +1503,7 @@ class Layout:
             for n, y in zip(col, ys):
                 n.y = y
         _straighten(self, links)
+        self._bus_sources_on_top()
         self._place_columns()
         # normalise
         x0 = min(n.x + n.box[0] for n in self.nodes)

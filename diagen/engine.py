@@ -1,6 +1,7 @@
 """Glue: netlist text -> layout -> routing -> a `Drawing` plus a quality report."""
 from __future__ import annotations
 
+import itertools
 import math
 import time
 from collections import defaultdict
@@ -46,6 +47,9 @@ class Report:
         d = dict(self.__dict__)
         d["ok"] = self.ok
         return d
+
+
+BODY_CLEARANCE = 0.3   # grid points closer than this to a symbol body are off limits
 
 
 def _grid_points(box, eps):
@@ -148,17 +152,25 @@ class _Search:
         self.best = start
         self.opts = dict(start[2].opts, spacing=start[2].opts.get("spacing", 0))
         self.state = ([], [])              # (column swaps, pin swaps) applied so far
+        lay = start[2]
+        # In repeated stages only the template stage gets moves of its own;
+        # the layout (swaps) and the move itself (pins) repeat them in every
+        # stage, so the stages stay alike.
+        copies = {n.id for n in lay.nodes if n.id in lay.node_stage
+                  and lay.node_stage[n.id][1] != lay.template[lay.node_stage[n.id][0]]}
         self.gate_moves = []
         for c in ckt.components:
-            if getattr(c.spec, "base", None) in COMMUTATIVE:
+            if getattr(c.spec, "base", None) in COMMUTATIVE and lay.node_of[c.id].id not in copies:
                 ins = [p for p in c.spec.order if p != "y" and p in c.pins]
-                self.gate_moves += [("pin", c.id, a, b) for a, b in zip(ins, ins[1:])]
+                self.gate_moves += [("pin", tuple((o, a, b) for o in [c.id] + lay.peers.get(c.id, [])))
+                                    for a, b in zip(ins, ins[1:])]
         # The move list never changes (swaps keep every column's size), so
         # single moves are scanned round-robin: after an improvement the scan
         # carries on with the next move instead of re-trying the ones that
         # just failed.
-        self.moves = [("col", l, i) for l, col in enumerate(start[2].cols)
-                      for i in range(len(col) - 1)] + self.gate_moves
+        self.moves = [("col", l, i) for l, col in enumerate(lay.cols)
+                      for i in range(len(col) - 1)
+                      if not (col[i].id in copies and col[i + 1].id in copies)] + self.gate_moves
         self.k = 0
         self.stuck = False                 # no single move helps any more
 
@@ -170,7 +182,9 @@ class _Search:
         swaps, pins = st
         if move[0] == "col":
             return (swaps + [move[1:]], pins)
-        return (swaps, _toggle(pins, move[1:]))
+        for m in move[1]:
+            pins = _toggle(pins, m)
+        return (swaps, pins)
 
     def _try(self, st):
         self.budget[0] -= 1
@@ -243,7 +257,9 @@ def _build_once(ckt: Circuit, opts):
                 prims.append(q)
                 eps = 0.2 if isinstance(q, Text) else 0.05
                 blocked.update(_grid_points(prim_box(q), eps))
-            blocked.update(_grid_points(prim_box(apply(t, _box_line(inst.sym.body))), 0.05))
+            # wires keep clear of a body: none may graze it on a row a hair away
+            # (an inverter's tip sits 0.1 from the rows above and below it)
+            blocked.update(_grid_points(prim_box(apply(t, _box_line(inst.sym.body))), BODY_CLEARANCE))
             shift = Transform(0, False, node.x, node.y)
             for p in inst.decor:
                 q = apply(shift, p)
@@ -285,7 +301,7 @@ def _build_once(ckt: Circuit, opts):
     bounds = (x0, math.floor(box[1]) - margin, x1, math.ceil(box[3]) + margin)
     wired = {n: pts for n, pts in nets.items() if len(pts) >= 2}
     router = Router(bounds, blocked, pins, stubs)
-    paths, failed = router.route(wired)
+    paths, failed = router.route(wired, seeds=_bus_trunks(lay, pins))
 
     report.nets = len(wired)
     for net, edges in paths.items():
@@ -314,6 +330,54 @@ def _build_once(ckt: Circuit, opts):
     report.width = bbox[2] - bbox[0]
     report.height = bbox[3] - bbox[1]
     return Drawing(prims, bbox, ckt.title), report, lay
+
+
+def _bus_trunks(lay, pins):
+    """Vertical trunks for the bus nets of each column (see Layout._bus_nets):
+    one track each, right of the channel, spanning every pin of the net that
+    reaches it from either side. Tracks are ordered to cross as few source
+    wires (coming from the left) and taps (from the right) as possible."""
+    seeds = {}
+    for l, nets in sorted(lay.bus.items()):
+        col = [n for n in lay.nodes if n.layer == l]
+        xs = [p[0] for p, (net, d) in pins.items() if d == "L"
+              and any(n.x + n.box[0] - 1 <= p[0] <= n.x + n.box[2] + 1
+                      and n.y + n.box[1] <= p[1] <= n.y + n.box[3] for n in col)]
+        if not xs:
+            continue
+        edge = min(xs)
+        span, taps, srcs = {}, {}, {}
+        for net in nets:
+            pts = [p for p, (n, d) in pins.items() if n == net]
+            taps[net] = [p[1] for p in pts if p[0] >= edge]
+            srcs[net] = [p[1] for p in pts if p[0] < edge]
+            ys = taps[net] + srcs[net]
+            span[net] = (min(ys), max(ys))
+
+        def cost(y, lo, hi):
+            # crossing a trunk is fine; meeting its end (a corner) forces a detour
+            return 1 if lo < y < hi else 6 if y in (lo, hi) else 0
+
+        def crossings(order):
+            # order[0] is nearest the column; later trunks lie further left
+            c = 0
+            for j, net in enumerate(order):
+                for k, other in enumerate(order):
+                    lo, hi = span[other]
+                    if k < j:
+                        c += sum(cost(y, lo, hi) for y in taps[net])
+                    elif k > j:
+                        c += sum(cost(y, lo, hi) for y in srcs[net])
+            return c
+        if len(nets) <= 6:
+            best = min(itertools.permutations(nets), key=lambda o: (crossings(o), o))
+        else:
+            best = sorted(nets, key=lambda n: (sum(span[n]), n))
+        for j, net in enumerate(best):
+            x = edge - 2 - j
+            lo, hi = span[net]
+            seeds[net] = [(x, y) for y in range(lo, hi + 1)]
+    return seeds
 
 
 def _box_line(body):

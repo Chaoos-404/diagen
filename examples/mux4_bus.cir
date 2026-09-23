@@ -1,0 +1,11 @@
+title 4-to-1 multiplexer (bus routing)
+option routing=bus
+input s0 s1 d0 d1 d2 d3
+output y
+N0 not s0 s0n
+N1 not s1 s1n
+G0 and3 d0 s0n s1n t0
+G1 and3 d1 s0 s1n t1
+G2 and3 d2 s0n s1 t2
+G3 and3 d3 s0 s1 t3
+O or4 t0 t1 t2 t3 y

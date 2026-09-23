@@ -58,12 +58,18 @@ def main(argv=None):
     ap.add_argument("--unit", type=float, default=0.5, help="TikZ grid unit in cm (default 0.5)")
     ap.add_argument("--json", action="store_true", help="print the report as JSON")
     ap.add_argument("--resistor", choices=["american", "european"], help="resistor style")
+    ap.add_argument("--ports", choices=["auto", "edge", "near"], help="where ports go")
+    ap.add_argument("--routing", choices=["direct", "bus"],
+                    help="bus: shared inputs run as vertical trunks that gates tap onto")
+    ap.add_argument("--stages", choices=["auto", "off"],
+                    help="lay out repeated stages side by side, all alike (default auto)")
     args = ap.parse_args(argv)
 
     text = sys.stdin.read() if args.netlist == "-" else open(args.netlist, encoding="utf-8").read()
     opts = {}
-    if args.resistor:
-        opts["resistor"] = args.resistor
+    for key in ("resistor", "ports", "routing", "stages"):
+        if getattr(args, key):
+            opts[key] = getattr(args, key)
     try:
         ckt = parse(text)
     except ParseError as e:

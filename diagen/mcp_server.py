@@ -55,6 +55,15 @@ TOOLS = [
                 "name": {"type": "string", "description": "Base file name for out_dir. Default 'circuit'."},
                 "preview": {"type": "boolean", "description": "Return a PNG preview image. Default true."},
                 "resistor": {"enum": ["american", "european"]},
+                "ports": {"enum": ["auto", "edge", "near"],
+                          "description": "Where input/output ports go. Default auto."},
+                "routing": {"enum": ["direct", "bus"],
+                            "description": "bus: inputs shared by several gates (select lines, "
+                                           "decoder inputs) run as vertical trunks that each gate "
+                                           "taps onto, textbook style. Default direct."},
+                "stages": {"enum": ["auto", "off"],
+                           "description": "Lay out repeated stages (found automatically, or "
+                                          "tagged stage=N) side by side, all drawn alike. Default auto."},
             },
             "required": ["netlist"],
         },
@@ -73,8 +82,9 @@ def call_render(args):
     except ParseError as e:
         return [{"type": "text", "text": "Netlist errors:\n" + "\n".join(e.errors)}], True
     opts = {}
-    if args.get("resistor"):
-        opts["resistor"] = args["resistor"]
+    for key in ("resistor", "ports", "routing", "stages"):
+        if args.get(key):
+            opts[key] = args[key]
     drawing, report = build(ckt, opts)
     svg = to_svg(drawing)
     tikz = to_tikz(drawing, standalone=bool(args.get("standalone")))

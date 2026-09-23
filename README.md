@@ -77,6 +77,11 @@ adds the `diagen` and `diagen-mcp` commands.
    latches share a column, and the ranks are assigned by longest path. A gate
    that only drives outputs joins the column of the gates reading the same
    inputs (the four ANDs of a decoder line up).
+   **Stages**: groups of parts that repeat in a chain, each linked to the next
+   by a single net (the carry of a ripple adder), are found automatically, or
+   tagged with `stage=N`. Each stage is laid out on its own and the stages
+   follow one another as blocks, every one in the same column order; the
+   search moves them together, so they stay alike.
 4. **Order and align**: barycentre sweeps reduce crossings. A second
    candidate order adds Sugiyama crossing reduction on top: wires that span
    columns get virtual points in the columns they pass, and neighbours are
@@ -104,6 +109,11 @@ adds the `diagen` and `diagen-mcp` commands.
    If a net cannot be routed, the channels are widened and it tries again.
    The search budget is a number of trials, not seconds, so a netlist gives
    the same drawing on every machine.
+   With `routing=bus`, a net that feeds several gates of one column becomes
+   a vertical trunk just left of that column: its sources (select inputs and
+   their inverters) sit above the gates and feed the trunk tops in a
+   staircase, and each gate input taps the trunk with a dot. The router lays
+   the trunks down first and connects the pins to them.
 7. **Render** ([render.py](diagen/render.py)): one primitive list, two back
    ends, so the SVG and the TikZ always match.
 
@@ -117,6 +127,7 @@ adds the `diagen` and `diagen-mcp` commands.
 | ![](examples/sr_latch.svg) | ![](examples/counter.svg) |
 | ![](examples/ripple_adder.svg) | ![](examples/symbols.svg) |
 | ![](examples/wheatstone.svg) | ![](examples/rlc.svg) |
+| ![](examples/mux4_bus.svg) | ![](examples/adder3.svg) |
 
 ## Extending
 

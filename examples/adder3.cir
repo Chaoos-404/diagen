@@ -1,0 +1,21 @@
+title 3-bit ripple-carry adder (gate level)
+input a0 b0 a1 b1 a2 b2 cin
+output s0 s1 s2 cout
+# stage 0
+X0 xor2 a0 b0 p0
+Y0 xor2 p0 cin s0
+A0 and2 a0 b0 g0
+B0 and2 p0 cin t0
+O0 or2 g0 t0 c1
+# stage 1
+X1 xor2 a1 b1 p1
+Y1 xor2 p1 c1 s1
+A1 and2 a1 b1 g1
+B1 and2 p1 c1 t1
+O1 or2 g1 t1 c2
+# stage 2
+X2 xor2 a2 b2 p2
+Y2 xor2 p2 c2 s2
+A2 and2 a2 b2 g2
+B2 and2 p2 c2 t2
+O2 or2 g2 t2 cout

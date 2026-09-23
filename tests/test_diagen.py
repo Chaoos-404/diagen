@@ -169,6 +169,63 @@ class LayoutRulesTest(unittest.TestCase):
         self.assertEqual({lay.node_of[g].layer for g in ("G0", "G1", "G2", "G3")}, {2})
 
 
+class StagesTest(unittest.TestCase):
+    def test_repeated_stages_are_found_and_laid_out_alike(self):
+        from diagen.layout import Layout
+        lay = Layout(parse(read(os.path.join(ROOT, "examples", "adder3.cir")))).run()
+        self.assertEqual([[len(st) for st in ch] for ch in lay.stages], [[5, 5, 5]])
+        spans = []
+        for si in range(3):
+            nodes = lay.stage_nodes[(0, si)]
+            spans.append((min(n.layer for n in nodes), max(n.layer for n in nodes)))
+            # the same parts in the same column order, stage by stage
+            order = [(n.layer - spans[-1][0], lay.cols[n.layer].index(n), lay.node_key[n.id])
+                     for n in nodes]
+            if si:
+                self.assertEqual(sorted((c, k) for c, _, k in order),
+                                 sorted((c, k) for c, _, k in first))
+                self.assertEqual([k for *_, k in sorted(order)], [k for *_, k in sorted(first)])
+            else:
+                first = order
+        self.assertLess(spans[0][1], spans[1][0])                  # stages side by side
+        self.assertLess(spans[1][1], spans[2][0])
+
+    def test_stage_tags(self):
+        from diagen.layout import Layout
+        lay = Layout(parse("input vin\noutput vout\n"
+                           "C1 cap vin b1 stage=1\nR1 res b1 0 stage=1\nQ1 npn c=c1 b=b1 e=0 stage=1\n"
+                           "RC1 res vcc c1 stage=1\nC2 cap c1 b2 stage=2\nR2 res b2 0 stage=2\n"
+                           "Q2 npn c=vout b=b2 e=0 stage=2\nRC2 res vcc vout stage=2\n")).run()
+        self.assertEqual(lay.stages, [[["C1", "R1", "Q1"], ["C2", "R2", "Q2"]]])
+
+    def test_stages_off(self):
+        from diagen.layout import Layout
+        lay = Layout(parse(read(os.path.join(ROOT, "examples", "adder3.cir"))), {"stages": "off"}).run()
+        self.assertEqual(lay.stages, [])
+
+
+class BusTest(unittest.TestCase):
+    def test_select_lines_become_trunks_fed_from_above(self):
+        from diagen.engine import _start
+        ckt = parse(read(os.path.join(ROOT, "examples", "mux4_bus.cir")))
+        _, report, lay = _start(ckt, {"ports": "edge"})
+        self.assertTrue(report.ok, report.text())
+        self.assertEqual(sorted(n for nets in lay.bus.values() for n in nets),
+                         ["s0", "s0n", "s1", "s1n"])
+        src = lay._bus_sources()
+        low = max(n.y + n.box[3] for n in lay.nodes if n.id in src)
+        gates = [lay.node_of[g] for g in ("G0", "G1", "G2", "G3")]
+        self.assertLess(low, min(n.y + n.box[1] for n in gates))
+        # a dot where each trunk's upper tap joins, and where s0, s1 branch to
+        # their inverters; the lower tap and the source entry are corners
+        self.assertEqual(report.junctions, 4 + 2)
+
+    def test_direct_routing_has_no_trunks(self):
+        from diagen.layout import Layout
+        text = read(os.path.join(ROOT, "examples", "mux4_bus.cir")).replace("option routing=bus", "")
+        self.assertEqual(Layout(parse(text)).run().bus, {})
+
+
 def adder_chain(n):
     lines = ["input " + " ".join(f"a{i} b{i}" for i in range(n)) + " cin",
              "output " + " ".join(f"s{i}" for i in range(n)) + " cout"]

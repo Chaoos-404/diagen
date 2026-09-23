@@ -24,7 +24,8 @@ A part is `ID TYPE` followed by its connections:
 * **Named**: `pin=net`, in any order, mixed with positional.
 * **Value**: one extra positional token after all pins, or `value=...`.
 * **Attributes**: `label=` (replaces the ID in the drawing; `label=""` shows
-  the value only), `flip=1` (mirror a multi-pin part), `rank=N` (force column N).
+  the value only), `flip=1` (mirror a multi-pin part), `rank=N` (force column N),
+  `stage=N` (put the part in repeated stage N, see below).
 * Quote tokens with spaces: `"1 \mu F"`.
 
 Net names are any token without spaces. Nets connect by name.
@@ -96,6 +97,13 @@ Unicode `Ω µ` also works.
 
 * `ports=auto|edge|near`: where input/output ports go. `auto` (the default)
   tries both and keeps the clearer layout.
+* `routing=direct|bus`: with `bus`, a net that feeds several gates of one
+  column (select lines, decoder inputs) is drawn as a vertical trunk that
+  each gate taps onto, with its source above the gates, as in textbook
+  decoders and multiplexers. `direct` (the default) routes every net as short
+  as it can.
+* `stages=auto|off`: repeated stages are laid out side by side, all alike
+  (see below). `off` lays the circuit out as one piece.
 * `resistor=american|european`: zigzag or box resistors.
 * `transistor_circle=false`: no envelope circle on BJTs.
 
@@ -112,6 +120,11 @@ Unicode `Ω µ` also works.
   side. A supply-side part and a ground-side part on the same net form a
   vertical divider.
 * Two gates that feed each other (latches) share a column.
+* Repeated stages (a ripple adder built from gates, cascaded amplifier
+  stages) are found when each stage has the same parts and is linked to the
+  next by one net. They are drawn one after another, all in the same
+  arrangement. When the stages share more than one net (a common clock or
+  enable), tag the parts with `stage=1`, `stage=2`, ... instead.
 * To get a ladder or bridge drawn with vertical dividers, name the top node
   as a rail (`vcc`, or `rail VTOP`) so that each branch becomes a divider.
 
