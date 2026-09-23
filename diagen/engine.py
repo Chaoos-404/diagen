@@ -143,15 +143,16 @@ def _start(ckt: Circuit, opts):
 
 class _Search:
     """Local search from one starting layout. Moves: swap two neighbours in
-    a column, or two inputs of a commutative gate. Every move is a full place
-    and route, kept when the routed drawing scores better."""
+    a column, two inputs of a commutative gate, or mirror an op-amp (which
+    puts its feedback on the other side). Every move is a full place and
+    route, kept when the routed drawing scores better."""
 
     def __init__(self, ckt, start, budget):
         self.ckt = ckt
         self.budget = budget               # [trials left, wall-clock limit], shared
         self.best = start
         self.opts = dict(start[2].opts, spacing=start[2].opts.get("spacing", 0))
-        self.state = ([], [])              # (column swaps, pin swaps) applied so far
+        self.state = ([], [], [])          # (column swaps, pin swaps, flips) applied so far
         lay = start[2]
         # In repeated stages only the template stage gets moves of its own;
         # the layout (swaps) and the move itself (pins) repeat them in every
@@ -169,6 +170,15 @@ class _Search:
                     continue
                 self.gate_moves += [("pin", tuple((o, a, b) for o in [c.id] + lay.peers.get(c.id, [])))
                                     for a, b in zip(ins, ins[1:])]
+        # Mirroring an op-amp swaps '+' and '-', and its feedback part follows
+        # the '-' input to the other side. Which side reads best depends on the
+        # neighbours (two op-amps with their feedback facing each other, e.g.),
+        # so it is left to the search rather than decided locally. A part the
+        # netlist flips itself keeps its orientation.
+        self.flip_moves = [("flip", tuple([c.id] + lay.peers.get(c.id, [])))
+                           for c in ckt.components
+                           if c.type in ("opamp", "op", "oa", "comparator")
+                           and lay.node_of[c.id].id not in copies and "flip" not in c.attrs]
         # The move list never changes (swaps keep every column's size), so
         # single moves are scanned round-robin: after an improvement the scan
         # carries on with the next move instead of re-trying the ones that
@@ -178,7 +188,7 @@ class _Search:
         self.moves = [("col", l, i) for l, col in enumerate(lay.cols)
                       for i in range(len(col) - 1)
                       if not (col[i].id in copies and col[i + 1].id in copies)
-                      and l not in lay.bus] + self.gate_moves
+                      and l not in lay.bus] + self.gate_moves + self.flip_moves
         self.k = 0
         self.stuck = False                 # no single move helps any more
 
@@ -187,17 +197,21 @@ class _Search:
 
     @staticmethod
     def _apply(st, move):
-        swaps, pins = st
+        swaps, pins, flips = st
         if move[0] == "col":
-            return (swaps + [move[1:]], pins)
+            return (swaps + [move[1:]], pins, flips)
+        if move[0] == "flip":
+            for m in move[1]:
+                flips = _toggle(flips, m)
+            return (swaps, pins, flips)
         for m in move[1]:
             pins = _toggle(pins, m)
-        return (swaps, pins)
+        return (swaps, pins, flips)
 
     def _try(self, st):
         self.budget[0] -= 1
         self.used += 1
-        cand = _build_once(self.ckt, dict(self.opts, swaps=st[0], pinswaps=st[1]))
+        cand = _build_once(self.ckt, dict(self.opts, swaps=st[0], pinswaps=st[1], flips=st[2]))
         if score(cand[1]) < score(self.best[1]) - 1e-9:
             self.best, self.state = cand, st
             return True
@@ -238,9 +252,9 @@ class _Search:
         return self
 
 
-def _toggle(pinswaps, move):
-    """Swapping the same two pins twice cancels out."""
-    return [m for m in pinswaps if m != move] if move in pinswaps else pinswaps + [move]
+def _toggle(moves, move):
+    """Swapping the same two pins (or flipping a part) twice cancels out."""
+    return [m for m in moves if m != move] if move in moves else moves + [move]
 
 
 def _build_once(ckt: Circuit, opts):

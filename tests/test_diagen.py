@@ -245,6 +245,24 @@ class SearchTest(unittest.TestCase):
         reduced = _start(ckt, {"ports": "edge", "xmin": True})[1]
         self.assertLess(reduced.crossings, plain.crossings)
 
+    def test_opamp_feedback_side_is_chosen_with_its_neighbours(self):
+        # Both input op-amps have '-' on top, so the local rule puts both
+        # feedback resistors above; mirroring the upper one (feedback below)
+        # is what untangles the gain resistor between them.
+        text = ("input v1 v2\noutput vout\n"
+                "U1 opamp +=v1 -=a out=o1\nU2 opamp +=v2 -=b out=o2\n"
+                "R1 res o1 a 10k\nRG res a b 1k\nR2 res b o2 10k\n"
+                "R3 res o1 c 10k\nR4 res o2 d 10k\nR5 res c vout 10k\nR6 res d 0 10k\n"
+                "U3 opamp +=d -=c out=vout\n")
+        drawing, report = render(text)
+        self.assertTrue(report.ok)
+        self.assertEqual(report.crossings, 0)
+        # a part the netlist flips itself is left alone
+        from diagen.engine import _Search, _start
+        ckt = parse(text.replace("out=o1", "out=o1 flip=1"))
+        moves = _Search(ckt, _start(ckt, {"ports": "edge"}), [0, 0]).flip_moves
+        self.assertEqual(sorted(m[1][0] for m in moves), ["U2", "U3"])
+
     def test_result_does_not_depend_on_machine_speed(self):
         import time
         import diagen.engine as engine

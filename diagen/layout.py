@@ -237,6 +237,8 @@ class Layout:
                 mirror = c.attrs.get("flip", "") not in ("", "0", "false", "no")
                 if c.type in ("opamp", "op", "oa", "comparator") and self._inv_shunt(c):
                     mirror = not mirror
+                if c.id in self.opts.get("flips", ()):     # the engine's search may mirror it
+                    mirror = not mirror
                 inst.t = Transform(0, mirror)
                 continue
             na, nb = c.pins.get("a"), c.pins.get("b")

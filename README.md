@@ -105,7 +105,11 @@ adds the `diagen` and `diagen-mcp` commands.
    columns of their own beside the part they connect to, and one stage's
    outputs never share a column with the next stage's inputs). Each start
    gets a share of the budget, and the rest goes to the best one. For commutative gates (AND/OR/XOR…) the search also tries
-   exchanging inputs, which is often what removes a crossing.
+   exchanging inputs, which is often what removes a crossing. Op-amps may
+   be mirrored ('+' and '-' swap, and the feedback part moves to the other
+   side): which side reads best depends on the neighbours, such as the two
+   input amplifiers of an instrumentation amp. A part with `flip=` in the
+   netlist keeps its orientation.
    If a net cannot be routed, the channels are widened and it tries again.
    The search budget is a number of trials, not seconds, so a netlist gives
    the same drawing on every machine.
