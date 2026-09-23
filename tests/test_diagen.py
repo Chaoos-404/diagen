@@ -161,18 +161,37 @@ class LayoutRulesTest(unittest.TestCase):
         _, report = render(text)
         self.assertEqual(report.bends, 0)                          # carries run straight
 
+    def test_gate_driving_only_an_output_joins_its_siblings(self):
+        from diagen.layout import Layout
+        lay = Layout(parse("input a b en\noutput y0 y1 y2 y3\nN1 not a an\nN2 not b bn\n"
+                           "G0 and3 an bn en y0\nG1 and3 a bn en y1\n"
+                           "G2 and3 an b en y2\nG3 and3 a b en y3\n")).run()
+        self.assertEqual({lay.node_of[g].layer for g in ("G0", "G1", "G2", "G3")}, {2})
+
+
+def adder_chain(n):
+    lines = ["input " + " ".join(f"a{i} b{i}" for i in range(n)) + " cin",
+             "output " + " ".join(f"s{i}" for i in range(n)) + " cout"]
+    for i in range(n):
+        ci, co = ("cin" if i == 0 else f"c{i}"), ("cout" if i == n - 1 else f"c{i + 1}")
+        lines += [f"X{i} xor2 a{i} b{i} p{i}", f"Y{i} xor2 p{i} {ci} s{i}",
+                  f"A{i} and2 a{i} b{i} g{i}", f"B{i} and2 p{i} {ci} t{i}",
+                  f"O{i} or2 g{i} t{i} {co}"]
+    return "\n".join(lines)
+
 
 class SearchTest(unittest.TestCase):
+    def test_crossing_reduction_untangles_a_long_chain(self):
+        from diagen.engine import _start
+        ckt = parse(adder_chain(4))
+        plain = _start(ckt, {"ports": "edge"})[1]
+        reduced = _start(ckt, {"ports": "edge", "xmin": True})[1]
+        self.assertLess(reduced.crossings, plain.crossings)
+
     def test_result_does_not_depend_on_machine_speed(self):
         import time
         import diagen.engine as engine
-        lines = ["input a0 b0 a1 b1 a2 b2 cin", "output s0 s1 s2 cout"]
-        for i in range(3):
-            ci, co = ("cin" if i == 0 else f"c{i}"), ("cout" if i == 2 else f"c{i + 1}")
-            lines += [f"X{i} xor2 a{i} b{i} p{i}", f"Y{i} xor2 p{i} {ci} s{i}",
-                      f"A{i} and2 a{i} b{i} g{i}", f"B{i} and2 p{i} {ci} t{i}",
-                      f"O{i} or2 g{i} t{i} {co}"]
-        text = "\n".join(lines)
+        text = adder_chain(3)
         fast = to_svg(render(text)[0])
         orig = engine._build_once
 

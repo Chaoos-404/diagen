@@ -12,7 +12,8 @@ The pipeline:
    transistor's collector/emitter/drain/source.
 3. Assign nodes to columns by signal flow (longest path over a DAG built from
    driver pins, or BFS distance from the sources for passive nets).
-4. Order nodes inside each column (barycentre sweeps) and pick y positions
+4. Order nodes inside each column (barycentre sweeps, optionally Sugiyama
+   crossing reduction with virtual points for long wires) and pick y positions
    that straighten wires (weighted median targets, resolved with isotonic
    regression so nodes never overlap).
 """
@@ -548,6 +549,24 @@ class Layout:
             if (comps[u].type == "input" and not near) or not dag[u]:
                 continue
             layer[u] = max(layer[u], min(layer[v] for v in dag[u]) - 1)
+        # A part that only drives output ports has nothing to pull it right,
+        # so it would stay back beside its inputs. Line it up with its
+        # siblings instead: the parts that read the same nets (the last AND
+        # of a decoder joins the other three).
+        readers = defaultdict(set)          # net -> anchors reading it
+        for net, pins in self.net_pins.items():
+            for cid, p in pins:
+                if cid in rep and self.insts[cid].sym.pins[p].kind == "in":
+                    readers[net].add(rep[cid])
+        for u in anchors:
+            if comps[u].type in ("input", "output") or not dag[u] \
+                    or any(comps[v].type != "output" for v in dag[u]):
+                continue
+            mine = [n for n, rs in readers.items() if u in rs]
+            sib = [layer[v] for n in mine for v in readers[n]
+                   if v != u and comps[v].type not in ("input", "output")]
+            if sib:
+                layer[u] = max(layer[u], max(sib))
         # a source sharing a column with other parts moves one column left
         for u in anchors:
             if self.insts[u].sym.source and comps[u].type != "input":
@@ -981,11 +1000,134 @@ class Layout:
                         return cur[n.id]
                     return sum(x * w for x, w in zip(xs, ws)) / sum(ws)
                 cols[l].sort(key=key)
+        if self.opts.get("xmin"):
+            self._reduce_crossings(cols, touch, net_nodes)
         # swaps requested by the engine's layout search: (layer, index)
         for l, i in self.opts.get("swaps", ()):
             if l < len(cols) and i + 1 < len(cols[l]):
                 cols[l][i], cols[l][i + 1] = cols[l][i + 1], cols[l][i]
         self.cols = cols
+
+    def _reduce_crossings(self, cols, touch, net_nodes):
+        """Sugiyama crossing reduction on top of the barycentre order.
+
+        A wire spanning several columns gets a virtual point in every column
+        it passes, so it takes part in the ordering like a node (one point per
+        net and column: the trunk of the net is shared). Then barycentre
+        sweeps over nodes and virtual points, and transposing neighbours,
+        lower the number of crossings between adjacent columns. The new order
+        is kept only if it has fewer crossings than the one it started from.
+        """
+        L = len(cols)
+        drivers = defaultdict(set)
+        for n in self.nodes:
+            for m in n.members:
+                for p, pin in m.sym.pins.items():
+                    net = m.comp.pins.get(p)
+                    if net is not None and pin.kind == "out":
+                        drivers[net].add(n.id)
+        # an entry is a node id, or ("v", net, layer) for a virtual point
+        layer_of = {n.id: n.layer for n in self.nodes}
+        adj = defaultdict(list)          # entry -> [(other entry, net)]
+        seen = set()
+        guess = defaultdict(list)        # virtual point -> initial height guesses
+        home = {n.id: (cols[n.layer].index(n) + 0.5) / len(cols[n.layer]) for n in self.nodes}
+
+        def link(a, b, net):
+            if (a, b, net) not in seen:
+                seen.add((a, b, net))
+                seen.add((b, a, net))
+                adj[a].append((b, net))
+                adj[b].append((a, net))
+        for net, nodes in net_nodes.items():
+            if len(nodes) < 2:
+                continue
+            ds = [n for n in nodes if n.id in drivers[net]]
+            src = ds[0] if ds else min(nodes, key=lambda n: (n.layer, n.id))
+            for v in nodes:
+                if v.layer == src.layer:
+                    continue
+                step = 1 if v.layer > src.layer else -1
+                prev = src.id
+                for l in range(src.layer + step, v.layer, step):
+                    k = ("v", net, l)
+                    layer_of[k] = l
+                    t = (l - src.layer) / (v.layer - src.layer)
+                    guess[k].append(home[src.id] * (1 - t) + home[v.id] * t)
+                    link(prev, k, net)
+                    prev = k
+                link(prev, v.id, net)
+        if not guess:
+            return                       # no wire spans a column: nothing to add
+        seq = []
+        for l in range(L):
+            items = [(home[n.id], 0, n.id) for n in cols[l]]
+            items += [(sum(g) / len(g), 1, k) for k, g in guess.items() if layer_of[k] == l]
+            seq.append([k for _, _, k in sorted(items, key=lambda t: (t[0], t[1]))])
+
+        def fr(k, net):
+            return touch[k][net] if not isinstance(k, tuple) else 0.5
+
+        def positions(sq):
+            return {k: i for col in sq for i, k in enumerate(col)}
+
+        def crossings(sq):
+            pos = positions(sq)
+            total = 0
+            for l in range(L - 1):
+                es = [(pos[a] + fr(a, net), pos[b] + fr(b, net), net)
+                      for a in sq[l] for b, net in adj[a] if layer_of[b] == l + 1]
+                for i, (x1, y1, n1) in enumerate(es):
+                    for x2, y2, n2 in es[i + 1:]:
+                        if n1 != n2 and (x1 - x2) * (y1 - y2) < 0:
+                            total += 1
+            return total
+
+        def sweep(sq, l, side):
+            pos = positions(sq)
+            cur = {k: i for i, k in enumerate(sq[l])}
+
+            def bary(k):
+                xs = [pos[o] + fr(o, net) for o, net in adj[k] if layer_of[o] == l + side]
+                return sum(xs) / len(xs) if xs else cur[k] + 0.5
+            sq[l] = sorted(sq[l], key=lambda k: (bary(k), cur[k]))
+
+        start = crossings(seq)
+        best, best_c = [list(c) for c in seq], start
+        for it in range(4):
+            forward = it % 2 == 0
+            for l in (range(1, L) if forward else range(L - 2, -1, -1)):
+                sweep(seq, l, -1 if forward else 1)
+            c = crossings(seq)
+            if c < best_c:
+                best, best_c = [list(col) for col in seq], c
+        seq = best
+        # transpose: swap neighbours while that removes crossings
+        pos = positions(seq)
+        for _ in range(20):
+            improved = False
+            for l in range(L):
+                col = seq[l]
+                for i in range(len(col) - 1):
+                    u, v = col[i], col[i + 1]
+                    delta = 0
+                    for side in (-1, 1):
+                        eu = [(pos[o] + fr(o, net), net) for o, net in adj[u] if layer_of[o] == l + side]
+                        ev = [(pos[o] + fr(o, net), net) for o, net in adj[v] if layer_of[o] == l + side]
+                        for ou, nu in eu:
+                            for ov, nv in ev:
+                                if nu != nv:
+                                    delta += (ou < ov) - (ou > ov)
+                    if delta < 0:
+                        col[i], col[i + 1] = v, u
+                        pos[u], pos[v] = i + 1, i
+                        improved = True
+            if not improved:
+                break
+        if crossings(seq) < start:
+            by_id = {n.id: n for n in self.nodes}
+            for l in range(L):
+                cols[l] = [by_id[k] for k in seq[l] if not isinstance(k, tuple)]
 
     # 5. coordinates ----------------------------------------------------------------------------
     def _place(self):

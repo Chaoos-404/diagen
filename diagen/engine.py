@@ -68,6 +68,8 @@ def search_budget(ckt):
     return max(40, min(300, SEARCH_TRIALS // max(parts, 1)))
 
 
+START_SLACK = 1.5   # starting layouts worse than this times the best are not searched
+NEAR_MARGIN = 0.9   # ports next to their parts must beat edge ports by 10% to win
 COMMUTATIVE = ("and", "or", "nand", "nor", "xor", "xnor")
 
 
@@ -78,29 +80,53 @@ def score(report):
 
 
 def build(ckt: Circuit, opts=None):
-    """Lay out and route. With ports=auto (the default) both port placements
-    are tried: ports on the outer edges (conventional) and ports next to the
-    parts they connect to; the second wins only when clearly better."""
+    """Lay out and route.
+
+    Several starting layouts are built: with ports=auto (the default) ports
+    on the outer edges (conventional) and ports next to the parts they
+    connect to, and for each, columns ordered by barycentre alone or with
+    crossing reduction on top. Each start is improved by local search with a
+    fair share of the budget (a local search ends up somewhere quite
+    different depending on where it starts), the best one wins (near ports
+    only when clearly better), and the rest of the budget goes to it.
+    """
     opts = dict(opts or {})
-    # shared by every variant
-    opts["_budget"] = [search_budget(ckt), time.monotonic() + SEARCH_SECONDS]
+    budget = [search_budget(ckt), time.monotonic() + SEARCH_SECONDS]
     mode = opts.get("ports") or ckt.options.get("ports") or "auto"
     has_ports = any(c.type in ("input", "output") for c in ckt.components)
-    if mode != "auto" or not has_ports:
-        opts["ports"] = "edge" if mode == "auto" else mode
-        return _build(ckt, opts)[:2]
-    # compare the two port placements unsearched, then spend the whole
-    # search budget on the one that wins
-    edge = _build(ckt, dict(opts, ports="edge"), search=False)
-    near = _build(ckt, dict(opts, ports="near"), search=False)
-    mode = "near" if score(near[1]) < 0.8 * score(edge[1]) else "edge"
-    return _build(ckt, dict(opts, ports=mode))[:2]
+    modes = (["edge", "near"] if has_ports else ["edge"]) if mode == "auto" else [mode]
+    searches = []
+    for m in modes:
+        plain = _start(ckt, dict(opts, ports=m))
+        xmin = _start(ckt, dict(opts, ports=m, xmin=True))
+        searches.append(_Search(ckt, plain, budget))
+        if _signature(xmin[2]) != _signature(plain[2]):
+            searches.append(_Search(ckt, xmin, budget))
+    # a start far behind the best rarely catches up: don't spend budget on it
+    top = min(score(x.best[1]) for x in searches)
+    searches = [x for x in searches if score(x.best[1]) <= START_SLACK * top]
+    share = max(1, budget[0] // len(searches))
+    for srch in searches:
+        srch.run(cap=share, pairs=False)
+
+    def best_of(m):
+        return min((x for x in searches if x.opts["ports"] == m),
+                   key=lambda x: score(x.best[1]), default=None)
+    win = best_of("edge") or best_of(modes[-1])
+    near = best_of("near") if len(modes) == 2 else None
+    if near and near is not win and score(near.best[1]) < NEAR_MARGIN * score(win.best[1]):
+        win = near
+    win.run()
+    return win.best[:2]
 
 
-def _build(ckt: Circuit, opts, search=True):
-    """Tight layout first; if a net cannot be routed, widen the channels.
-    Then search: swap neighbouring parts within a column and keep every swap
-    that makes the routed drawing better."""
+def _signature(lay):
+    """What a starting layout is: its column order."""
+    return [[n.id for n in col] for col in lay.cols]
+
+
+def _start(ckt: Circuit, opts):
+    """Tight layout first; if a net cannot be routed, widen the channels."""
     best = None
     for extra in (0, 2, 5):
         result = _build_once(ckt, dict(opts, spacing=extra))
@@ -108,66 +134,86 @@ def _build(ckt: Circuit, opts, search=True):
             best = result
         if best[1].ok:
             break
-    if not search:
-        return best
-    opts = dict(opts, spacing=best[2].opts.get("spacing", 0))
-    # moves: swap two neighbours in a column, or two inputs of a commutative gate
-    gate_moves = []
-    for c in ckt.components:
-        spec = c.spec
-        if getattr(spec, "base", None) in COMMUTATIVE:
-            ins = [p for p in spec.order if p != "y" and p in c.pins]
-            gate_moves += [("pin", c.id, a, b) for a, b in zip(ins, ins[1:])]
-    state = ([], [])                       # (column swaps, pin swaps) applied so far
-    budget = opts.get("_budget") or [search_budget(ckt), time.monotonic() + SEARCH_SECONDS]
+    return best
 
-    def spent():
-        return budget[0] <= 0 or time.monotonic() >= budget[1]
 
-    def apply(st, move):
+class _Search:
+    """Local search from one starting layout. Moves: swap two neighbours in
+    a column, or two inputs of a commutative gate. Every move is a full place
+    and route, kept when the routed drawing scores better."""
+
+    def __init__(self, ckt, start, budget):
+        self.ckt = ckt
+        self.budget = budget               # [trials left, wall-clock limit], shared
+        self.best = start
+        self.opts = dict(start[2].opts, spacing=start[2].opts.get("spacing", 0))
+        self.state = ([], [])              # (column swaps, pin swaps) applied so far
+        self.gate_moves = []
+        for c in ckt.components:
+            if getattr(c.spec, "base", None) in COMMUTATIVE:
+                ins = [p for p in c.spec.order if p != "y" and p in c.pins]
+                self.gate_moves += [("pin", c.id, a, b) for a, b in zip(ins, ins[1:])]
+        # The move list never changes (swaps keep every column's size), so
+        # single moves are scanned round-robin: after an improvement the scan
+        # carries on with the next move instead of re-trying the ones that
+        # just failed.
+        self.moves = [("col", l, i) for l, col in enumerate(start[2].cols)
+                      for i in range(len(col) - 1)] + self.gate_moves
+        self.k = 0
+        self.stuck = False                 # no single move helps any more
+
+    def _spent(self):
+        return self.budget[0] <= 0 or time.monotonic() >= self.budget[1]
+
+    @staticmethod
+    def _apply(st, move):
         swaps, pins = st
         if move[0] == "col":
             return (swaps + [move[1:]], pins)
         return (swaps, _toggle(pins, move[1:]))
 
-    def attempt(st):
-        budget[0] -= 1
-        return _build_once(ckt, dict(opts, swaps=st[0], pinswaps=st[1]))
+    def _try(self, st):
+        self.budget[0] -= 1
+        self.used += 1
+        cand = _build_once(self.ckt, dict(self.opts, swaps=st[0], pinswaps=st[1]))
+        if score(cand[1]) < score(self.best[1]) - 1e-9:
+            self.best, self.state = cand, st
+            return True
+        return False
 
-    # The move list never changes (swaps keep every column's size), so single
-    # moves are scanned round-robin: after an improvement the scan carries on
-    # with the next move instead of re-trying the ones that just failed.
-    moves = [("col", l, i) for l, col in enumerate(best[2].cols)
-             for i in range(len(col) - 1)] + gate_moves
-    k = 0
-    while moves and not spent():
-        found = None
-        for _ in range(len(moves)):                  # single moves first
-            if spent():
-                break
-            m = moves[k]
-            k = (k + 1) % len(moves)
-            st = apply(state, m)
-            cand = attempt(st)
-            if score(cand[1]) < score(best[1]) - 1e-9:
-                found = (cand, st)
-                break
-        if found is None and not spent():            # then pairs: escapes local optima
-            for i, m1 in enumerate(moves):
-                for m2 in moves[i + 1:]:
-                    if spent():
+    def run(self, cap=None, pairs=True):
+        """Climb until no move helps, the shared budget runs out, or `cap`
+        trials were spent here. Pairs of moves (to escape a local optimum)
+        are tried only when `pairs` is set."""
+        self.used = 0
+        stop = lambda: self._spent() or (cap is not None and self.used >= cap)
+        moves = self.moves
+        while moves and not stop():
+            found = False
+            if not self.stuck:
+                for _ in range(len(moves)):
+                    if stop():
+                        return self
+                    m = moves[self.k]
+                    self.k = (self.k + 1) % len(moves)
+                    if self._try(self._apply(self.state, m)):
+                        found = True
                         break
-                    st = apply(apply(state, m1), m2)
-                    cand = attempt(st)
-                    if score(cand[1]) < score(best[1]) - 1e-9:
-                        found = (cand, st)
+                self.stuck = not found
+            if not found and pairs:
+                for i, m1 in enumerate(moves):
+                    for m2 in moves[i + 1:]:
+                        if stop():
+                            return self
+                        if self._try(self._apply(self._apply(self.state, m1), m2)):
+                            found = True
+                            self.stuck = False
+                            break
+                    if found:
                         break
-                if found or spent():
-                    break
-        if found is None:
-            break
-        best, state = found
-    return best
+            if not found:
+                break
+        return self
 
 
 def _toggle(pinswaps, move):

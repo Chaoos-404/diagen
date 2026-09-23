@@ -74,8 +74,13 @@ adds the `diagen` and `diagen-mcp` commands.
 3. **Rank by signal flow**: a Sugiyama-style layered layout. Edges come from
    driver pins (gate/op-amp outputs, input ports), or for passive nets from
    BFS distance from the sources. Cycles are broken by DFS, cross-coupled
-   latches share a column, and the ranks are assigned by longest path.
-4. **Order and align**: barycentre sweeps reduce crossings. Then each column
+   latches share a column, and the ranks are assigned by longest path. A gate
+   that only drives outputs joins the column of the gates reading the same
+   inputs (the four ANDs of a decoder line up).
+4. **Order and align**: barycentre sweeps reduce crossings. A second
+   candidate order adds Sugiyama crossing reduction on top: wires that span
+   columns get virtual points in the columns they pass, and neighbours are
+   transposed while that removes crossings. Then each column
    picks y positions by weighted median over connected pins, solved exactly
    with isotonic regression (pool-adjacent-violators). Nodes never overlap
    and wires come out straight wherever possible.
@@ -88,11 +93,13 @@ adds the `diagen` and `diagen-mcp` commands.
    drawn as a red dashed air wire and reported.
 6. **Search**: neighbouring parts in each column are swapped one pair at a
    time and the circuit is re-routed; a swap is kept whenever the routed
-   drawing scores better (wire length, bends, crossings, area). With
-   `ports=auto` both port placements are laid out and scored the same way
-   (with `near`, ports get thin columns of their own beside the part they
-   connect to, and one stage's outputs never share a column with the next
-   stage's inputs). For commutative gates (AND/OR/XOR…) the search also tries
+   drawing scores better (wire length, bends, crossings, area). The search
+   runs from several starting layouts, since a local search ends up somewhere
+   quite different depending on where it starts: both column orders, and
+   with `ports=auto` both port placements (with `near`, ports get thin
+   columns of their own beside the part they connect to, and one stage's
+   outputs never share a column with the next stage's inputs). Each start
+   gets a share of the budget, and the rest goes to the best one. For commutative gates (AND/OR/XOR…) the search also tries
    exchanging inputs, which is often what removes a crossing.
    If a net cannot be routed, the channels are widened and it tries again.
    The search budget is a number of trials, not seconds, so a netlist gives
