@@ -106,8 +106,8 @@ adds the `diagen` and `diagen-mcp` commands.
    with isotonic regression (pool-adjacent-violators). Nodes never overlap
    and wires come out straight wherever possible.
 5. **Route** ([router.py](diagen/router.py)): grid A* over (point, heading)
-   with bend and crossing costs; the heuristic counts the bends a route
-   cannot avoid, which keeps the search narrow. Nets are routed as trees with T-junction
+   with bend and crossing costs (a crossing is worth a detour of about 20
+   steps); the heuristic counts the bends a route cannot avoid, which keeps the search narrow. Nets are routed as trees with T-junction
    dots. Hard rules: never through a body or label, never along another net,
    cross only at right angles, never turn or join on another net's wire. Nets
    that fail are retried in a different order; anything still unroutable is

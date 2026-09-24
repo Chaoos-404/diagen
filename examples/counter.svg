@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="578" height="184" viewBox="0 0 578 184" font-family="'Latin Modern Roman', 'CMU Serif', 'Times New Roman', serif" font-size="13">
+<svg xmlns="http://www.w3.org/2000/svg" width="658" height="164" viewBox="0 0 658 164" font-family="'Latin Modern Roman', 'CMU Serif', 'Times New Roman', serif" font-size="13">
 <title>2-bit ripple counter</title>
 <rect width="100%" height="100%" fill="white"/>
 <g stroke="black" stroke-width="1.4" fill="none" stroke-linecap="round" stroke-linejoin="round">
@@ -8,43 +8,40 @@
 <polyline points="142.4,125 151.4,132 142.4,139"/>
 <polyline points="222.4,92 242.4,92"/>
 <polyline points="222.4,132 242.4,132"/>
-<polygon points="362.4,72 442.4,72 442.4,152 362.4,152"/>
-<polyline points="342.4,92 362.4,92"/>
-<polyline points="342.4,132 362.4,132"/>
-<polyline points="362.4,125 371.4,132 362.4,139"/>
-<polyline points="442.4,92 462.4,92"/>
-<polyline points="442.4,132 462.4,132"/>
+<polygon points="442.4,32 522.4,32 522.4,112 442.4,112"/>
+<polyline points="422.4,52 442.4,52"/>
+<polyline points="422.4,92 442.4,92"/>
+<polyline points="442.4,85 451.4,92 442.4,99"/>
+<polyline points="522.4,52 542.4,52"/>
+<polyline points="522.4,92 542.4,92"/>
 <circle cx="42.4" cy="132" r="3"/>
-<circle cx="542.4" cy="52" r="3"/>
-<circle cx="542.4" cy="92" r="3"/>
+<circle cx="322.4" cy="92" r="3"/>
+<circle cx="622.4" cy="52" r="3"/>
 <polyline points="45.4,132 122.4,132"/>
-<polyline points="462.4,92 539.4,92"/>
-<polyline points="462.4,132 482.4,132"/>
-<polyline points="302.4,172 482.4,172"/>
-<polyline points="302.4,92 342.4,92"/>
-<polyline points="482.4,132 482.4,172"/>
-<polyline points="302.4,92 302.4,172"/>
-<polyline points="242.4,132 342.4,132"/>
-<polyline points="102.4,32 282.4,32"/>
+<polyline points="242.4,92 319.4,92"/>
+<polyline points="542.4,52 619.4,52"/>
+<polyline points="542.4,92 562.4,92"/>
+<polyline points="382.4,132 562.4,132"/>
+<polyline points="382.4,52 422.4,52"/>
+<polyline points="562.4,92 562.4,132"/>
+<polyline points="382.4,52 382.4,132"/>
+<polyline points="242.4,132 362.4,132"/>
+<polyline points="102.4,32 362.4,32"/>
 <polyline points="102.4,92 122.4,92"/>
-<polyline points="282.4,32 282.4,132"/>
+<polyline points="362.4,92 422.4,92"/>
+<polyline points="362.4,32 362.4,132"/>
 <polyline points="102.4,32 102.4,92"/>
-<circle cx="282.4" cy="132" r="2.8" fill="black" stroke="none"/>
-<polyline points="422.4,52 539.4,52"/>
-<polyline points="262.4,12 422.4,12"/>
-<polyline points="242.4,92 262.4,92"/>
-<polyline points="422.4,12 422.4,52"/>
-<polyline points="262.4,12 262.4,92"/>
+<circle cx="362.4" cy="92" r="2.8" fill="black" stroke="none"/>
 </g>
 <text x="146.4" y="95.315" text-anchor="start" font-size="11.05" fill="black" stroke="none"><tspan>D</tspan></text>
 <text x="218.4" y="95.315" text-anchor="end" font-size="11.05" fill="black" stroke="none"><tspan>Q</tspan></text>
 <text x="218.4" y="135.315" text-anchor="end" font-size="11.05" fill="black" stroke="none"><tspan text-decoration="overline">Q</tspan></text>
 <text x="182.4" y="66.14" text-anchor="middle" fill="black" stroke="none"><tspan>FF0</tspan></text>
-<text x="366.4" y="95.315" text-anchor="start" font-size="11.05" fill="black" stroke="none"><tspan>D</tspan></text>
-<text x="438.4" y="95.315" text-anchor="end" font-size="11.05" fill="black" stroke="none"><tspan>Q</tspan></text>
-<text x="438.4" y="135.315" text-anchor="end" font-size="11.05" fill="black" stroke="none"><tspan text-decoration="overline">Q</tspan></text>
-<text x="402.4" y="66.14" text-anchor="middle" fill="black" stroke="none"><tspan>FF1</tspan></text>
+<text x="446.4" y="55.315" text-anchor="start" font-size="11.05" fill="black" stroke="none"><tspan>D</tspan></text>
+<text x="518.4" y="55.315" text-anchor="end" font-size="11.05" fill="black" stroke="none"><tspan>Q</tspan></text>
+<text x="518.4" y="95.315" text-anchor="end" font-size="11.05" fill="black" stroke="none"><tspan text-decoration="overline">Q</tspan></text>
+<text x="482.4" y="26.14" text-anchor="middle" fill="black" stroke="none"><tspan>FF1</tspan></text>
 <text x="36.4" y="135.9" text-anchor="end" fill="black" stroke="none"><tspan>clk</tspan></text>
-<text x="548.4" y="55.9" text-anchor="start" fill="black" stroke="none"><tspan>q0</tspan></text>
-<text x="548.4" y="95.9" text-anchor="start" fill="black" stroke="none"><tspan>q1</tspan></text>
+<text x="328.4" y="95.9" text-anchor="start" fill="black" stroke="none"><tspan>q0</tspan></text>
+<text x="628.4" y="55.9" text-anchor="start" fill="black" stroke="none"><tspan>q1</tspan></text>
 </svg>

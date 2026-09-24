@@ -27,7 +27,12 @@ from collections import defaultdict
 from .geom import DIRS, OPPOSITE
 
 BEND = 4.0
-CROSS = 8.0
+# A crossing is worth a detour of about this many steps. The search scores a
+# crossing like 30 steps of wire, so a router that crossed for anything under
+# 8 steps took shortcuts the drawing then paid for: in an SRAM cell the
+# cross-coupling needs two crossings inside, but one wire going round the
+# outside leaves only one.
+CROSS = 20.0
 JOIN4 = 8.0  # joining where three wires already meet (a dotted 4-way junction)
 HUG = 0.6   # running right beside another net's wire
 

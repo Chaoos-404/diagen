@@ -1,97 +1,106 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="724.4" height="644.5" viewBox="0 0 724.4 644.5" font-family="'Latin Modern Roman', 'CMU Serif', 'Times New Roman', serif" font-size="13">
+<svg xmlns="http://www.w3.org/2000/svg" width="724.4" height="696" viewBox="0 0 724.4 696" font-family="'Latin Modern Roman', 'CMU Serif', 'Times New Roman', serif" font-size="13">
 <title>4-to-1 multiplexer (bus routing)</title>
 <rect width="100%" height="100%" fill="white"/>
 <g stroke="black" stroke-width="1.4" fill="none" stroke-linecap="round" stroke-linejoin="round">
-<polyline points="95.6,140.5 115.6,140.5"/>
-<polygon points="115.6,122.5 115.6,158.5 151.6,140.5"/>
-<circle cx="155.6" cy="140.5" r="4"/>
-<polyline points="159.6,140.5 175.6,140.5"/>
-<polyline points="95.6,60.5 115.6,60.5"/>
-<polygon points="115.6,42.5 115.6,78.5 151.6,60.5"/>
-<circle cx="155.6" cy="60.5" r="4"/>
-<polyline points="159.6,60.5 175.6,60.5"/>
-<path d="M375.6,272.5 C375.6,272.5 375.6,208.5 375.6,208.5 C375.6,208.5 407.6,208.5 407.6,208.5 C425.274,208.5 439.6,222.826 439.6,240.5 C439.6,258.174 425.274,272.5 407.6,272.5 C407.6,272.5 375.6,272.5 375.6,272.5 Z"/>
-<polyline points="355.6,220.5 375.6,220.5"/>
-<polyline points="355.6,240.5 375.6,240.5"/>
-<polyline points="355.6,260.5 375.6,260.5"/>
-<polyline points="439.6,240.5 455.6,240.5"/>
-<path d="M375.6,392.5 C375.6,392.5 375.6,328.5 375.6,328.5 C375.6,328.5 407.6,328.5 407.6,328.5 C425.274,328.5 439.6,342.826 439.6,360.5 C439.6,378.174 425.274,392.5 407.6,392.5 C407.6,392.5 375.6,392.5 375.6,392.5 Z"/>
-<polyline points="355.6,340.5 375.6,340.5"/>
-<polyline points="355.6,360.5 375.6,360.5"/>
-<polyline points="355.6,380.5 375.6,380.5"/>
-<polyline points="439.6,360.5 455.6,360.5"/>
-<path d="M375.6,512.5 C375.6,512.5 375.6,448.5 375.6,448.5 C375.6,448.5 407.6,448.5 407.6,448.5 C425.274,448.5 439.6,462.826 439.6,480.5 C439.6,498.174 425.274,512.5 407.6,512.5 C407.6,512.5 375.6,512.5 375.6,512.5 Z"/>
-<polyline points="355.6,460.5 375.6,460.5"/>
-<polyline points="355.6,480.5 375.6,480.5"/>
-<polyline points="355.6,500.5 375.6,500.5"/>
-<polyline points="439.6,480.5 455.6,480.5"/>
-<path d="M375.6,632.5 C375.6,632.5 375.6,568.5 375.6,568.5 C375.6,568.5 407.6,568.5 407.6,568.5 C425.274,568.5 439.6,582.826 439.6,600.5 C439.6,618.174 425.274,632.5 407.6,632.5 C407.6,632.5 375.6,632.5 375.6,632.5 Z"/>
-<polyline points="355.6,580.5 375.6,580.5"/>
-<polyline points="355.6,600.5 375.6,600.5"/>
-<polyline points="355.6,620.5 375.6,620.5"/>
-<polyline points="439.6,600.5 455.6,600.5"/>
-<path d="M575.6,348.5 C604.4,348.5 627.6,374.5 639.6,400.5 C627.6,426.5 604.4,452.5 575.6,452.5 C586.6,421.3 586.6,379.7 575.6,348.5 Z"/>
-<polyline points="555.6,360.5 579.173,360.5"/>
-<polyline points="555.6,380.5 582.729,380.5"/>
-<polyline points="555.6,420.5 582.729,420.5"/>
-<polyline points="555.6,440.5 579.173,440.5"/>
-<polyline points="639.6,400.5 655.6,400.5"/>
-<circle cx="35.6" cy="100.5" r="3"/>
-<circle cx="35.6" cy="20.5" r="3"/>
-<circle cx="35.6" cy="220.5" r="3"/>
-<circle cx="35.6" cy="340.5" r="3"/>
-<circle cx="35.6" cy="480.5" r="3"/>
-<circle cx="35.6" cy="600.5" r="3"/>
-<circle cx="695.6" cy="400.5" r="3"/>
-<polyline points="315.6,260.5 355.6,260.5"/>
-<polyline points="315.6,360.5 355.6,360.5"/>
-<polyline points="175.6,60.5 315.6,60.5"/>
-<polyline points="315.6,60.5 315.6,360.5"/>
-<circle cx="315.6" cy="260.5" r="2.8" fill="black" stroke="none"/>
-<polyline points="295.6,240.5 355.6,240.5"/>
-<polyline points="295.6,460.5 355.6,460.5"/>
-<polyline points="175.6,140.5 295.6,140.5"/>
-<polyline points="295.6,140.5 295.6,460.5"/>
-<circle cx="295.6" cy="240.5" r="2.8" fill="black" stroke="none"/>
-<polyline points="255.6,380.5 355.6,380.5"/>
-<polyline points="255.6,620.5 355.6,620.5"/>
-<polyline points="75.6,140.5 95.6,140.5"/>
-<polyline points="38.6,100.5 255.6,100.5"/>
-<polyline points="255.6,100.5 255.6,620.5"/>
-<polyline points="75.6,100.5 75.6,140.5"/>
-<circle cx="255.6" cy="380.5" r="2.8" fill="black" stroke="none"/>
-<circle cx="75.6" cy="100.5" r="2.8" fill="black" stroke="none"/>
-<polyline points="275.6,500.5 355.6,500.5"/>
-<polyline points="275.6,580.5 355.6,580.5"/>
-<polyline points="75.6,60.5 95.6,60.5"/>
-<polyline points="38.6,20.5 275.6,20.5"/>
-<polyline points="275.6,20.5 275.6,580.5"/>
-<polyline points="75.6,20.5 75.6,60.5"/>
-<circle cx="275.6" cy="500.5" r="2.8" fill="black" stroke="none"/>
-<circle cx="75.6" cy="20.5" r="2.8" fill="black" stroke="none"/>
-<polyline points="655.6,400.5 692.6,400.5"/>
-<polyline points="475.6,380.5 555.6,380.5"/>
-<polyline points="455.6,360.5 475.6,360.5"/>
-<polyline points="475.6,360.5 475.6,380.5"/>
-<polyline points="475.6,420.5 555.6,420.5"/>
-<polyline points="455.6,480.5 475.6,480.5"/>
-<polyline points="475.6,420.5 475.6,480.5"/>
-<polyline points="535.6,360.5 555.6,360.5"/>
-<polyline points="455.6,240.5 535.6,240.5"/>
-<polyline points="535.6,240.5 535.6,360.5"/>
-<polyline points="535.6,440.5 555.6,440.5"/>
-<polyline points="455.6,600.5 535.6,600.5"/>
-<polyline points="535.6,440.5 535.6,600.5"/>
-<polyline points="38.6,220.5 355.6,220.5"/>
-<polyline points="38.6,340.5 355.6,340.5"/>
-<polyline points="38.6,480.5 355.6,480.5"/>
-<polyline points="38.6,600.5 355.6,600.5"/>
+<polyline points="95.6,112 115.6,112"/>
+<polygon points="115.6,94 115.6,130 151.6,112"/>
+<circle cx="155.6" cy="112" r="4"/>
+<polyline points="159.6,112 175.6,112"/>
+<polyline points="95.6,192 115.6,192"/>
+<polygon points="115.6,174 115.6,210 151.6,192"/>
+<circle cx="155.6" cy="192" r="4"/>
+<polyline points="159.6,192 175.6,192"/>
+<path d="M375.6,324 C375.6,324 375.6,260 375.6,260 C375.6,260 407.6,260 407.6,260 C425.274,260 439.6,274.326 439.6,292 C439.6,309.674 425.274,324 407.6,324 C407.6,324 375.6,324 375.6,324 Z"/>
+<polyline points="355.6,272 375.6,272"/>
+<polyline points="355.6,292 375.6,292"/>
+<polyline points="355.6,312 375.6,312"/>
+<polyline points="439.6,292 455.6,292"/>
+<path d="M375.6,444 C375.6,444 375.6,380 375.6,380 C375.6,380 407.6,380 407.6,380 C425.274,380 439.6,394.326 439.6,412 C439.6,429.674 425.274,444 407.6,444 C407.6,444 375.6,444 375.6,444 Z"/>
+<polyline points="355.6,392 375.6,392"/>
+<polyline points="355.6,412 375.6,412"/>
+<polyline points="355.6,432 375.6,432"/>
+<polyline points="439.6,412 455.6,412"/>
+<path d="M375.6,564 C375.6,564 375.6,500 375.6,500 C375.6,500 407.6,500 407.6,500 C425.274,500 439.6,514.326 439.6,532 C439.6,549.674 425.274,564 407.6,564 C407.6,564 375.6,564 375.6,564 Z"/>
+<polyline points="355.6,512 375.6,512"/>
+<polyline points="355.6,532 375.6,532"/>
+<polyline points="355.6,552 375.6,552"/>
+<polyline points="439.6,532 455.6,532"/>
+<path d="M375.6,684 C375.6,684 375.6,620 375.6,620 C375.6,620 407.6,620 407.6,620 C425.274,620 439.6,634.326 439.6,652 C439.6,669.674 425.274,684 407.6,684 C407.6,684 375.6,684 375.6,684 Z"/>
+<polyline points="355.6,632 375.6,632"/>
+<polyline points="355.6,652 375.6,652"/>
+<polyline points="355.6,672 375.6,672"/>
+<polyline points="439.6,652 455.6,652"/>
+<path d="M575.6,400 C604.4,400 627.6,426 639.6,452 C627.6,478 604.4,504 575.6,504 C586.6,472.8 586.6,431.2 575.6,400 Z"/>
+<polyline points="555.6,412 579.173,412"/>
+<polyline points="555.6,432 582.729,432"/>
+<polyline points="555.6,472 582.729,472"/>
+<polyline points="555.6,492 579.173,492"/>
+<polyline points="639.6,452 655.6,452"/>
+<circle cx="35.6" cy="72" r="3"/>
+<circle cx="35.6" cy="152" r="3"/>
+<circle cx="35.6" cy="272" r="3"/>
+<circle cx="35.6" cy="392" r="3"/>
+<circle cx="35.6" cy="532" r="3"/>
+<circle cx="35.6" cy="672" r="3"/>
+<circle cx="695.6" cy="452" r="3"/>
+<polyline points="295.6,312 355.6,312"/>
+<polyline points="295.6,412 355.6,412"/>
+<polyline points="175.6,192 215.6,192"/>
+<polyline points="215.6,52 295.6,52"/>
+<polyline points="295.6,52 295.6,412"/>
+<polyline points="215.6,52 215.6,192"/>
+<circle cx="295.6" cy="312" r="2.8" fill="black" stroke="none"/>
+<polyline points="315.6,292 355.6,292"/>
+<polyline points="315.6,512 355.6,512"/>
+<polyline points="175.6,112 195.6,112"/>
+<polyline points="195.6,12 315.6,12"/>
+<polyline points="315.6,12 315.6,512"/>
+<polyline points="195.6,12 195.6,112"/>
+<circle cx="315.6" cy="292" r="2.8" fill="black" stroke="none"/>
+<polyline points="315.6,552 355.6,552"/>
+<polyline points="255.6,652 355.6,652"/>
+<polyline points="75.6,192 95.6,192"/>
+<polyline points="75.6,232 255.6,232"/>
+<polyline points="38.6,152 75.6,152"/>
+<polyline points="255.6,232 255.6,652"/>
+<polyline points="315.6,552 315.6,652"/>
+<polyline points="75.6,152 75.6,232"/>
+<circle cx="315.6" cy="652" r="2.8" fill="black" stroke="none"/>
+<circle cx="75.6" cy="192" r="2.8" fill="black" stroke="none"/>
+<polyline points="275.6,432 355.6,432"/>
+<polyline points="275.6,632 355.6,632"/>
+<polyline points="75.6,112 95.6,112"/>
+<polyline points="75.6,132 95.6,132"/>
+<polyline points="95.6,152 275.6,152"/>
+<polyline points="38.6,72 75.6,72"/>
+<polyline points="275.6,152 275.6,632"/>
+<polyline points="75.6,72 75.6,132"/>
+<polyline points="95.6,132 95.6,152"/>
+<circle cx="275.6" cy="432" r="2.8" fill="black" stroke="none"/>
+<circle cx="75.6" cy="112" r="2.8" fill="black" stroke="none"/>
+<polyline points="655.6,452 692.6,452"/>
+<polyline points="475.6,432 555.6,432"/>
+<polyline points="455.6,412 475.6,412"/>
+<polyline points="475.6,412 475.6,432"/>
+<polyline points="475.6,472 555.6,472"/>
+<polyline points="455.6,532 475.6,532"/>
+<polyline points="475.6,472 475.6,532"/>
+<polyline points="535.6,412 555.6,412"/>
+<polyline points="455.6,292 535.6,292"/>
+<polyline points="535.6,292 535.6,412"/>
+<polyline points="535.6,492 555.6,492"/>
+<polyline points="455.6,652 535.6,652"/>
+<polyline points="535.6,492 535.6,652"/>
+<polyline points="38.6,272 355.6,272"/>
+<polyline points="38.6,392 355.6,392"/>
+<polyline points="38.6,532 355.6,532"/>
+<polyline points="38.6,672 355.6,672"/>
 </g>
-<text x="29.6" y="104.4" text-anchor="end" fill="black" stroke="none"><tspan>s0</tspan></text>
-<text x="29.6" y="24.4" text-anchor="end" fill="black" stroke="none"><tspan>s1</tspan></text>
-<text x="29.6" y="224.4" text-anchor="end" fill="black" stroke="none"><tspan>d0</tspan></text>
-<text x="29.6" y="344.4" text-anchor="end" fill="black" stroke="none"><tspan>d1</tspan></text>
-<text x="29.6" y="484.4" text-anchor="end" fill="black" stroke="none"><tspan>d2</tspan></text>
-<text x="29.6" y="604.4" text-anchor="end" fill="black" stroke="none"><tspan>d3</tspan></text>
-<text x="701.6" y="404.4" text-anchor="start" fill="black" stroke="none"><tspan>y</tspan></text>
+<text x="29.6" y="75.9" text-anchor="end" fill="black" stroke="none"><tspan>s0</tspan></text>
+<text x="29.6" y="155.9" text-anchor="end" fill="black" stroke="none"><tspan>s1</tspan></text>
+<text x="29.6" y="275.9" text-anchor="end" fill="black" stroke="none"><tspan>d0</tspan></text>
+<text x="29.6" y="395.9" text-anchor="end" fill="black" stroke="none"><tspan>d1</tspan></text>
+<text x="29.6" y="535.9" text-anchor="end" fill="black" stroke="none"><tspan>d2</tspan></text>
+<text x="29.6" y="675.9" text-anchor="end" fill="black" stroke="none"><tspan>d3</tspan></text>
+<text x="701.6" y="455.9" text-anchor="start" fill="black" stroke="none"><tspan>y</tspan></text>
 </svg>
