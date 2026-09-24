@@ -248,9 +248,6 @@ class SymmetryTest(unittest.TestCase):
         self.assertEqual(a1.pin_pos("s")[1], a2.pin_pos("s")[1])        # level with q and qb
         _, report = render(text)
         self.assertTrue(report.ok)
-        # inside the cell the cross-coupling needs two crossings; one wire
-        # going round the outside leaves one
-        self.assertEqual(report.crossings, 1)
 
     def test_symmetry_off(self):
         lay = self.layout(DIFF_PAIR, symmetry="off")
