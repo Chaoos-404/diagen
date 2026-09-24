@@ -30,6 +30,7 @@ BEND = 4.0
 CROSS = 8.0
 JOIN4 = 8.0  # joining where three wires already meet (a dotted 4-way junction)
 HUG = 0.6   # running right beside another net's wire
+REACH_CHECK = 200  # search steps after which unreachable targets are ruled out first
 
 
 class Router:
@@ -194,8 +195,16 @@ class Router:
         g = {startstate: 1.0}
         came = {startstate: None}
         heap = [(1.0 + h(first, sdir), 1.0, first, sdir)]
+        pops = 0
         while heap:
             f, cost, p, d = heapq.heappop(heap)
+            pops += 1
+            # A search that fails ends only when everything reachable from the
+            # start has been expanded, often a wide open area around a target
+            # shut in a small pocket. Once the search runs long, check from
+            # both ends whether the target can be reached at all.
+            if pops == REACH_CHECK and not self._reachable(net, first, targets):
+                return None
             if cost > g.get((p, d), 1e18):
                 continue
             # reached the tree?
@@ -227,6 +236,48 @@ class Router:
                     came[(q, nd)] = (p, d)
                     heapq.heappush(heap, (ng + h(q, nd), ng, q, nd))
         return None
+
+    def _reachable(self, net, first, targets):
+        """Can any target be reached from `first` at all? Breadth-first from
+        both ends at once, on points only and under looser rules than the
+        search (a point is open if some step could enter it: any heading, any
+        turn), so False is certain. The side that runs out first decides, so
+        a target shut in a small pocket is found out without flooding the
+        open side."""
+        x0, y0, x1, y1 = self.bounds
+        occ, blocked, pins, stubs = self.occ, self.blocked, self.pins, self.stubs
+        straight = ({"U", "D"}, {"L", "R"})
+
+        def open_(q):
+            if not (x0 <= q[0] <= x1 and y0 <= q[1] <= y1) or q in blocked or q in pins:
+                return False
+            sn = stubs.get(q)
+            if sn is not None and sn != net:
+                return False
+            for other, ds in occ.get(q, {}).items():
+                if (len(ds) >= 4) if other == net else (ds not in straight):
+                    return False
+            return True
+        near, far = {first}, set(targets)
+        if near & far:
+            return True
+        fronts = [list(near), list(far)]
+        seen = [near, far]
+        while fronts[0] and fronts[1]:
+            i = 0 if len(fronts[0]) <= len(fronts[1]) else 1
+            nxt = []
+            for p in fronts[i]:
+                for dx, dy in DIRS.values():
+                    q = (p[0] + dx, p[1] + dy)
+                    if q in seen[i]:
+                        continue
+                    if q in seen[1 - i]:
+                        return True
+                    if open_(q):
+                        seen[i].add(q)
+                        nxt.append(q)
+            fronts[i] = nxt
+        return False
 
     def _unwind(self, came, state, start):
         out = []

@@ -324,6 +324,16 @@ def adder_chain(n):
 
 
 class SearchTest(unittest.TestCase):
+    def test_a_target_shut_in_a_pocket_is_ruled_out_from_both_ends(self):
+        from diagen.router import Router
+        # a ring of blocked points around (10, 10); the start is far outside
+        ring = {(x, y) for x in range(8, 13) for y in range(8, 13)} - {(10, 10)}
+        r = Router((0, 0, 30, 30), ring, {}, {})
+        r.occ = {}
+        self.assertFalse(r._reachable("n", (25, 25), [(10, 10)]))
+        r.blocked = ring - {(10, 8), (10, 9)}                       # open a way in
+        self.assertTrue(r._reachable("n", (25, 25), [(10, 10)]))
+
     def test_crossing_reduction_untangles_a_long_chain(self):
         from diagen.engine import _start
         ckt = parse(adder_chain(4))
