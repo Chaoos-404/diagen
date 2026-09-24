@@ -236,6 +236,19 @@ class SymmetryTest(unittest.TestCase):
         self.assertEqual(y("input:in", "a"), axis)
         self.assertEqual(y("output:out", "a"), axis)
 
+    def test_sram_access_transistors_lie_on_either_side(self):
+        text = read(os.path.join(ROOT, "examples", "sram_6t.cir"))
+        lay = self.layout(text)
+        a1, a2, p1, p2 = (lay.insts[c] for c in ("A1", "A2", "P1", "P2"))
+        self.assertIs(lay.node_of["A1"], lay.node_of["P1"])
+        self.assertLess(a1.pin_pos("s")[0], p1.pin_pos("d")[0])        # left of the left half
+        self.assertGreater(a2.pin_pos("s")[0], p2.pin_pos("d")[0])     # right of the right half
+        self.assertEqual((a1.pin_dir("s"), a2.pin_dir("s")), ("R", "L"))   # pointing inwards
+        self.assertEqual((a1.pin_dir("g"), a2.pin_dir("g")), ("U", "U"))   # gates up to wl
+        self.assertEqual(a1.pin_pos("s")[1], a2.pin_pos("s")[1])        # level with q and qb
+        _, report = render(text)
+        self.assertTrue(report.ok)
+
     def test_symmetry_off(self):
         lay = self.layout(DIFF_PAIR, symmetry="off")
         self.assertIsNot(lay.node_of["Q1"], lay.node_of["Q2"])

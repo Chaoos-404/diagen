@@ -1,0 +1,8 @@
+title 6T SRAM cell
+input wl bl blb
+P1 pmos d=q g=qb s=vdd
+N1 nmos d=q g=qb s=0
+P2 pmos d=qb g=q s=vdd
+N2 nmos d=qb g=q s=0
+A1 nmos d=bl g=wl s=q
+A2 nmos d=blb g=wl s=qb

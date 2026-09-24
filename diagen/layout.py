@@ -469,11 +469,35 @@ class Layout:
                         rung = c.id
                         used.add(c.id)
                         break
-            cells.append((group, mirror, below_c, above_c, rung))
-        cells += [([col], False, None, None, None) for col in cols if len(col) > 1 and col[0] not in used]
+            # Sides: a lone transistor hanging off the junction inside each
+            # half by one of its vertical pins (the access transistors of an
+            # SRAM cell) lies on its side next to that half, level with the
+            # junction, pointing inwards, its gate up.
+            sides = []
+            if mirror:
+                found = []
+                for col in group:
+                    hits = []
+                    for lvl, (u, d) in enumerate(zip(col, col[1:])):
+                        j = bot[u]
+                        for C in cols:
+                            x = C[0]
+                            if len(C) == 1 and x not in used and x not in (u, d):
+                                for pd in ("U", "D"):
+                                    if net[x][pd] == j:
+                                        hits.append((x, lvl, pd))
+                    found.append(hits)
+                if all(len(h) == 1 for h in found):
+                    (a, la, pa), (b, lb, pb) = found[0][0], found[1][0]
+                    if comp[a].type == comp[b].type and (la, pa) == (lb, pb) and a != b:
+                        sides = [(a, 0, la, pa), (b, 1, lb, pb)]
+                        used.update((a, b))
+            cells.append((group, mirror, below_c, above_c, rung, sides))
+        cells += [([col], False, None, None, None, []) for col in cols
+                  if len(col) > 1 and col[0] not in used]
 
         # 3) geometry: level i of every column has its top pin at y = 6i
-        for group, mirror, below_c, above_c, rung in cells:
+        for group, mirror, below_c, above_c, rung, sides in cells:
             flips = []
             for k, col in enumerate(group):
                 f = []
@@ -515,6 +539,25 @@ class Layout:
             mid = round(sum(xs) / len(xs))
             yb = 6 * (len(group[0]) - 1) + 4
             members = [cid for col in group for cid in col]
+            for cid, k, lvl, pd in sides:
+                inst = insts[cid]
+                inner = pins[cid][pd]
+                want = "R" if k == 0 else "L"
+                for rot, mir in ((1, False), (1, True), (3, False), (3, True)):
+                    inst.t = Transform(rot, mir)
+                    if inst.pin_dir(inner) == want and inst.pin_dir(pins[cid]["L"]) == "U":
+                        break
+                y = 6 * lvl + 5                          # the junction inside the half
+                px, py = inst.pin_pos(inner)
+                inst.t = inst.moved(-px, y - py)
+                b = self._inst_box(inst)
+                half = [self._inst_box(insts[c]) for c in group[k]]
+                if k == 0:                               # clear of the half, with a free column
+                    dx = math.floor(min(h[0] for h in half) - 2 - b[2])
+                else:
+                    dx = math.ceil(max(h[2] for h in half) + 2 - b[0])
+                inst.t = inst.moved(dx, 0)
+                members.append(cid)
             if rung:
                 left = group[0]
                 ab = [insts[rung].comp.pins[p] for p in ("a", "b")]

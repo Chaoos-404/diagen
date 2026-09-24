@@ -1,0 +1,93 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="718" height="312.8" viewBox="0 0 718 312.8" font-family="'Latin Modern Roman', 'CMU Serif', 'Times New Roman', serif" font-size="13">
+<title>6T SRAM cell</title>
+<rect width="100%" height="100%" fill="white"/>
+<g stroke="black" stroke-width="1.4" fill="none" stroke-linecap="round" stroke-linejoin="round">
+<polyline points="285.6,96 285.6,128"/>
+<polyline points="278.6,94 278.6,130" stroke-width="2.8"/>
+<polyline points="278.6,100 255.6,100 255.6,72"/>
+<polyline points="278.6,124 255.6,124 255.6,152"/>
+<circle cx="290.6" cy="112" r="4"/>
+<polyline points="315.6,112 294.6,112"/>
+<polygon points="273.6,100 267.6,97 267.6,103" fill="black"/>
+<polyline points="255.6,72 255.6,52"/>
+<polyline points="245.6,52 265.6,52"/>
+<polyline points="285.6,216 285.6,248"/>
+<polyline points="278.6,214 278.6,250" stroke-width="2.8"/>
+<polyline points="278.6,220 255.6,220 255.6,192"/>
+<polyline points="278.6,244 255.6,244 255.6,272"/>
+<polyline points="315.6,232 285.6,232"/>
+<polygon points="255.6,244 261.6,247 261.6,241" fill="black"/>
+<polyline points="255.6,272 255.6,292"/>
+<polyline points="243.6,292 267.6,292"/>
+<polyline points="248,296.4 263.2,296.4"/>
+<polyline points="252.4,300.8 258.8,300.8"/>
+<polyline points="425.6,96 425.6,128"/>
+<polyline points="432.6,94 432.6,130" stroke-width="2.8"/>
+<polyline points="432.6,100 455.6,100 455.6,72"/>
+<polyline points="432.6,124 455.6,124 455.6,152"/>
+<circle cx="420.6" cy="112" r="4"/>
+<polyline points="395.6,112 416.6,112"/>
+<polygon points="437.6,100 443.6,97 443.6,103" fill="black"/>
+<polyline points="455.6,72 455.6,52"/>
+<polyline points="445.6,52 465.6,52"/>
+<polyline points="425.6,216 425.6,248"/>
+<polyline points="432.6,214 432.6,250" stroke-width="2.8"/>
+<polyline points="432.6,220 455.6,220 455.6,192"/>
+<polyline points="432.6,244 455.6,244 455.6,272"/>
+<polyline points="395.6,232 425.6,232"/>
+<polygon points="455.6,244 449.6,247 449.6,241" fill="black"/>
+<polyline points="455.6,272 455.6,292"/>
+<polyline points="443.6,292 467.6,292"/>
+<polyline points="448,296.4 463.2,296.4"/>
+<polyline points="452.4,300.8 458.8,300.8"/>
+<polyline points="99.6,142 131.6,142"/>
+<polyline points="97.6,149 133.6,149" stroke-width="2.8"/>
+<polyline points="103.6,149 103.6,172 75.6,172"/>
+<polyline points="127.6,149 127.6,172 155.6,172"/>
+<polyline points="115.6,112 115.6,142"/>
+<polygon points="127.6,172 130.6,166 124.6,166" fill="black"/>
+<polyline points="611.6,142 579.6,142"/>
+<polyline points="613.6,149 577.6,149" stroke-width="2.8"/>
+<polyline points="607.6,149 607.6,172 635.6,172"/>
+<polyline points="583.6,149 583.6,172 555.6,172"/>
+<polyline points="595.6,112 595.6,142"/>
+<polygon points="583.6,172 580.6,166 586.6,166" fill="black"/>
+<circle cx="35.6" cy="92" r="3"/>
+<circle cx="35.6" cy="172" r="3"/>
+<circle cx="675.6" cy="172" r="3"/>
+<polyline points="38.6,172 75.6,172"/>
+<polyline points="635.6,172 672.6,172"/>
+<polyline points="155.6,172 355.6,172"/>
+<polyline points="355.6,112 395.6,112"/>
+<polyline points="355.6,232 395.6,232"/>
+<polyline points="255.6,152 255.6,192"/>
+<polyline points="355.6,112 355.6,232"/>
+<circle cx="255.6" cy="172" r="2.8" fill="black" stroke="none"/>
+<circle cx="355.6" cy="172" r="2.8" fill="black" stroke="none"/>
+<polyline points="315.6,232 335.6,232"/>
+<polyline points="315.6,112 335.6,112"/>
+<polyline points="395.6,172 555.6,172"/>
+<polyline points="335.6,152 395.6,152"/>
+<polyline points="335.6,112 335.6,232"/>
+<polyline points="455.6,152 455.6,192"/>
+<polyline points="395.6,152 395.6,172"/>
+<circle cx="335.6" cy="152" r="2.8" fill="black" stroke="none"/>
+<circle cx="455.6" cy="172" r="2.8" fill="black" stroke="none"/>
+<polyline points="38.6,92 115.6,92"/>
+<polyline points="115.6,12 595.6,12"/>
+<polyline points="115.6,12 115.6,112"/>
+<polyline points="595.6,12 595.6,112"/>
+<circle cx="115.6" cy="92" r="2.8" fill="black" stroke="none"/>
+</g>
+<text x="255.6" y="47.026" text-anchor="middle" font-size="11.7" fill="black" stroke="none"><tspan>vdd</tspan></text>
+<text x="245.6" y="115.9" text-anchor="end" fill="black" stroke="none"><tspan>P1</tspan></text>
+<text x="245.6" y="235.9" text-anchor="end" fill="black" stroke="none"><tspan>N1</tspan></text>
+<text x="455.6" y="47.026" text-anchor="middle" font-size="11.7" fill="black" stroke="none"><tspan>vdd</tspan></text>
+<text x="465.6" y="115.9" text-anchor="start" fill="black" stroke="none"><tspan>P2</tspan></text>
+<text x="465.6" y="235.9" text-anchor="start" fill="black" stroke="none"><tspan>N2</tspan></text>
+<text x="115.6" y="185.9" text-anchor="start" fill="black" stroke="none"><tspan>A1</tspan></text>
+<text x="595.6" y="185.9" text-anchor="start" fill="black" stroke="none"><tspan>A2</tspan></text>
+<text x="29.6" y="95.9" text-anchor="end" fill="black" stroke="none"><tspan>wl</tspan></text>
+<text x="29.6" y="175.9" text-anchor="end" fill="black" stroke="none"><tspan>bl</tspan></text>
+<text x="681.6" y="175.9" text-anchor="start" fill="black" stroke="none"><tspan>blb</tspan></text>
+</svg>

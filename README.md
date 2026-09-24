@@ -80,7 +80,9 @@ adds the `diagen` and `diagen-mcp` commands.
    H-bridge), each level turning its base or gate inwards when that net is
    shared or cross-coupled and outwards when it comes from outside. The part
    that closes the pair (the tail source, the NAND pull-down) sits on the
-   axis, and a load between the two halves lies across the middle. A
+   axis, a load between the two halves lies across the middle, and a
+   transistor hanging off the junction inside each half (the access
+   transistors of an SRAM cell) lies on its side next to it, gate up. A
    complementary pair with its gates tied (an inverter, a push-pull stage) is
    mirrored top to bottom: its input comes in level with the output, on the
    axis between the two. An input that only feeds a base facing right comes
