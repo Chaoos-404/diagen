@@ -143,6 +143,9 @@ adds the `diagen` and `diagen-mcp` commands.
 |---|---|
 | ![](examples/inverting_amp.svg) | ![](examples/noninverting_amp.svg) |
 | ![](examples/sallen_key.svg) | ![](examples/cmos_inverter.svg) |
+| ![](examples/diff_pair.svg) | ![](examples/diff_amp.svg) |
+| ![](examples/cmos_nand.svg) | ![](examples/sram_6t.svg) |
+| ![](examples/h_bridge.svg) | ![](examples/push_pull.svg) |
 | ![](examples/full_adder.svg) | ![](examples/mux2.svg) |
 | ![](examples/sr_latch.svg) | ![](examples/counter.svg) |
 | ![](examples/ripple_adder.svg) | ![](examples/symbols.svg) |
