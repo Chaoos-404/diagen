@@ -136,11 +136,13 @@ def parse_text(text: str) -> Circuit:
         if head == "title":
             ckt.title = line.split(None, 1)[1] if len(toks) > 1 else ""
             continue
-        if head in ("input", "inputs"):
-            inputs += toks[1:]
-            continue
-        if head in ("output", "outputs"):
-            outputs += toks[1:]
+        if head in ("input", "inputs", "output", "outputs"):
+            bad = [t for t in toks[1:] if "=" in t[1:]]
+            if bad:
+                errors.append(f"line {ln}: a port takes net names only, not '{bad[0]}' "
+                              f"(the net name is the port's label)")
+            names = [t for t in toks[1:] if t not in bad]
+            (inputs if head.startswith("input") else outputs).extend(names)
             continue
         if head in ("rail", "supply", "ground", "wire"):
             for t in toks[1:]:

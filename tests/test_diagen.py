@@ -58,6 +58,11 @@ class ParserTest(unittest.TestCase):
         self.assertIn("line 3", msgs)
         self.assertIn("no pin 'q'", msgs)
 
+    def test_port_rejects_key_value_tokens(self):
+        with self.assertRaises(ParseError) as cm:
+            parse("R1 res a b\noutput b label=V_X\n")
+        self.assertIn("line 2", "\n".join(cm.exception.errors))
+
     def test_rails(self):
         ckt = parse("R1 res a 0\nR2 res a VCC\nR3 res a -12V\nrail VREF\nR4 res a VREF\n")
         self.assertEqual(ckt.rail_kind("0"), "gnd")
