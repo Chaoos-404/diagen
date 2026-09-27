@@ -66,6 +66,7 @@ Multi-pin:
 | type | positional order | pin names (aliases) |
 |---|---|---|
 | `opamp` (`comparator`) | `+ - out [v+ v-]` | `+` (`in+`, `non`), `-` (`in-`, `inv`), `out`, `v+` (`vcc`), `v-` (`vee`) |
+| `transformer` (`xfmr`, `xformer`, `trafo`) | `p1 p2 s1 s2 [ct]` | primary `p1` (top) `p2` on the left, secondary `s1` (top) `s2` on the right, optional centre tap `ct`; `dots=1` draws polarity dots on the top ends |
 | `npn`, `pnp` | `c b e` | `c` collector, `b` base, `e` emitter |
 | `nmos`, `pmos` | `d g s` | `d` drain, `g` gate, `s` source |
 | `and` `or` `nand` `nor` `xor` `xnor` + input count (`and3`, default 2) | `a b ... y` | inputs `a b c d` (`in1`...), output `y` (`out`, `q`) |
@@ -126,6 +127,9 @@ Unicode `Ω µ` also works.
   side. A supply-side part and a ground-side part on the same net form a
   vertical divider.
 * Two gates that feed each other (latches) share a column.
+* A source or load whose two nets reach only one winding of a transformer
+  stands upright beside it, as in textbook rectifiers:
+  `V1 vac p1 p2` + `T1 transformer p1 p2 a b ct=0`.
 * Repeated stages (a ripple adder built from gates, cascaded amplifier
   stages) are found when each stage has the same parts and is linked to the
   next by one net. They are drawn one after another at the same height,

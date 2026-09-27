@@ -39,6 +39,31 @@ def gap_y(a, b):
     """Rows kept free between two stacked nodes. Two ports only need one, so
     a column of ports can match the 2-unit pitch of the pins they feed."""
     return 1 if _is_port(a) and _is_port(b) else GAP_Y
+
+
+CLEARANCE = 0.3    # a wire row this close to a drawing is not free (as in the router)
+
+
+def _free_rows(a, b, dy):
+    """Grid rows a wire can use between node a and node b, dy below it."""
+    lo = math.ceil(a.box[3] + CLEARANCE - 1e-9)
+    hi = math.floor(dy + b.box[1] - CLEARANCE + 1e-9)
+    return max(0, hi - lo + 1)
+
+
+def min_dy(a, b):
+    """Smallest whole-unit distance from node a down to node b. The gap is
+    gap_y between the drawings, but rounding up to the grid must not waste a
+    row: gates end 0.4 short of a grid row, and two NOR gates of a latch
+    stacked 2.8 apart leave three wire rows where the gap promised two.
+    So the distance is the smallest that still leaves as many free rows as
+    the exact gap does."""
+    ideal = a.box[3] + gap_y(a, b) - b.box[1]
+    need = _free_rows(a, b, ideal)
+    dy = math.ceil(ideal - 1e-9)
+    while dy > 0 and _free_rows(a, b, dy - 1) >= need and dy - 1 + b.box[1] > a.box[3]:
+        dy -= 1
+    return dy
 MIN_COL_GAP = 1    # minimum free columns between node boxes (boxes include pin exits)
 
 
@@ -251,7 +276,10 @@ class Layout:
             na, nb = c.pins.get("a"), c.pins.get("b")
             ra, rb = self.orail(na) if na else None, self.orail(nb) if nb else None
             if ra is None and rb is None:
-                inst.t = Transform(0)       # series; may be flipped later
+                # series; may be flipped later. A part that only spans two pins
+                # on one side of another part (a source across a transformer
+                # winding) stands upright beside them instead.
+                inst.t = Transform(self._across_pins(c) or 0)
                 continue
             # Vertical. Decide which pin goes on top.
             rank = {"pos": 0, None: 1, "neg": 2, "gnd": 2}
@@ -263,6 +291,25 @@ class Layout:
             if sym.source and ra is None and rb == "gnd":
                 a_top = True
             inst.t = Transform(1) if a_top else Transform(3)
+
+    def _across_pins(self, c):
+        """Rotation (1: pin a on top, 3: pin b on top) for a two-terminal part
+        whose two nets reach nothing but two pins on the same side of one other
+        part, one above the other; None otherwise."""
+        na, nb = c.pins.get("a"), c.pins.get("b")
+        if na is None or nb is None or na == nb:
+            return None
+        ends = [[(o, p) for o, p in self.net_pins[n] if o != c.id] for n in (na, nb)]
+        if any(len(e) != 1 for e in ends):
+            return None
+        (oa, pa), (ob, pb) = ends[0][0], ends[1][0]
+        other = self.insts[oa]
+        if oa != ob or other.sym.two_terminal or other.comp.type in ("opamp", "op", "oa", "comparator"):
+            return None
+        A, B = other.sym.pins[pa], other.sym.pins[pb]
+        if A.dir != B.dir or A.dir not in ("L", "R") or A.y == B.y:
+            return None
+        return 1 if A.y < B.y else 3
 
     def _inv_shunt(self, c):
         """Non-inverting style: the '-' net has a part to a rail and '+' is not a rail."""
@@ -1942,7 +1989,7 @@ def _fits(cols, moved):
         if not any(n.id in moved for n in col):
             continue
         for a, b in zip(col, col[1:]):
-            if b.y + b.box[1] < a.y + a.box[3] + gap_y(a, b) - 1e-9:
+            if b.y - a.y < min_dy(a, b):
                 return False
     return True
 
@@ -2046,7 +2093,7 @@ def _stack(col, desired, weights):
         y = round(z + o - n.box[1])
         if prev is not None:
             pn, py = prev
-            y = max(y, math.ceil(py + pn.box[3] + gap_y(pn, n) - n.box[1] - 1e-9))
+            y = max(y, py + min_dy(pn, n))
         res.append(y)
         prev = (n, y)
     return res

@@ -45,9 +45,12 @@ class Router:
         self.pins = pins
         self.stubs = stubs
 
-    def route(self, nets, max_rounds=6, seeds=None):
+    def route(self, nets, max_rounds=6, seeds=None, give_up=False):
         """nets: {net: [pin points]}; seeds: {net: [points in a line]}.
+        With give_up, stop at the first net that cannot be routed (the caller
+        only needs to know that the layout does not route).
         Returns (paths, failed)."""
+        self.give_up = give_up
         self.seeds = {n: pts for n, pts in (seeds or {}).items() if n in nets}
         order = sorted(nets, key=lambda n: (n not in self.seeds, self._span(nets[n])))
         best = None
@@ -82,6 +85,8 @@ class Router:
             paths[net] = edges
             if missing:
                 failed[net] = missing
+                if self.give_up:
+                    break
         return paths, failed
 
     def _add_edge(self, net, a, b):
@@ -195,6 +200,28 @@ class Router:
         g = {startstate: 1.0}
         came = {startstate: None}
         heap = [(1.0 + h(first, sdir), 1.0, first, sdir)]
+        # The inner loop is the hot spot of the whole engine: the rules of
+        # _free, _crossing_at and _hugging are inlined, and occupancy does not
+        # change during one search, so wires running alongside are counted
+        # once per point and axis.
+        occ, blocked, pins, stubs = self.occ, self.blocked, self.pins, self.stubs
+        steps = list(DIRS.items())
+        vert, horiz = {"U", "D"}, {"L", "R"}
+        hug_memo = {}
+
+        def hugging(q, flat):
+            key = (q, flat)
+            n = hug_memo.get(key)
+            if n is None:
+                n = 0
+                sides = ((q[0], q[1] - 1), (q[0], q[1] + 1)) if flat else ((q[0] - 1, q[1]), (q[0] + 1, q[1]))
+                along = horiz if flat else vert
+                for side in sides:
+                    for o, ds in occ.get(side, {}).items():
+                        if o != net and ds & along:
+                            n += 1
+                hug_memo[key] = n
+            return n
         pops = 0
         while heap:
             f, cost, p, d = heapq.heappop(heap)
@@ -213,23 +240,43 @@ class Router:
             if p in pin_goal and p not in tree_pts:
                 # p is the stub of a tree pin: step straight into the pin
                 return self._unwind(came, (p, d), start) + [pin_goal[p][0]]
-            crossing_here = self._crossing_at(net, p)
-            for nd, (dx, dy) in DIRS.items():
-                if nd == OPPOSITE[d]:
-                    continue
-                if crossing_here and nd != d:
+            here = occ.get(p)
+            crossing_here = bool(here) and any(o != net for o in here)
+            back = OPPOSITE[d]
+            for nd, (dx, dy) in steps:
+                if nd == back or (crossing_here and nd != d):
                     continue
                 q = (p[0] + dx, p[1] + dy)
-                if not (x0 <= q[0] <= x1 and y0 <= q[1] <= y1):
+                if not (x0 <= q[0] <= x1 and y0 <= q[1] <= y1) or q in blocked or q in pins:
                     continue
-                if not self._free(net, q, nd, allow_own_stub=True, tree_pts=tree_pts):
+                sn = stubs.get(q)
+                if sn is not None and sn != net:
                     continue
+                flat = nd in horiz
+                crossing = join4 = False
+                there = occ.get(q)
+                if there:
+                    ok = True
+                    for other, ds in there.items():
+                        if other == net:
+                            if len(ds) >= 4:
+                                ok = False
+                                break
+                            join4 = len(ds) == 3
+                        else:
+                            # another net may only be crossed straight, at right angles
+                            crossing = True
+                            if ds != (vert if flat else horiz):
+                                ok = False
+                                break
+                    if not ok:
+                        continue
                 step = 1.0 + (BEND if nd != d else 0.0)
-                if self._crossing_at(net, q):
+                if crossing:
                     step += CROSS
-                elif len(self.occ.get(q, {}).get(net, ())) == 3:
+                elif join4:
                     step += JOIN4
-                step += HUG * self._hugging(net, q, nd)
+                step += HUG * hugging(q, flat)
                 ng = cost + step
                 if ng < g.get((q, nd), 1e18):
                     g[(q, nd)] = ng

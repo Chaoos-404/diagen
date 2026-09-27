@@ -161,6 +161,15 @@ class LayoutRulesTest(unittest.TestCase):
         _, report = render(text)
         self.assertEqual(report.bends, 0)                          # carries run straight
 
+    def test_latch_gates_leave_exactly_the_rows_their_feedback_needs(self):
+        from diagen.layout import Layout, _free_rows
+        lay = Layout(parse(read(os.path.join(ROOT, "examples", "sr_latch.cir")))).run()
+        top, bottom = sorted((lay.node_of["N1"], lay.node_of["N2"]), key=lambda n: n.y)
+        self.assertEqual(_free_rows(top, bottom, bottom.y - top.y), 2)   # two feedback wires
+        _, report = render(read(os.path.join(ROOT, "examples", "sr_latch.cir")))
+        self.assertTrue(report.ok)
+        self.assertEqual(report.crossings, 1)
+
     def test_gate_driving_only_an_output_joins_its_siblings(self):
         from diagen.layout import Layout
         lay = Layout(parse("input a b en\noutput y0 y1 y2 y3\nN1 not a an\nN2 not b bn\n"
@@ -406,6 +415,32 @@ class FuzzTest(unittest.TestCase):
                 drawing, report = render(text)
                 to_svg(drawing)
                 to_tikz(drawing)
+
+
+class TransformerTest(unittest.TestCase):
+    CT = ("V1 vac p1 p2\nT1 transformer p1 p2 a b ct=0\n"
+          "D1 d a out\nD2 d b out\nRL res out 0 1k\noutput out\n")
+
+    def test_centre_tap_is_optional_and_routes(self):
+        drawing, report = render(self.CT)
+        self.assertTrue(report.ok, report.text())
+        self.assertEqual(report.crossings, 0)
+        ckt = parse("V1 vac p1 p2\nT1 xfmr p1 p2 a b\nR1 res a b\n")
+        self.assertFalse([w for w in ckt.warnings if "unconnected" in w], ckt.warnings)
+
+    def test_source_across_a_winding_stands_upright(self):
+        from diagen.layout import Layout
+        lay = Layout(parse(self.CT), {}).run()
+        self.assertIn(lay.insts["V1"].t.rot, (1, 3))
+        v, t = lay.insts["V1"], lay.insts["T1"]
+        # the source's top pin feeds the top of the primary
+        top = "a" if v.pin_pos("a")[1] < v.pin_pos("b")[1] else "b"
+        self.assertEqual(v.comp.pins[top], "p1" if t.pin_pos("p1")[1] < t.pin_pos("p2")[1] else "p2")
+
+    def test_dots_is_an_attribute(self):
+        c = parse("T1 transformer a b c d dots=1\n").components[0]
+        self.assertEqual(c.attrs.get("dots"), "1")
+        self.assertNotIn("dots", c.pins)
 
 
 class TypesTest(unittest.TestCase):

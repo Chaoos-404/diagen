@@ -25,7 +25,7 @@ from dataclasses import dataclass, field
 
 from .symbols import KNOWN_TYPES, lookup
 
-ATTR_KEYS = {"value", "label", "style", "left", "right", "top", "bottom", "text",
+ATTR_KEYS = {"value", "label", "style", "left", "right", "top", "bottom", "text", "dots",
              "clock", "rank", "flip", "rot", "name", "stage"}
 GROUND = {"0", "gnd", "ground", "vss", "agnd", "dgnd", "gnd!", "com"}
 SUPPLY_POS = re.compile(r"^(vcc|vdd|v\+|vbat|vsup|vs\+|avdd|dvdd|vin_?supply|\+\d+(\.\d+)?v)$", re.I)
@@ -223,7 +223,8 @@ def _validate(ckt, errors):
         if not c.pins:
             errors.append(f"line {c.line}: {c.id} has no connections")
         if c.spec.order and c.type not in ("opamp", "op", "oa", "comparator"):
-            missing = [p for p in c.spec.order if p not in c.pins]
+            missing = [p for p in c.spec.order
+                       if p not in c.pins and p not in getattr(c.spec, "optional", ())]
             if missing and c.spec.order != ["a"]:
                 ckt.warnings.append(f"{c.id}: pins left unconnected: {', '.join(missing)}")
     for net, conns in ckt.nets().items():

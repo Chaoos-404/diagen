@@ -1,0 +1,73 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="530.4" height="189" viewBox="0 0 530.4 189" font-family="'Latin Modern Roman', 'CMU Serif', 'Times New Roman', serif" font-size="13">
+<title>Centre-tapped full-wave rectifier</title>
+<rect width="100%" height="100%" fill="white"/>
+<g stroke="black" stroke-width="1.4" fill="none" stroke-linecap="round" stroke-linejoin="round">
+<polyline points="28,66 28,90"/>
+<polyline points="28,122 28,146"/>
+<circle cx="28" cy="106" r="16"/>
+<path d="M28,96 C40,100 40,103 28,106 C16,109 16,112 28,116"/>
+<polyline points="48,46 88,46 88,66"/>
+<polyline points="88,146 88,166 48,166"/>
+<path d="M88,66 C100,66 100,86 88,86 C100,86 100,106 88,106 C100,106 100,126 88,126 C100,126 100,146 88,146"/>
+<polyline points="128,66 128,46 168,46"/>
+<polyline points="128,146 128,166 168,166"/>
+<path d="M128,66 C116,66 116,86 128,86 C116,86 116,106 128,106 C116,106 116,126 128,126 C116,126 116,146 128,146"/>
+<polyline points="105,60 105,152"/>
+<polyline points="111,60 111,152"/>
+<polyline points="128,106 168,106"/>
+<circle cx="99" cy="61" r="2.4" fill="black" stroke="none"/>
+<circle cx="117" cy="61" r="2.4" fill="black" stroke="none"/>
+<polyline points="168,106 188,106"/>
+<polyline points="188,106 188,116"/>
+<polyline points="176,116 200,116"/>
+<polyline points="180.4,120.4 195.6,120.4"/>
+<polyline points="184.8,124.8 191.2,124.8"/>
+<polyline points="208,46 236,46"/>
+<polyline points="260,46 288,46"/>
+<polygon points="236,35 236,57 260,46" fill="black"/>
+<polyline points="260,35 260,57"/>
+<polyline points="208,166 236,166"/>
+<polyline points="260,166 288,166"/>
+<polygon points="236,155 236,177 260,166" fill="black"/>
+<polyline points="260,155 260,177"/>
+<polyline points="348,66 348,102"/>
+<polyline points="348,110 348,146"/>
+<polyline points="360,102 336,102"/>
+<polyline points="360,110 336,110"/>
+<polyline points="348,146 348,166"/>
+<polyline points="336,166 360,166"/>
+<polyline points="340.4,170.4 355.6,170.4"/>
+<polyline points="344.8,174.8 351.2,174.8"/>
+<polyline points="428,66 428,86"/>
+<polyline points="428,126 428,146"/>
+<polyline points="428,86 434,89.333 422,96 434,102.667 422,109.333 434,116 422,122.667 428,126"/>
+<polyline points="428,146 428,166"/>
+<polyline points="416,166 440,166"/>
+<polyline points="420.4,170.4 435.6,170.4"/>
+<polyline points="424.8,174.8 431.2,174.8"/>
+<circle cx="488" cy="46" r="3"/>
+<polyline points="28,46 48,46"/>
+<polyline points="28,46 28,66"/>
+<polyline points="28,166 48,166"/>
+<polyline points="28,146 28,166"/>
+<polyline points="168,46 208,46"/>
+<polyline points="168,166 208,166"/>
+<polyline points="288,46 485,46"/>
+<polyline points="288,166 308,166"/>
+<polyline points="348,46 348,66"/>
+<polyline points="428,46 428,66"/>
+<polyline points="308,46 308,166"/>
+<circle cx="348" cy="46" r="2.8" fill="black" stroke="none"/>
+<circle cx="308" cy="46" r="2.8" fill="black" stroke="none"/>
+<circle cx="428" cy="46" r="2.8" fill="black" stroke="none"/>
+</g>
+<text x="49" y="109.9" text-anchor="start" fill="black" stroke="none"><tspan>v</tspan><tspan baseline-shift="-25%" font-size="9.36">s</tspan></text>
+<text x="108" y="47.14" text-anchor="middle" fill="black" stroke="none"><tspan>T1</tspan></text>
+<text x="248" y="26.14" text-anchor="middle" fill="black" stroke="none"><tspan>D1</tspan></text>
+<text x="248" y="146.14" text-anchor="middle" fill="black" stroke="none"><tspan>D2</tspan></text>
+<text x="366" y="101.4" text-anchor="start" fill="black" stroke="none"><tspan>C1</tspan></text>
+<text x="366" y="118.4" text-anchor="start" fill="black" stroke="none"><tspan>100µ</tspan></text>
+<text x="440" y="101.4" text-anchor="start" fill="black" stroke="none"><tspan>R</tspan><tspan baseline-shift="-25%" font-size="9.36">L</tspan></text>
+<text x="440" y="118.4" text-anchor="start" fill="black" stroke="none"><tspan>1k</tspan></text>
+<text x="494" y="49.9" text-anchor="start" fill="black" stroke="none"><tspan>out</tspan></text>
+</svg>

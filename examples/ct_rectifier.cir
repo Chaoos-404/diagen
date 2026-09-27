@@ -1,0 +1,8 @@
+title Centre-tapped full-wave rectifier
+V1 vac p1 p2 label=v_s
+T1 transformer p1 p2 a b ct=0 dots=1
+D1 d a out
+D2 d b out
+C1 cap out 0 100\mu
+RL res out 0 1k label=R_L
+output out

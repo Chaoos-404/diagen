@@ -220,6 +220,45 @@ class OpAmp:
                          label_spot=(3.0, 0.6, "sw"), label_default="name")
 
 
+# --- transformer ---------------------------------------------------------------
+
+def _coil(x, y0, y1, bulge, humps=4):
+    """A vertical winding from (x, y0) down to (x, y1), humps bulging by `bulge`."""
+    h = (y1 - y0) / humps
+    segs = [((x + bulge, y0 + i * h), (x + bulge, y0 + (i + 1) * h), (x, y0 + (i + 1) * h))
+            for i in range(humps)]
+    return Path((x, y0), segs)
+
+
+class Transformer:
+    """Two windings on a core: primary p1/p2 on the left, secondary s1/s2 on the
+    right, and an optional centre tap ct on the secondary."""
+    type = "transformer"
+    order = ["p1", "p2", "s1", "s2", "ct"]
+    optional = ("ct",)
+    aliases = {"p1": "p1", "1": "p1", "pa": "p1", "p2": "p2", "2": "p2", "pb": "p2",
+               "s1": "s1", "3": "s1", "sa": "s1", "s2": "s2", "4": "s2", "sb": "s2",
+               "ct": "ct", "tap": "ct", "c": "ct", "center": "ct", "centre": "ct"}
+
+    def build(self, comp, opts):
+        # Pins six apart, so an upright source or load (four long) beside a
+        # winding meets each pin with a single bend.
+        prims = [Line([(0, 0), (2, 0), (2, 1)]), Line([(2, 5), (2, 6), (0, 6)]),
+                 _coil(2, 1, 5, 0.6),
+                 Line([(4, 1), (4, 0), (6, 0)]), Line([(4, 5), (4, 6), (6, 6)]),
+                 _coil(4, 1, 5, -0.6),
+                 Line([(2.85, 0.7), (2.85, 5.3)]), Line([(3.15, 0.7), (3.15, 5.3)])]
+        pins = {"p1": Pin("p1", 0, 0, "L", "in"), "p2": Pin("p2", 0, 6, "L", "in"),
+                "s1": Pin("s1", 6, 0, "R", "out"), "s2": Pin("s2", 6, 6, "R", "out")}
+        if "ct" in comp.pins:
+            pins["ct"] = Pin("ct", 6, 3, "R", "out")
+            prims.append(Line([(4, 3), (6, 3)]))
+        if str(comp.attrs.get("dots", "")).lower() in ("1", "true", "yes", "on"):
+            prims += [Circle((2.55, 0.75), 0.12, fill="black"), Circle((3.45, 0.75), 0.12, fill="black")]
+        return SymbolDef(self.type, pins, prims, (1.6, 0.7, 4.4, 5.3),
+                         label_spot=(3, 0.2, "s"), label_default="name")
+
+
 # --- transistors -------------------------------------------------------------
 
 def _arrow(tip, frm, size=0.3):
@@ -516,6 +555,8 @@ def lookup(typ: str):
         return TwoTerminal(t)
     if t in ("opamp", "op", "oa", "comparator"):
         return OpAmp()
+    if t in ("transformer", "xfmr", "xformer", "trafo", "tx"):
+        return Transformer()
     if t in ("npn", "pnp"):
         return BJT(t)
     if t in ("nmos", "pmos", "nfet", "pfet"):
@@ -535,5 +576,5 @@ def lookup(typ: str):
 
 
 KNOWN_TYPES = sorted(set(TWO_TERMINAL) | set(TWO_ALIASES) | {
-    "opamp", "npn", "pnp", "nmos", "pmos", "not", "buf", "and", "or", "nand", "nor",
+    "opamp", "transformer", "xfmr", "npn", "pnp", "nmos", "pmos", "not", "buf", "and", "or", "nand", "nor",
     "xor", "xnor", "and3", "or4", "dff", "tff", "jkff", "srlatch", "dlatch", "block"})

@@ -211,7 +211,10 @@ class _Search:
     def _try(self, st):
         self.budget[0] -= 1
         self.used += 1
-        cand = _build_once(self.ckt, dict(self.opts, swaps=st[0], pinswaps=st[1], flips=st[2]))
+        # A candidate that does not route in two tries will not beat the best;
+        # when the best routes completely, one unroutable net already loses.
+        cand = _build_once(self.ckt, dict(self.opts, swaps=st[0], pinswaps=st[1], flips=st[2], _rounds=2,
+                                          _give_up=self.best[1].ok))
         if score(cand[1]) < score(self.best[1]) - 1e-9:
             self.best, self.state = cand, st
             return True
@@ -323,7 +326,8 @@ def _build_once(ckt: Circuit, opts):
     bounds = (x0, math.floor(box[1]) - margin, x1, math.ceil(box[3]) + margin)
     wired = {n: pts for n, pts in nets.items() if len(pts) >= 2}
     router = Router(bounds, blocked, pins, stubs)
-    paths, failed = router.route(wired, seeds=_bus_trunks(lay, pins))
+    paths, failed = router.route(wired, max_rounds=opts.get("_rounds", 6),
+                                 seeds=_bus_trunks(lay, pins), give_up=opts.get("_give_up", False))
 
     report.nets = len(wired)
     for net, edges in paths.items():
