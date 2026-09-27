@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="696.84" height="350.5" viewBox="0 0 696.84 350.5" font-family="'Latin Modern Roman', 'CMU Serif', 'Times New Roman', serif" font-size="13">
+<svg xmlns="http://www.w3.org/2000/svg" width="696.84" height="310.5" viewBox="0 0 696.84 310.5" font-family="'Latin Modern Roman', 'CMU Serif', 'Times New Roman', serif" font-size="13">
 <title>Symbol sampler</title>
 <rect width="100%" height="100%" fill="white"/>
 <g stroke="black" stroke-width="1.4" fill="none" stroke-linecap="round" stroke-linejoin="round">
@@ -56,21 +56,21 @@
 <circle cx="631.24" cy="149.7" r="26"/>
 <polyline points="646.24,109.7 646.24,89.7"/>
 <polyline points="636.24,89.7 656.24,89.7"/>
-<polyline points="646.24,229.7 646.24,253.7"/>
-<polyline points="646.24,285.7 646.24,309.7"/>
-<circle cx="646.24" cy="269.7" r="16"/>
-<polyline points="657.554,258.386 634.926,281.014"/>
-<polyline points="634.926,258.386 657.554,281.014"/>
-<polyline points="646.24,309.7 646.24,329.7"/>
-<polyline points="634.24,329.7 658.24,329.7"/>
-<polyline points="638.64,334.1 653.84,334.1"/>
-<polyline points="643.04,338.5 649.44,338.5"/>
+<polyline points="646.24,189.7 646.24,213.7"/>
+<polyline points="646.24,245.7 646.24,269.7"/>
+<circle cx="646.24" cy="229.7" r="16"/>
+<polyline points="657.554,218.386 634.926,241.014"/>
+<polyline points="634.926,218.386 657.554,241.014"/>
+<polyline points="646.24,269.7 646.24,289.7"/>
+<polyline points="634.24,289.7 658.24,289.7"/>
+<polyline points="638.64,294.1 653.84,294.1"/>
+<polyline points="643.04,298.5 649.44,298.5"/>
+<polyline points="646.24,169.7 646.24,189.7"/>
 <polyline points="86.24,149.7 106.24,149.7"/>
 <polyline points="86.24,129.7 86.24,149.7"/>
 <polyline points="186.24,149.7 226.24,149.7"/>
 <polyline points="426.24,149.7 466.24,149.7"/>
 <polyline points="546.24,149.7 586.24,149.7"/>
-<polyline points="646.24,189.7 646.24,229.7"/>
 <polyline points="306.24,149.7 346.24,149.7"/>
 <polyline points="326.24,149.7 326.24,169.7"/>
 <circle cx="326.24" cy="149.7" r="2.8" fill="black" stroke="none"/>
@@ -88,5 +88,5 @@
 <text x="506.24" y="119.84" text-anchor="middle" fill="black" stroke="none"><tspan>R1</tspan></text>
 <text x="646.24" y="84.726" text-anchor="middle" font-size="11.7" fill="black" stroke="none"><tspan>vcc</tspan></text>
 <text x="660.24" y="153.6" text-anchor="start" fill="black" stroke="none"><tspan>Q1</tspan></text>
-<text x="667.24" y="273.6" text-anchor="start" fill="black" stroke="none"><tspan>RL</tspan></text>
+<text x="667.24" y="233.6" text-anchor="start" fill="black" stroke="none"><tspan>RL</tspan></text>
 </svg>

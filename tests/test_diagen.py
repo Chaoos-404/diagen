@@ -144,6 +144,8 @@ class LayoutRulesTest(unittest.TestCase):
         self.assertEqual(r1.pin_pos("a")[0], r1.pin_pos("b")[0])
         self.assertIs(lay.node_of["R1"], lay.node_of["Q1"])
         self.assertEqual(r1.pin_pos("b")[0], q1.pin_pos("c")[0])
+        # nothing else is on the collector net, so the pins meet
+        self.assertEqual(r1.pin_pos("b"), q1.pin_pos("c"))
 
     def test_fed_net_with_a_transistor_on_it_is_not_a_dc_load(self):
         # emitter follower: the emitter net holds a source, a coupling cap and the transistor

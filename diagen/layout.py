@@ -1346,7 +1346,10 @@ class Layout:
                     inst.t = t
                     break
             sx, sy = inst.pin_pos(sp)
-            inst.t = inst.moved(hx - sx, hy + (-2 if d == "U" else 2) - sy)
+            # the two pins meet when nothing else joins their net; otherwise
+            # leave a gap for the junction
+            gap = 0 if len(self.net_pins[parent.comp.pins[hp]]) == 2 else 2
+            inst.t = inst.moved(hx - sx, hy + (-gap if d == "U" else gap) - sy)
             return
         psig = self._shunt_info(parent.comp.id)[0]
         csig = self._shunt_info(inst.comp.id)[0]
