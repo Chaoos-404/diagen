@@ -1,103 +1,103 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1144.8" height="284" viewBox="0 0 1144.8 284" font-family="'Latin Modern Roman', 'CMU Serif', 'Times New Roman', serif" font-size="13">
+<svg xmlns="http://www.w3.org/2000/svg" width="1304.8" height="284" viewBox="0 0 1304.8 284" font-family="'Latin Modern Roman', 'CMU Serif', 'Times New Roman', serif" font-size="13">
 <title>4-bit ripple-carry adder</title>
 <rect width="100%" height="100%" fill="white"/>
 <g stroke="black" stroke-width="1.4" fill="none" stroke-linecap="round" stroke-linejoin="round">
-<polygon points="115.6,152 195.6,152 195.6,272 115.6,272"/>
+<polygon points="115.6,152 235.6,152 235.6,272 115.6,272"/>
 <polyline points="95.6,172 115.6,172"/>
 <polyline points="95.6,212 115.6,212"/>
 <polyline points="95.6,252 115.6,252"/>
-<polyline points="195.6,172 215.6,172"/>
-<polyline points="195.6,212 215.6,212"/>
-<polygon points="395.6,112 475.6,112 475.6,232 395.6,232"/>
-<polyline points="375.6,132 395.6,132"/>
-<polyline points="375.6,172 395.6,172"/>
-<polyline points="375.6,212 395.6,212"/>
-<polyline points="475.6,132 495.6,132"/>
-<polyline points="475.6,172 495.6,172"/>
-<polygon points="675.6,72 755.6,72 755.6,192 675.6,192"/>
-<polyline points="655.6,92 675.6,92"/>
-<polyline points="655.6,132 675.6,132"/>
-<polyline points="655.6,172 675.6,172"/>
-<polyline points="755.6,92 775.6,92"/>
-<polyline points="755.6,132 775.6,132"/>
-<polygon points="955.6,32 1035.6,32 1035.6,152 955.6,152"/>
-<polyline points="935.6,52 955.6,52"/>
-<polyline points="935.6,92 955.6,92"/>
-<polyline points="935.6,132 955.6,132"/>
-<polyline points="1035.6,52 1055.6,52"/>
-<polyline points="1035.6,92 1055.6,92"/>
+<polyline points="235.6,172 255.6,172"/>
+<polyline points="235.6,212 255.6,212"/>
+<polygon points="435.6,112 555.6,112 555.6,232 435.6,232"/>
+<polyline points="415.6,132 435.6,132"/>
+<polyline points="415.6,172 435.6,172"/>
+<polyline points="415.6,212 435.6,212"/>
+<polyline points="555.6,132 575.6,132"/>
+<polyline points="555.6,172 575.6,172"/>
+<polygon points="755.6,72 875.6,72 875.6,192 755.6,192"/>
+<polyline points="735.6,92 755.6,92"/>
+<polyline points="735.6,132 755.6,132"/>
+<polyline points="735.6,172 755.6,172"/>
+<polyline points="875.6,92 895.6,92"/>
+<polyline points="875.6,132 895.6,132"/>
+<polygon points="1075.6,32 1195.6,32 1195.6,152 1075.6,152"/>
+<polyline points="1055.6,52 1075.6,52"/>
+<polyline points="1055.6,92 1075.6,92"/>
+<polyline points="1055.6,132 1075.6,132"/>
+<polyline points="1195.6,52 1215.6,52"/>
+<polyline points="1195.6,92 1215.6,92"/>
 <circle cx="35.6" cy="172" r="3"/>
 <circle cx="35.6" cy="212" r="3"/>
-<circle cx="335.6" cy="132" r="3"/>
-<circle cx="335.6" cy="172" r="3"/>
-<circle cx="615.6" cy="92" r="3"/>
-<circle cx="615.6" cy="132" r="3"/>
-<circle cx="895.6" cy="52" r="3"/>
-<circle cx="895.6" cy="92" r="3"/>
+<circle cx="375.6" cy="132" r="3"/>
+<circle cx="375.6" cy="172" r="3"/>
+<circle cx="695.6" cy="92" r="3"/>
+<circle cx="695.6" cy="132" r="3"/>
+<circle cx="1015.6" cy="52" r="3"/>
+<circle cx="1015.6" cy="92" r="3"/>
 <circle cx="55.6" cy="252" r="3"/>
-<circle cx="255.6" cy="172" r="3"/>
-<circle cx="535.6" cy="132" r="3"/>
-<circle cx="815.6" cy="92" r="3"/>
-<circle cx="1095.6" cy="52" r="3"/>
-<circle cx="1095.6" cy="92" r="3"/>
+<circle cx="295.6" cy="172" r="3"/>
+<circle cx="615.6" cy="132" r="3"/>
+<circle cx="935.6" cy="92" r="3"/>
+<circle cx="1255.6" cy="52" r="3"/>
+<circle cx="1255.6" cy="92" r="3"/>
 <polyline points="58.6,252 95.6,252"/>
-<polyline points="215.6,172 252.6,172"/>
-<polyline points="338.6,132 375.6,132"/>
-<polyline points="338.6,172 375.6,172"/>
-<polyline points="495.6,132 532.6,132"/>
-<polyline points="618.6,92 655.6,92"/>
-<polyline points="618.6,132 655.6,132"/>
-<polyline points="775.6,92 812.6,92"/>
-<polyline points="898.6,52 935.6,52"/>
-<polyline points="898.6,92 935.6,92"/>
-<polyline points="1055.6,52 1092.6,52"/>
-<polyline points="1055.6,92 1092.6,92"/>
+<polyline points="255.6,172 292.6,172"/>
+<polyline points="378.6,132 415.6,132"/>
+<polyline points="378.6,172 415.6,172"/>
+<polyline points="575.6,132 612.6,132"/>
+<polyline points="698.6,92 735.6,92"/>
+<polyline points="698.6,132 735.6,132"/>
+<polyline points="895.6,92 932.6,92"/>
+<polyline points="1018.6,52 1055.6,52"/>
+<polyline points="1018.6,92 1055.6,92"/>
+<polyline points="1215.6,52 1252.6,52"/>
+<polyline points="1215.6,92 1252.6,92"/>
 <polyline points="38.6,172 95.6,172"/>
 <polyline points="38.6,212 95.6,212"/>
-<polyline points="215.6,212 375.6,212"/>
-<polyline points="495.6,172 655.6,172"/>
-<polyline points="775.6,132 935.6,132"/>
+<polyline points="255.6,212 415.6,212"/>
+<polyline points="575.6,172 735.6,172"/>
+<polyline points="895.6,132 1055.6,132"/>
 </g>
 <text x="119.6" y="175.315" text-anchor="start" font-size="11.05" fill="black" stroke="none"><tspan>A</tspan></text>
 <text x="119.6" y="215.315" text-anchor="start" font-size="11.05" fill="black" stroke="none"><tspan>B</tspan></text>
 <text x="119.6" y="255.315" text-anchor="start" font-size="11.05" fill="black" stroke="none"><tspan>Cin</tspan></text>
-<text x="191.6" y="175.315" text-anchor="end" font-size="11.05" fill="black" stroke="none"><tspan>S</tspan></text>
-<text x="191.6" y="215.315" text-anchor="end" font-size="11.05" fill="black" stroke="none"><tspan>Cout</tspan></text>
-<text x="155.6" y="215.9" text-anchor="middle" fill="black" stroke="none"><tspan>FA</tspan></text>
-<text x="155.6" y="146.14" text-anchor="middle" fill="black" stroke="none"><tspan>FA0</tspan></text>
-<text x="399.6" y="135.315" text-anchor="start" font-size="11.05" fill="black" stroke="none"><tspan>A</tspan></text>
-<text x="399.6" y="175.315" text-anchor="start" font-size="11.05" fill="black" stroke="none"><tspan>B</tspan></text>
-<text x="399.6" y="215.315" text-anchor="start" font-size="11.05" fill="black" stroke="none"><tspan>Cin</tspan></text>
-<text x="471.6" y="135.315" text-anchor="end" font-size="11.05" fill="black" stroke="none"><tspan>S</tspan></text>
-<text x="471.6" y="175.315" text-anchor="end" font-size="11.05" fill="black" stroke="none"><tspan>Cout</tspan></text>
-<text x="435.6" y="175.9" text-anchor="middle" fill="black" stroke="none"><tspan>FA</tspan></text>
-<text x="435.6" y="106.14" text-anchor="middle" fill="black" stroke="none"><tspan>FA1</tspan></text>
-<text x="679.6" y="95.315" text-anchor="start" font-size="11.05" fill="black" stroke="none"><tspan>A</tspan></text>
-<text x="679.6" y="135.315" text-anchor="start" font-size="11.05" fill="black" stroke="none"><tspan>B</tspan></text>
-<text x="679.6" y="175.315" text-anchor="start" font-size="11.05" fill="black" stroke="none"><tspan>Cin</tspan></text>
-<text x="751.6" y="95.315" text-anchor="end" font-size="11.05" fill="black" stroke="none"><tspan>S</tspan></text>
-<text x="751.6" y="135.315" text-anchor="end" font-size="11.05" fill="black" stroke="none"><tspan>Cout</tspan></text>
-<text x="715.6" y="135.9" text-anchor="middle" fill="black" stroke="none"><tspan>FA</tspan></text>
-<text x="715.6" y="66.14" text-anchor="middle" fill="black" stroke="none"><tspan>FA2</tspan></text>
-<text x="959.6" y="55.315" text-anchor="start" font-size="11.05" fill="black" stroke="none"><tspan>A</tspan></text>
-<text x="959.6" y="95.315" text-anchor="start" font-size="11.05" fill="black" stroke="none"><tspan>B</tspan></text>
-<text x="959.6" y="135.315" text-anchor="start" font-size="11.05" fill="black" stroke="none"><tspan>Cin</tspan></text>
-<text x="1031.6" y="55.315" text-anchor="end" font-size="11.05" fill="black" stroke="none"><tspan>S</tspan></text>
-<text x="1031.6" y="95.315" text-anchor="end" font-size="11.05" fill="black" stroke="none"><tspan>Cout</tspan></text>
-<text x="995.6" y="95.9" text-anchor="middle" fill="black" stroke="none"><tspan>FA</tspan></text>
-<text x="995.6" y="26.14" text-anchor="middle" fill="black" stroke="none"><tspan>FA3</tspan></text>
+<text x="231.6" y="175.315" text-anchor="end" font-size="11.05" fill="black" stroke="none"><tspan>S</tspan></text>
+<text x="231.6" y="215.315" text-anchor="end" font-size="11.05" fill="black" stroke="none"><tspan>Cout</tspan></text>
+<text x="175.6" y="215.9" text-anchor="middle" fill="black" stroke="none"><tspan>FA</tspan></text>
+<text x="175.6" y="146.14" text-anchor="middle" fill="black" stroke="none"><tspan>FA0</tspan></text>
+<text x="439.6" y="135.315" text-anchor="start" font-size="11.05" fill="black" stroke="none"><tspan>A</tspan></text>
+<text x="439.6" y="175.315" text-anchor="start" font-size="11.05" fill="black" stroke="none"><tspan>B</tspan></text>
+<text x="439.6" y="215.315" text-anchor="start" font-size="11.05" fill="black" stroke="none"><tspan>Cin</tspan></text>
+<text x="551.6" y="135.315" text-anchor="end" font-size="11.05" fill="black" stroke="none"><tspan>S</tspan></text>
+<text x="551.6" y="175.315" text-anchor="end" font-size="11.05" fill="black" stroke="none"><tspan>Cout</tspan></text>
+<text x="495.6" y="175.9" text-anchor="middle" fill="black" stroke="none"><tspan>FA</tspan></text>
+<text x="495.6" y="106.14" text-anchor="middle" fill="black" stroke="none"><tspan>FA1</tspan></text>
+<text x="759.6" y="95.315" text-anchor="start" font-size="11.05" fill="black" stroke="none"><tspan>A</tspan></text>
+<text x="759.6" y="135.315" text-anchor="start" font-size="11.05" fill="black" stroke="none"><tspan>B</tspan></text>
+<text x="759.6" y="175.315" text-anchor="start" font-size="11.05" fill="black" stroke="none"><tspan>Cin</tspan></text>
+<text x="871.6" y="95.315" text-anchor="end" font-size="11.05" fill="black" stroke="none"><tspan>S</tspan></text>
+<text x="871.6" y="135.315" text-anchor="end" font-size="11.05" fill="black" stroke="none"><tspan>Cout</tspan></text>
+<text x="815.6" y="135.9" text-anchor="middle" fill="black" stroke="none"><tspan>FA</tspan></text>
+<text x="815.6" y="66.14" text-anchor="middle" fill="black" stroke="none"><tspan>FA2</tspan></text>
+<text x="1079.6" y="55.315" text-anchor="start" font-size="11.05" fill="black" stroke="none"><tspan>A</tspan></text>
+<text x="1079.6" y="95.315" text-anchor="start" font-size="11.05" fill="black" stroke="none"><tspan>B</tspan></text>
+<text x="1079.6" y="135.315" text-anchor="start" font-size="11.05" fill="black" stroke="none"><tspan>Cin</tspan></text>
+<text x="1191.6" y="55.315" text-anchor="end" font-size="11.05" fill="black" stroke="none"><tspan>S</tspan></text>
+<text x="1191.6" y="95.315" text-anchor="end" font-size="11.05" fill="black" stroke="none"><tspan>Cout</tspan></text>
+<text x="1135.6" y="95.9" text-anchor="middle" fill="black" stroke="none"><tspan>FA</tspan></text>
+<text x="1135.6" y="26.14" text-anchor="middle" fill="black" stroke="none"><tspan>FA3</tspan></text>
 <text x="29.6" y="175.9" text-anchor="end" fill="black" stroke="none"><tspan>a0</tspan></text>
 <text x="29.6" y="215.9" text-anchor="end" fill="black" stroke="none"><tspan>b0</tspan></text>
-<text x="329.6" y="135.9" text-anchor="end" fill="black" stroke="none"><tspan>a1</tspan></text>
-<text x="329.6" y="175.9" text-anchor="end" fill="black" stroke="none"><tspan>b1</tspan></text>
-<text x="609.6" y="95.9" text-anchor="end" fill="black" stroke="none"><tspan>a2</tspan></text>
-<text x="609.6" y="135.9" text-anchor="end" fill="black" stroke="none"><tspan>b2</tspan></text>
-<text x="889.6" y="55.9" text-anchor="end" fill="black" stroke="none"><tspan>a3</tspan></text>
-<text x="889.6" y="95.9" text-anchor="end" fill="black" stroke="none"><tspan>b3</tspan></text>
+<text x="369.6" y="135.9" text-anchor="end" fill="black" stroke="none"><tspan>a1</tspan></text>
+<text x="369.6" y="175.9" text-anchor="end" fill="black" stroke="none"><tspan>b1</tspan></text>
+<text x="689.6" y="95.9" text-anchor="end" fill="black" stroke="none"><tspan>a2</tspan></text>
+<text x="689.6" y="135.9" text-anchor="end" fill="black" stroke="none"><tspan>b2</tspan></text>
+<text x="1009.6" y="55.9" text-anchor="end" fill="black" stroke="none"><tspan>a3</tspan></text>
+<text x="1009.6" y="95.9" text-anchor="end" fill="black" stroke="none"><tspan>b3</tspan></text>
 <text x="49.6" y="255.9" text-anchor="end" fill="black" stroke="none"><tspan>cin</tspan></text>
-<text x="261.6" y="175.9" text-anchor="start" fill="black" stroke="none"><tspan>s0</tspan></text>
-<text x="541.6" y="135.9" text-anchor="start" fill="black" stroke="none"><tspan>s1</tspan></text>
-<text x="821.6" y="95.9" text-anchor="start" fill="black" stroke="none"><tspan>s2</tspan></text>
-<text x="1101.6" y="55.9" text-anchor="start" fill="black" stroke="none"><tspan>s3</tspan></text>
-<text x="1101.6" y="95.9" text-anchor="start" fill="black" stroke="none"><tspan>cout</tspan></text>
+<text x="301.6" y="175.9" text-anchor="start" fill="black" stroke="none"><tspan>s0</tspan></text>
+<text x="621.6" y="135.9" text-anchor="start" fill="black" stroke="none"><tspan>s1</tspan></text>
+<text x="941.6" y="95.9" text-anchor="start" fill="black" stroke="none"><tspan>s2</tspan></text>
+<text x="1261.6" y="55.9" text-anchor="start" fill="black" stroke="none"><tspan>s3</tspan></text>
+<text x="1261.6" y="95.9" text-anchor="start" fill="black" stroke="none"><tspan>cout</tspan></text>
 </svg>

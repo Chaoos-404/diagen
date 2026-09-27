@@ -485,7 +485,12 @@ class Box:
         inner = max([tw(text(p)) for p in sides["left"]] + [0]) + \
             max([tw(text(p)) for p in sides["right"]] + [0]) + 0.8
         if title:
-            inner = max(inner, tw(title) * 1.2 + 0.8)
+            ty = h / 2 if not sides["top"] else h / 2 + 0.4
+            # the centred title shares a line with the pin names level with it,
+            # so it needs room for the wider of them on both sides
+            beside = [tw(text(sides[s][i])) for s in ("left", "right")
+                      for i in range(len(sides[s])) if abs(2 * i + 1 - ty) < 0.8]
+            inner = max(inner, tw(title) / 0.85 + 2 * max(beside + [0]) + (1.6 if beside else 0.8))
         cols = max(len(sides["top"]), len(sides["bottom"]))
         w = max(4, math.ceil(inner), 2 * cols)
         if w % 2:
@@ -517,7 +522,6 @@ class Box:
             pins[p] = Pin(p, x, h + 1, "D")
             prims += [Line([(x, h), (x, h + 1)]), Text((x, h - 0.15), text(p), "s", 0.8)]
         if title:
-            ty = h / 2 if not sides["top"] else h / 2 + 0.4
             prims.append(Text(((x0 + x1) / 2, ty), title, "c", 1.0))
         spot = ((x0 + x1) / 2, -0.15 if not sides["top"] else -1.1, "s")
         return SymbolDef(self.type, pins, prims, (x0, 0, x1, h), label_spot=spot,

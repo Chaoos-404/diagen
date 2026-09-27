@@ -461,6 +461,25 @@ class TransformerTest(unittest.TestCase):
 
 
 class TypesTest(unittest.TestCase):
+    def test_block_title_clears_the_pin_names_beside_it(self):
+        from diagen.geom import Text, text_box
+        from diagen.symbols import lookup
+        for text in ("IN=a RET=b right=RET text=Load",
+                     "A=a B=b Cin=c S=s Cout=d right=S,Cout text=FA"):
+            with self.subTest(text=text):
+                comp = parse(f"X1 block {text}\n").components[0]
+                sym = lookup("block").build(comp, {})
+                texts = [p for p in sym.prims if isinstance(p, Text)]
+                title = next(t for t in texts if t.s == comp.attrs["text"])
+                tb = text_box(title)
+                for t in texts:
+                    if t is title:
+                        continue
+                    b = text_box(t)
+                    overlap = min(tb[2], b[2]) - max(tb[0], b[0]) > 0 and \
+                        min(tb[3], b[3]) - max(tb[1], b[1]) > 0
+                    self.assertFalse(overlap, t.s)
+
     def test_every_known_type_builds(self):
         from diagen.symbols import lookup
         for t in KNOWN_TYPES:
