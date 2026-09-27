@@ -268,6 +268,7 @@ def _build_once(ckt: Circuit, opts):
     stubs = {}
     nets = defaultdict(list)
     hollow = {}   # centre -> radius of open circles; wires stop at their rim
+    joined = []   # (point, net, dir, dir) where two pins of one net coincide
     port_x = {"in": [], "out": []}
     report = Report(components=sum(1 for c in ckt.components if c.type not in ("input", "output")))
     report.warnings += ckt.warnings
@@ -304,12 +305,25 @@ def _build_once(ckt: Circuit, opts):
                     port_x["in"].append(pos[0])
                 elif inst.comp.type == "output":
                     port_x["out"].append(pos[0])
+                if pos in pins and pins[pos][0] == net:
+                    # two pins of one net meet (a part stacked right on a
+                    # transistor pin): they are joined already
+                    joined.append((pos, net, pins[pos][1], d))
+                    continue
                 pins[pos] = (net, d)
                 nets[net].append(pos)
                 sp = (pos[0] + DIRS[d][0], pos[1] + DIRS[d][1])
                 if sp in stubs and stubs[sp] != net:
                     report.warnings.append(f"pins of nets '{net}' and '{stubs[sp]}' touch at {sp}")
                 stubs[sp] = net
+    # a net that is nothing but pins meeting needs no wire, and the exits of
+    # those pins point into the other part: drop them
+    for pos, net, *dirs in joined:
+        if len(nets[net]) == 1:
+            for d in dirs:
+                sp = (pos[0] + DIRS[d][0], pos[1] + DIRS[d][1])
+                if stubs.get(sp) == net:
+                    del stubs[sp]
     for p in pins:
         blocked.discard(p)
     for p in stubs:

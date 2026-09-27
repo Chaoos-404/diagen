@@ -151,6 +151,10 @@ class LayoutRulesTest(unittest.TestCase):
         self.assertEqual(r1.pin_pos("b")[0], q1.pin_pos("c")[0])
         # nothing else is on the collector net, so the pins meet
         self.assertEqual(r1.pin_pos("b"), q1.pin_pos("c"))
+        # and no wire is drawn for it (a stub into the transistor would stick out)
+        _, report = render("V1 vsource x 0 2.5\nR1 res x c 50\nV2 vsource b 0\n"
+                           "Q1 npn c=c b=b e=0\n")
+        self.assertEqual(report.nets, 2)
 
     def test_fed_net_with_a_transistor_on_it_is_not_a_dc_load(self):
         # emitter follower: the emitter net holds a source, a coupling cap and the transistor
