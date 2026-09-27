@@ -232,8 +232,27 @@ class Layout:
                     fed += 1
                 elif self.is_signal(far):
                     branches += 1
-            if fed and branches >= 2:
+            if fed and branches >= 2 or fed == 1 and branches == 1 and self._dc_load(net):
                 self.bus_nodes.add(net)
+
+    def _dc_load(self, net):
+        """A DC source feeding one load that ends on a transistor's top pin
+        (a collector resistor fed by its own V_CC source). Drawn as a supply
+        so the load stacks on the collector instead of lying sideways."""
+        for cid, p in self.net_pins[net]:
+            inst = self.insts[cid]
+            if inst.sym.source and inst.sym.type not in ("vsource", "battery"):
+                return False
+            if inst.sym.source:
+                continue
+            if not inst.sym.two_terminal or len(inst.comp.pins) != 2:
+                return False
+            far = inst.comp.pins["b" if p == "a" else "a"]
+            for oid, op in self.net_pins[far]:
+                o = self.insts[oid]
+                if o.comp.type in TRANSISTORS and o.sym.pins[op].dir == "U":
+                    return True
+        return False
 
     def run(self):
         for c in self.ckt.components:

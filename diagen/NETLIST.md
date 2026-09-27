@@ -137,6 +137,8 @@ Unicode `Ω µ` also works.
   enable), tag the parts with `stage=1`, `stage=2`, ... instead.
 * To get a ladder or bridge drawn with vertical dividers, name the top node
   as a rail (`vcc`, or `rail VTOP`) so that each branch becomes a divider.
+* A DC source (`vsource`, `battery`) wired through one load to a transistor's
+  collector or drain is drawn like a supply: the load stacks on the transistor.
 
 ## Reading the report
 

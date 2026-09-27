@@ -136,6 +136,21 @@ class LayoutRulesTest(unittest.TestCase):
         r1 = lay.insts["R1"]
         self.assertEqual(r1.pin_pos("a")[1], r1.pin_pos("b")[1])
 
+    def test_collector_load_from_its_own_source_stacks_on_the_collector(self):
+        from diagen.layout import Layout
+        lay = Layout(parse("V1 vsource x 0 2.5\nR1 res x c 50\nV2 vsource b 0\n"
+                           "Q1 npn c=c b=b e=0\n")).run()
+        r1, q1 = lay.insts["R1"], lay.insts["Q1"]
+        self.assertEqual(r1.pin_pos("a")[0], r1.pin_pos("b")[0])
+        self.assertIs(lay.node_of["R1"], lay.node_of["Q1"])
+        self.assertEqual(r1.pin_pos("b")[0], q1.pin_pos("c")[0])
+
+    def test_fed_net_with_a_transistor_on_it_is_not_a_dc_load(self):
+        # emitter follower: the emitter net holds a source, a coupling cap and the transistor
+        drawing, report = render("rail VCC\ninput in\noutput out\nQ1 npn c=VCC b=in e=e\n"
+                                 "I1 isource e 0\nC1 cap e out\n")
+        self.assertTrue(report.ok, report.text())
+
     def test_feedback_resistor_rides_with_opamp(self):
         from diagen.layout import Layout
         lay = Layout(parse(read(os.path.join(ROOT, "examples", "inverting_amp.cir")))).run()
