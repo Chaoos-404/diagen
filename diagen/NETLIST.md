@@ -128,8 +128,8 @@ Unicode `Ω µ` also works.
 * Two gates that feed each other (latches) share a column.
 * Repeated stages (a ripple adder built from gates, cascaded amplifier
   stages) are found when each stage has the same parts and is linked to the
-  next by one net. They are drawn one after another, all in the same
-  arrangement. When the stages share more than one net (a common clock or
+  next by one net. They are drawn one after another at the same height,
+  all in the same arrangement (the net from stage to stage jogs if need be). When the stages share more than one net (a common clock or
   enable), tag the parts with `stage=1`, `stage=2`, ... instead.
 * To get a ladder or bridge drawn with vertical dividers, name the top node
   as a rail (`vcc`, or `rail VTOP`) so that each branch becomes a divider.

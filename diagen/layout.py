@@ -1703,6 +1703,28 @@ class Layout:
                 for i, n in zip(slots, want):
                     col[i] = n
 
+    def _snap_stages(self, links):
+        """Draw the stages of a chain side by side at one height, each with
+        the heights of the template stage. The chain moves as one block, to
+        where its links to the rest of the circuit want it: the weighted
+        median of the shifts those links ask for. (The links from stage to
+        stage, the carry, then jog between stages; that is the price.)"""
+        for ci, chain in enumerate(self.stages):
+            t = self.template[ci]
+            shape = {self.node_key[n.id]: n.y for n in self.stage_nodes[(ci, t)]}
+            rel = {}
+            for si in range(len(chain)):
+                for n in self.stage_nodes[(ci, si)]:
+                    if self.node_key[n.id] in shape:
+                        rel[n.id] = (n, shape[self.node_key[n.id]])
+            cands = [(m.y + o2 - o1 - r, w) for n, r in rel.values()
+                     for o1, m, o2, w in links[n.id] if m.id not in rel]
+            now = sorted(n.y - r for n, r in rel.values())
+            cur = now[len(now) // 2]
+            shift = round(_wmedian(cands, cur)) if cands else cur
+            for n, r in rel.values():
+                n.y = r + shift
+
     def _reduce_crossings(self, cols, touch, net_nodes):
         """Sugiyama crossing reduction on top of the barycentre order.
 
@@ -1869,23 +1891,35 @@ class Layout:
                 y += n.h + GAP_Y
         L = len(cols)
         sweeps = list(range(1, L)) + list(range(L - 2, -1, -1))
-        sweeps = sweeps * 4 + list(range(0, L))
-        for l in sweeps:
-            col = cols[l]
-            if not col:
-                continue
-            desired, weights = [], []
-            for n in col:
-                cands = [(m.y + o2 - o1, w) for o1, m, o2, w in links[n.id]]
-                if cands:
-                    desired.append(_wmedian(cands, n.y))
-                    weights.append(sum(w for _, w in cands))
-                else:
-                    desired.append(n.y)
-                    weights.append(0.01)
-            ys = _stack(col, desired, weights)
-            for n, y in zip(col, ys):
-                n.y = y
+
+        def sweep(order, pinned=()):
+            for l in order:
+                col = cols[l]
+                if not col:
+                    continue
+                desired, weights = [], []
+                for n in col:
+                    cands = [(m.y + o2 - o1, w) for o1, m, o2, w in links[n.id]]
+                    if n.id in pinned:
+                        desired.append(n.y)
+                        weights.append(1e6)
+                    elif cands:
+                        desired.append(_wmedian(cands, n.y))
+                        weights.append(sum(w for _, w in cands))
+                    else:
+                        desired.append(n.y)
+                        weights.append(0.01)
+                ys = _stack(col, desired, weights)
+                for n, y in zip(col, ys):
+                    n.y = y
+        sweep(sweeps * 4 + list(range(0, L)))
+        # repeated stages: every stage takes the template's shape and moves
+        # as one block, then the other parts settle around the stages
+        pinned = {n.id for nodes in self.stage_nodes.values() for n in nodes}
+        if pinned:
+            for _ in range(3):
+                self._snap_stages(links)
+                sweep(sweeps * 2 + list(range(0, L)), pinned)
         _straighten(self, links)
         self._bus_sources_on_top()
         self._place_columns()
@@ -1913,14 +1947,18 @@ def _fits(cols, moved):
     return True
 
 
-def _block(start, links, exclude):
-    """Nodes joined to `start` by links that are already perfectly straight."""
+def _block(start, links, exclude, rigid=None):
+    """Nodes joined to `start` by links that are already perfectly straight,
+    together with every node of a rigid group (a repeated stage) one of
+    them belongs to."""
+    rigid = rigid or {}
     seen = {start.id: start}
     todo = [start]
     while todo:
         n = todo.pop()
-        for o1, m, o2, w in links[n.id]:
-            if m.id not in seen and m.id not in exclude and m.y + o2 == n.y + o1:
+        near = [m for o1, m, o2, w in links[n.id] if m.y + o2 == n.y + o1]
+        for m in near + rigid.get(n.id, []):
+            if m.id not in seen and m.id not in exclude:
                 seen[m.id] = m
                 todo.append(m)
     return seen
@@ -1932,6 +1970,10 @@ def _straighten(lay, links):
     with its own neighbours). Here a whole straight run moves at once to
     remove a jog, as long as nothing overlaps and total misalignment drops."""
     nodes = lay.nodes
+    chains = defaultdict(list)          # a chain of stages moves as one block
+    for (ci, _), group in lay.stage_nodes.items():
+        chains[ci] += group
+    rigid = {n.id: group for group in chains.values() for n in group}
     for _ in range(4 * len(nodes)):
         improved = False
         base = _misalign(links, nodes)
@@ -1943,7 +1985,7 @@ def _straighten(lay, links):
                 continue
             for mover, other, delta in ((n, m, (m.y + o2) - (n.y + o1)),
                                         (m, n, (n.y + o1) - (m.y + o2))):
-                blk = _block(mover, links, {other.id})
+                blk = _block(mover, links, {other.id}, rigid)
                 if other.id in blk:
                     continue
                 for b in blk.values():

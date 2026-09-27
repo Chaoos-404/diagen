@@ -275,6 +275,10 @@ class StagesTest(unittest.TestCase):
                 first = order
         self.assertLess(spans[0][1], spans[1][0])                  # stages side by side
         self.assertLess(spans[1][1], spans[2][0])
+        # side by side at one height: twin parts sit on the same row
+        heights = [{lay.node_key[n.id]: n.y for n in lay.stage_nodes[(0, si)]} for si in range(3)]
+        self.assertEqual(heights[0], heights[1])
+        self.assertEqual(heights[1], heights[2])
 
     def test_stage_tags(self):
         from diagen.layout import Layout
