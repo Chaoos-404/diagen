@@ -152,6 +152,7 @@ adds the `diagen` and `diagen-mcp` commands.
 | ![](examples/wheatstone.svg) | ![](examples/rlc.svg) |
 | ![](examples/mux4_bus.svg) | ![](examples/adder3.svg) |
 | ![](examples/ct_rectifier.svg) | ![](examples/rc_lowpass.svg) |
+| ![](examples/current_mirror.svg) | ![](examples/emitter_follower.svg) |
 
 ## Extending
 

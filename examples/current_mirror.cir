@@ -1,0 +1,6 @@
+title BJT current mirror
+rail V_{CC}
+RREF res V_{CC} x 1k label=R_{REF}
+Q1 npn c=x b=x e=0
+Q2 npn c=out b=x e=0
+RL res V_{CC} out 50\Omega label=R_L

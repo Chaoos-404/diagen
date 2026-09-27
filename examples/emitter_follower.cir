@@ -1,0 +1,7 @@
+title Emitter follower biased by batteries
+B1 battery x 0 2V label=V_{CC}
+RC res x c 1k\Omega label=R_C
+B2 battery b 0 1.5V label=V_B
+Q1 npn c=c b=b e=V_X
+RE res V_X 0 1k\Omega label=R_E
+output V_X

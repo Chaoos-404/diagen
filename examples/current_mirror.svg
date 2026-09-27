@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="292" height="290.5" viewBox="0 0 292 290.5" font-family="'Latin Modern Roman', 'CMU Serif', 'Times New Roman', serif" font-size="13">
+<title>BJT current mirror</title>
+<rect width="100%" height="100%" fill="white"/>
+<g stroke="black" stroke-width="1.4" fill="none" stroke-linecap="round" stroke-linejoin="round">
+<polyline points="103.6,209.7 67.6,209.7"/>
+<polyline points="67.6,193.7 67.6,225.7" stroke-width="2.8"/>
+<polyline points="67.6,201.7 43.6,187.7 43.6,169.7"/>
+<polyline points="67.6,217.7 43.6,231.7 43.6,249.7"/>
+<polygon points="46.6,230.1 53.292,229.633 50.241,224.466" fill="black"/>
+<circle cx="58.6" cy="209.7" r="26"/>
+<polyline points="43.6,249.7 43.6,269.7"/>
+<polyline points="31.6,269.7 55.6,269.7"/>
+<polyline points="36,274.1 51.2,274.1"/>
+<polyline points="40.4,278.5 46.8,278.5"/>
+<polyline points="43.6,49.7 43.6,69.7"/>
+<polyline points="43.6,109.7 43.6,129.7"/>
+<polyline points="43.6,69.7 49.6,73.033 37.6,79.7 49.6,86.367 37.6,93.033 49.6,99.7 37.6,106.367 43.6,109.7"/>
+<polyline points="43.6,49.7 43.6,29.7"/>
+<polyline points="33.6,29.7 53.6,29.7"/>
+<polyline points="183.6,209.7 219.6,209.7"/>
+<polyline points="219.6,193.7 219.6,225.7" stroke-width="2.8"/>
+<polyline points="219.6,201.7 243.6,187.7 243.6,169.7"/>
+<polyline points="219.6,217.7 243.6,231.7 243.6,249.7"/>
+<polygon points="240.6,230.1 233.908,229.633 236.959,224.466" fill="black"/>
+<circle cx="228.6" cy="209.7" r="26"/>
+<polyline points="243.6,249.7 243.6,269.7"/>
+<polyline points="231.6,269.7 255.6,269.7"/>
+<polyline points="236,274.1 251.2,274.1"/>
+<polyline points="240.4,278.5 246.8,278.5"/>
+<polyline points="243.6,89.7 243.6,109.7"/>
+<polyline points="243.6,149.7 243.6,169.7"/>
+<polyline points="243.6,109.7 249.6,113.033 237.6,119.7 249.6,126.367 237.6,133.033 249.6,139.7 237.6,146.367 243.6,149.7"/>
+<polyline points="243.6,89.7 243.6,69.7"/>
+<polyline points="233.6,69.7 253.6,69.7"/>
+<polyline points="103.6,209.7 183.6,209.7"/>
+<polyline points="43.6,149.7 123.6,149.7"/>
+<polyline points="43.6,129.7 43.6,169.7"/>
+<polyline points="123.6,149.7 123.6,209.7"/>
+<circle cx="43.6" cy="149.7" r="2.8" fill="black" stroke="none"/>
+<circle cx="123.6" cy="209.7" r="2.8" fill="black" stroke="none"/>
+</g>
+<text x="29.6" y="213.6" text-anchor="end" fill="black" stroke="none"><tspan>Q1</tspan></text>
+<text x="43.6" y="24.726" text-anchor="middle" font-size="11.7" fill="black" stroke="none"><tspan>V</tspan><tspan baseline-shift="-25%" font-size="8.424">CC</tspan></text>
+<text x="55.6" y="85.1" text-anchor="start" fill="black" stroke="none"><tspan>R</tspan><tspan baseline-shift="-25%" font-size="9.36">REF</tspan></text>
+<text x="55.6" y="102.1" text-anchor="start" fill="black" stroke="none"><tspan>1k</tspan></text>
+<text x="257.6" y="213.6" text-anchor="start" fill="black" stroke="none"><tspan>Q2</tspan></text>
+<text x="243.6" y="64.726" text-anchor="middle" font-size="11.7" fill="black" stroke="none"><tspan>V</tspan><tspan baseline-shift="-25%" font-size="8.424">CC</tspan></text>
+<text x="255.6" y="125.1" text-anchor="start" fill="black" stroke="none"><tspan>R</tspan><tspan baseline-shift="-25%" font-size="9.36">L</tspan></text>
+<text x="255.6" y="142.1" text-anchor="start" fill="black" stroke="none"><tspan>50Ω</tspan></text>
+</svg>

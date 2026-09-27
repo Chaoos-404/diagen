@@ -1,0 +1,61 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="181.6" height="392.8" viewBox="0 0 181.6 392.8" font-family="'Latin Modern Roman', 'CMU Serif', 'Times New Roman', serif" font-size="13">
+<title>Emitter follower biased by batteries</title>
+<rect width="100%" height="100%" fill="white"/>
+<g stroke="black" stroke-width="1.4" fill="none" stroke-linecap="round" stroke-linejoin="round">
+<polyline points="26,32 26,64"/>
+<polyline points="26,80 26,112"/>
+<polyline points="40,64 12,64"/>
+<polyline points="33,69.4 19,69.4"/>
+<polyline points="40,74.6 12,74.6"/>
+<polyline points="33,80 19,80"/>
+<polyline points="26,112 26,132"/>
+<polyline points="14,132 38,132"/>
+<polyline points="18.4,136.4 33.6,136.4"/>
+<polyline points="22.8,140.8 29.2,140.8"/>
+<polyline points="26,212 26,244"/>
+<polyline points="26,260 26,292"/>
+<polyline points="40,244 12,244"/>
+<polyline points="33,249.4 19,249.4"/>
+<polyline points="40,254.6 12,254.6"/>
+<polyline points="33,260 19,260"/>
+<polyline points="26,292 26,312"/>
+<polyline points="14,312 38,312"/>
+<polyline points="18.4,316.4 33.6,316.4"/>
+<polyline points="22.8,320.8 29.2,320.8"/>
+<polyline points="66,192 102,192"/>
+<polyline points="102,176 102,208" stroke-width="2.8"/>
+<polyline points="102,184 126,170 126,152"/>
+<polyline points="102,200 126,214 126,232"/>
+<polygon points="123,212.4 116.308,211.933 119.359,206.766" fill="black"/>
+<circle cx="111" cy="192" r="26"/>
+<polyline points="126,72 126,92"/>
+<polyline points="126,132 126,152"/>
+<polyline points="126,92 132,95.333 120,102 132,108.667 120,115.333 132,122 120,128.667 126,132"/>
+<polyline points="126,272 126,292"/>
+<polyline points="126,332 126,352"/>
+<polyline points="126,292 132,295.333 120,302 132,308.667 120,315.333 132,322 120,328.667 126,332"/>
+<polyline points="126,352 126,372"/>
+<polyline points="114,372 138,372"/>
+<polyline points="118.4,376.4 133.6,376.4"/>
+<polyline points="122.8,380.8 129.2,380.8"/>
+<circle cx="146" cy="252" r="3"/>
+<polyline points="26,192 66,192"/>
+<polyline points="26,192 26,212"/>
+<polyline points="126,252 143,252"/>
+<polyline points="126,232 126,272"/>
+<circle cx="126" cy="252" r="2.8" fill="black" stroke="none"/>
+<polyline points="26,12 126,12"/>
+<polyline points="126,12 126,72"/>
+<polyline points="26,12 26,32"/>
+</g>
+<text x="46" y="67.4" text-anchor="start" fill="black" stroke="none"><tspan>V</tspan><tspan baseline-shift="-25%" font-size="9.36">CC</tspan></text>
+<text x="46" y="84.4" text-anchor="start" fill="black" stroke="none"><tspan>2V</tspan></text>
+<text x="46" y="247.4" text-anchor="start" fill="black" stroke="none"><tspan>V</tspan><tspan baseline-shift="-25%" font-size="9.36">B</tspan></text>
+<text x="46" y="264.4" text-anchor="start" fill="black" stroke="none"><tspan>1.5V</tspan></text>
+<text x="140" y="195.9" text-anchor="start" fill="black" stroke="none"><tspan>Q1</tspan></text>
+<text x="138" y="107.4" text-anchor="start" fill="black" stroke="none"><tspan>R</tspan><tspan baseline-shift="-25%" font-size="9.36">C</tspan></text>
+<text x="138" y="124.4" text-anchor="start" fill="black" stroke="none"><tspan>1kΩ</tspan></text>
+<text x="138" y="307.4" text-anchor="start" fill="black" stroke="none"><tspan>R</tspan><tspan baseline-shift="-25%" font-size="9.36">E</tspan></text>
+<text x="138" y="324.4" text-anchor="start" fill="black" stroke="none"><tspan>1kΩ</tspan></text>
+<text x="152" y="255.9" text-anchor="start" fill="black" stroke="none"><tspan>V</tspan><tspan baseline-shift="-25%" font-size="9.36">X</tspan></text>
+</svg>
